@@ -47,3 +47,20 @@
   - `Practical_Screenshots/Practical_03/P03_Implicit_Intent_Web.png`
 - **Google Doc Embedded:** Yes (All 4 images synchronized to Master Google Doc)
 - **Verification Status:** PASS
+
+### Practical 04: Appointment Form Application
+- **Package Name:** `com.example.appointmentform`
+- **Component:** `MainActivity`
+- **Build Status:** SUCCESS (`assembleDebug` in 10s)
+- **Install Command:** `adb install -r 04_Appointment_Form/app/build/outputs/apk/debug/app-debug.apk`
+- **Installation Output:** `Performing Streamed Install -> Success`
+- **ImageButton Test:** Tapped `ibServiceIcon` -> Service cycled through General Consultation, Dental Checkup, Cardiology Review with live Toast and icon mutation.
+- **Spinner Test:** `spnCategory` bound to 5 department categories via `ArrayAdapter`.
+- **DatePicker & TimePicker Test:** Swiped to date and time picker widgets; selected date `2026-11-12` and time `09:15 AM`.
+- **Submit & ListView Test:** Tapped `btnSubmitAppointment` at (620, 1160) -> Created new `Appointment` object for "Alex Johnson", inserted at top of `ListView`, dynamic list item displayed with patient name, service badge, department, and formatted date/time.
+- **Hardware Screenshots:**
+  - `Practical_Screenshots/Practical_04/P04_Appointment_Form.png`
+  - `Practical_Screenshots/Practical_04/P04_DateTime_Selection.png`
+  - `Practical_Screenshots/Practical_04/P04_Appointment_Submitted.png`
+- **Google Doc Embedded:** Yes (All 3 images synchronized to Master Google Doc)
+- **Verification Status:** PASS

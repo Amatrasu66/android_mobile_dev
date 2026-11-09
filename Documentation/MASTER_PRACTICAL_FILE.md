@@ -670,3 +670,257 @@ The application was installed and verified on the OnePlus CPH2661 test smartphon
 
 ## 9. Result & Conclusion
 The Intent demonstration application was successfully developed, installed, and validated on physical Android hardware. The principles of explicit inter-activity navigation with data passing and implicit intent delegation to system applications were fully demonstrated.
+
+
+---
+
+# PRACTICAL 04
+
+## 1. Title
+Development of an Appointment Form Application Demonstrating ImageButton, Spinner, DatePicker, TimePicker, and ListView.
+
+## 2. Aim
+To develop a complete, validated Appointment Form Android application in Java demonstrating the integration and user interaction of five native Android components:
+1. `ImageButton` for interactive service selection.
+2. `Spinner` for category/department selection.
+3. `DatePicker` for scheduling the appointment date.
+4. `TimePicker` for selecting the appointment time.
+5. `ListView` for dynamically rendering submitted appointment records.
+
+## 3. Software and Hardware Requirements
+- **IDE:** Android Studio (AI-262 / Ladybug / Meerkat)
+- **Language:** Java (JDK 21 LTS)
+- **Build System:** Gradle 9.1.0 with Android Gradle Plugin 9.0.1
+- **Compile SDK:** API 36 (Android 16) | **Min SDK:** API 24 (Android 7.0)
+- **Required Android Widgets:**
+  - `android.widget.ImageButton`
+  - `android.widget.Spinner`
+  - `android.widget.DatePicker`
+  - `android.widget.TimePicker`
+  - `android.widget.ListView`
+- **Testing Hardware:** OnePlus CPH2661 (Android 16, API Level 36, USB Debugging)
+
+## 4. Theoretical Background
+
+### 4.1 ImageButton Component
+An `ImageButton` is a standard button widget displaying an arbitrary image drawable rather than text. It responds to standard click events (`View.OnClickListener`) and supports dynamic drawable mutation via `setImageResource(int resId)` to convey application state changes visually.
+
+### 4.2 Spinner Component
+A `Spinner` provides a drop-down menu that allows users to select one value from a predefined set of choices. In Java, an `ArrayAdapter` bridges between the backend array of string items and the visual dropdown list presentation.
+
+### 4.3 DatePicker & TimePicker Components
+`DatePicker` and `TimePicker` are native compound widgets for selecting calendar dates and wall-clock times:
+- `DatePicker`: Provides getters `getYear()`, `getMonth()`, and `getDayOfMonth()`.
+- `TimePicker`: Provides getters `getHour()` and `getMinute()` with 12-hour or 24-hour display configuration (`setIs24HourView`).
+
+### 4.4 ListView & Custom Adapter
+A `ListView` is a ViewGroup that displays a vertically scrollable collection of items. Rather than hardcoding static rows, an `ArrayAdapter<T>` or `BaseAdapter` dynamically inflates view items via `getView()`, recycling child views (`convertView`) for efficient memory usage.
+
+---
+
+## 5. Algorithm & Procedure
+
+1. **Form Layout Construction (`activity_main.xml`):**
+   - Place an `EditText` for the patient's full name.
+   - Insert an `ImageButton` paired with a `TextView` to visually indicate and toggle between medical service types.
+   - Embed a `Spinner` for department selection.
+   - Embed native `DatePicker` and `TimePicker` widgets.
+   - Include a primary submit `MaterialButton`.
+   - Place a `ListView` (`@+id/lvAppointments`) below the form to display submitted appointments.
+2. **Adapter & View Recycling (`item_appointment.xml` & `AppointmentAdapter.java`):**
+   - Create a model class `Appointment` storing patient name, service type, department, date, and time.
+   - Create a custom `ArrayAdapter<Appointment>` that binds `Appointment` properties to individual Material Cards inside the `ListView`.
+3. **Event Listeners & State Logic (`MainActivity.java`):**
+   - Attach an `OnClickListener` to `ImageButton` to cycle service type on each tap.
+   - Populate `Spinner` with department categories using `ArrayAdapter<String>`.
+   - Initialize `TimePicker` to 10:30 AM.
+   - In `submitAppointment()`:
+     - Validate that patient name is non-empty.
+     - Extract values from `datePicker` (`getYear()`, `getMonth() + 1`, `getDayOfMonth()`).
+     - Extract values from `timePicker` (`getHour()`, `getMinute()`).
+     - Instantiate a new `Appointment` object and insert it into `appointmentList`.
+     - Call `appointmentAdapter.notifyDataSetChanged()` to update the live `ListView`.
+4. **Hardware Validation:**
+   - Assemble debug APK: `./gradlew assembleDebug`.
+   - Install onto OnePlus CPH2661 via `adb install -r <apk>`.
+   - Exercise form inputs, interact with DatePicker and TimePicker, submit appointment, and capture genuine hardware screenshots.
+
+---
+
+## 6. Source Code
+
+### 6.1 `MainActivity.java`
+```java
+package com.example.appointmentform;
+
+import android.os.Bundle;
+import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import java.util.ArrayList;
+import java.util.Locale;
+
+public class MainActivity extends AppCompatActivity {
+
+    private EditText etPatientName;
+    private ImageButton ibServiceIcon;
+    private TextView tvSelectedService;
+    private Spinner spnCategory;
+    private DatePicker datePicker;
+    private TimePicker timePicker;
+    private ListView lvAppointments;
+
+    private final String[] services = {
+            "General Consultation",
+            "Dental Checkup",
+            "Cardiology Review"
+    };
+    private final int[] serviceIcons = {
+            android.R.drawable.ic_menu_agenda,
+            android.R.drawable.ic_menu_my_calendar,
+            android.R.drawable.ic_menu_add
+    };
+    private int currentServiceIndex = 0;
+
+    private final ArrayList<Appointment> appointmentList = new ArrayList<>();
+    private AppointmentAdapter appointmentAdapter;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        etPatientName = findViewById(R.id.etPatientName);
+        ibServiceIcon = findViewById(R.id.ibServiceIcon);
+        tvSelectedService = findViewById(R.id.tvSelectedService);
+        spnCategory = findViewById(R.id.spnCategory);
+        datePicker = findViewById(R.id.datePicker);
+        timePicker = findViewById(R.id.timePicker);
+        lvAppointments = findViewById(R.id.lvAppointments);
+
+        // 1. ImageButton: Cycle service on tap
+        ibServiceIcon.setOnClickListener(v -> {
+            currentServiceIndex = (currentServiceIndex + 1) % services.length;
+            tvSelectedService.setText(services[currentServiceIndex]);
+            ibServiceIcon.setImageResource(serviceIcons[currentServiceIndex]);
+            Toast.makeText(this, "Service: " + services[currentServiceIndex], Toast.LENGTH_SHORT).show();
+        });
+
+        // 2. Spinner: Department categories
+        String[] categories = {
+                "General Medicine",
+                "Dental Surgery",
+                "Cardiovascular Care",
+                "Dermatology Clinic",
+                "Pediatric Health"
+        };
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                categories
+        );
+        spnCategory.setAdapter(spinnerAdapter);
+
+        // 3. TimePicker: 12-hour format configuration
+        timePicker.setIs24HourView(false);
+        timePicker.setHour(10);
+        timePicker.setMinute(30);
+
+        // 4. ListView: Dynamic adapter binding
+        appointmentAdapter = new AppointmentAdapter(this, appointmentList);
+        lvAppointments.setAdapter(appointmentAdapter);
+
+        // Submit Button
+        findViewById(R.id.btnSubmitAppointment).setOnClickListener(v -> submitAppointment());
+    }
+
+    private void submitAppointment() {
+        String patientName = etPatientName.getText().toString().trim();
+        if (patientName.isEmpty()) {
+            etPatientName.setError("Patient name is required");
+            etPatientName.requestFocus();
+            Toast.makeText(this, "Please enter patient name", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String serviceType = services[currentServiceIndex];
+        String category = spnCategory.getSelectedItem().toString();
+
+        int day = datePicker.getDayOfMonth();
+        int month = datePicker.getMonth() + 1;
+        int year = datePicker.getYear();
+        String formattedDate = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month, day);
+
+        int hour = timePicker.getHour();
+        int minute = timePicker.getMinute();
+        String amPm = (hour >= 12) ? "PM" : "AM";
+        int displayHour = (hour % 12 == 0) ? 12 : (hour % 12);
+        String formattedTime = String.format(Locale.getDefault(), "%02d:%02d %s", displayHour, minute, amPm);
+
+        Appointment newAppointment = new Appointment(
+                patientName,
+                serviceType,
+                category,
+                formattedDate,
+                formattedTime
+        );
+
+        appointmentList.add(0, newAppointment);
+        appointmentAdapter.notifyDataSetChanged();
+
+        Toast.makeText(this, "Appointment Booked: " + patientName, Toast.LENGTH_SHORT).show();
+        etPatientName.setText("");
+    }
+}
+```
+
+### 6.2 `Appointment.java`
+```java
+package com.example.appointmentform;
+
+public class Appointment {
+    private final String patientName;
+    private final String serviceType;
+    private final String category;
+    private final String date;
+    private final String time;
+
+    public Appointment(String patientName, String serviceType, String category, String date, String time) {
+        this.patientName = patientName;
+        this.serviceType = serviceType;
+        this.category = category;
+        this.date = date;
+        this.time = time;
+    }
+
+    public String getPatientName() { return patientName; }
+    public String getServiceType() { return serviceType; }
+    public String getCategory() { return category; }
+    public String getDate() { return date; }
+    public String getTime() { return time; }
+}
+```
+
+---
+
+## 7. Output & Hardware Execution Evidence
+
+The application was installed on the OnePlus CPH2661 test device and tested through its complete booking lifecycle.
+
+- **Appointment Form Screen:** `Practical_Screenshots/Practical_04/P04_Appointment_Form.png`
+- **DatePicker & TimePicker Interaction:** `Practical_Screenshots/Practical_04/P04_DateTime_Selection.png`
+- **Submitted Appointment in Dynamic ListView:** `Practical_Screenshots/Practical_04/P04_Appointment_Submitted.png`
+
+## 8. Expected Output
+1. The user inputs patient details, selects service via `ImageButton`, chooses category from `Spinner`, and adjusts `DatePicker` and `TimePicker`.
+2. Pressing "Confirm & Book Appointment" creates a new entry at the top of the `ListView` displaying the exact patient name, service, department, formatted date, and time.
+
+## 9. Result & Conclusion
+The Appointment Form application successfully incorporated `ImageButton`, `Spinner`, `DatePicker`, `TimePicker`, and a live dynamic `ListView`. All validation, scheduling, and dynamic list rendering operations were verified on physical Android hardware.
