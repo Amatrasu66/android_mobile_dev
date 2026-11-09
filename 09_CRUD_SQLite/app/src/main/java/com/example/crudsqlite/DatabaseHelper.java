@@ -8,26 +8,20 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * SQLite Database Helper for managing student records.
- * Implements native SQLiteOpenHelper for schema creation, upgrades, and CRUD operations.
- */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "StudentDB.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public static final String TABLE_STUDENTS = "students";
     public static final String COL_ID = "id";
     public static final String COL_NAME = "name";
     public static final String COL_EMAIL = "email";
-    public static final String COL_COURSE = "course";
 
-    private static final String CREATE_TABLE_QUERY = "CREATE TABLE " + TABLE_STUDENTS + " ("
+    private static final String CREATE_TABLE = "CREATE TABLE " + TABLE_STUDENTS + " ("
             + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + COL_NAME + " TEXT NOT NULL, "
-            + COL_EMAIL + " TEXT NOT NULL, "
-            + COL_COURSE + " TEXT NOT NULL"
+            + COL_EMAIL + " TEXT NOT NULL"
             + ");";
 
     public DatabaseHelper(Context context) {
@@ -36,7 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_TABLE_QUERY);
+        db.execSQL(CREATE_TABLE);
     }
 
     @Override
@@ -45,72 +39,40 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    /**
-     * CREATE / INSERT Operation: Inserts a new student record.
-     */
-    public long insertStudent(String name, String email, String course) {
+    public long insertStudent(String name, String email) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COL_NAME, name);
         values.put(COL_EMAIL, email);
-        values.put(COL_COURSE, course);
-
         return db.insert(TABLE_STUDENTS, null, values);
     }
 
-    /**
-     * READ Operation: Queries all stored student records ordered by ID descending.
-     */
     public List<Student> getAllStudents() {
-        List<Student> studentList = new ArrayList<>();
+        List<Student> list = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = null;
+        Cursor cursor = db.query(TABLE_STUDENTS, new String[]{COL_ID, COL_NAME, COL_EMAIL},
+                null, null, null, null, COL_ID + " ASC");
 
-        try {
-            cursor = db.query(TABLE_STUDENTS,
-                    new String[]{COL_ID, COL_NAME, COL_EMAIL, COL_COURSE},
-                    null, null, null, null,
-                    COL_ID + " ASC");
-
-            if (cursor != null && cursor.moveToFirst()) {
-                int idIdx = cursor.getColumnIndexOrThrow(COL_ID);
-                int nameIdx = cursor.getColumnIndexOrThrow(COL_NAME);
-                int emailIdx = cursor.getColumnIndexOrThrow(COL_EMAIL);
-                int courseIdx = cursor.getColumnIndexOrThrow(COL_COURSE);
-
-                do {
-                    int id = cursor.getInt(idIdx);
-                    String name = cursor.getString(nameIdx);
-                    String email = cursor.getString(emailIdx);
-                    String course = cursor.getString(courseIdx);
-                    studentList.add(new Student(id, name, email, course));
-                } while (cursor.moveToNext());
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID));
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(COL_NAME));
+                String email = cursor.getString(cursor.getColumnIndexOrThrow(COL_EMAIL));
+                list.add(new Student(id, name, email));
             }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
+            cursor.close();
         }
-
-        return studentList;
+        return list;
     }
 
-    /**
-     * UPDATE Operation: Modifies an existing student record matching the given ID.
-     */
-    public int updateStudent(int id, String name, String email, String course) {
+    public int updateStudent(int id, String name, String email) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COL_NAME, name);
         values.put(COL_EMAIL, email);
-        values.put(COL_COURSE, course);
-
         return db.update(TABLE_STUDENTS, values, COL_ID + " = ?", new String[]{String.valueOf(id)});
     }
 
-    /**
-     * DELETE Operation: Deletes the student record matching the given ID.
-     */
     public int deleteStudent(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TABLE_STUDENTS, COL_ID + " = ?", new String[]{String.valueOf(id)});

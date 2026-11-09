@@ -1,19 +1,14 @@
 package com.example.crudsqlite;
 
-/**
- * Model class representing a Student entity in SQLite database.
- */
 public class Student {
     private int id;
     private String name;
     private String email;
-    private String course;
 
-    public Student(int id, String name, String email, String course) {
+    public Student(int id, String name, String email) {
         this.id = id;
         this.name = name;
         this.email = email;
-        this.course = course;
     }
 
     public int getId() {
@@ -28,12 +23,8 @@ public class Student {
         return email;
     }
 
-    public String getCourse() {
-        return course;
-    }
-
     @Override
     public String toString() {
-        return "ID #" + id + " • " + name + " (" + course + ")\n" + email;
+        return "ID: " + id + " | " + name + " (" + email + ")";
     }
 }

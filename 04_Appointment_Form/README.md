@@ -2,24 +2,22 @@
 
 **Course Code:** SCS391 – Mobile App Development Lab  
 **Language:** Java  
-**Architecture:** Android Empty Views Activity, Material Design 3  
-**Package:** `com.example.appointmentform`  
-**Min SDK:** 24 (Android 7.0) | **Target SDK:** 36 (Android 16)  
-**Verification:** Installed & Verified on OnePlus CPH2661 (Android 16)
+**Architecture:** Android Views Activity  
+**Verification:** Verified on physical OnePlus CPH2661 (Android 16, API 36)
 
 ---
 
-## 1. Project Overview
-This application satisfies all Practical 04 requirements by demonstrating five core Android components within an Appointment Form workflow:
-- **`ImageButton`:** Allows interactive toggling/selection of healthcare service types (General Consultation, Dental, Cardiology) with dynamic icon updates.
-- **`Spinner`:** Dropdown selector for medical departments (General Medicine, Dental Surgery, Cardiovascular Care, Dermatology, Pediatrics).
-- **`DatePicker`:** Interactive widget allowing selection of appointment year, month, and day.
-- **`TimePicker`:** Interactive widget configured for hour and minute scheduling.
-- **`ListView`:** Dynamic list displaying newly submitted appointments using a custom `AppointmentAdapter` and Material Cards.
+## 1. Description
+Demonstrates essential interactive Android UI widgets:
+- **ImageButton:** Cycles medical service types and updates visual icon.
+- **Spinner:** Dropdown selection for hospital departments.
+- **DatePicker:** Date selection widget.
+- **TimePicker:** Time selection widget.
+- **ListView:** Dynamic list displaying submitted patient appointments.
 
 ---
 
-## 2. Source Code
+## 2. Key Code Implementation
 
 ### `MainActivity.java`
 ```java
@@ -40,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
+
     private EditText etPatientName;
     private ImageButton ibServiceIcon;
     private TextView tvSelectedService;
@@ -55,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
             android.R.drawable.ic_menu_add
     };
     private int currentServiceIndex = 0;
+
     private final ArrayList<Appointment> appointmentList = new ArrayList<>();
     private AppointmentAdapter appointmentAdapter;
 
@@ -73,70 +73,45 @@ public class MainActivity extends AppCompatActivity {
 
         ibServiceIcon.setOnClickListener(v -> {
             currentServiceIndex = (currentServiceIndex + 1) % services.length;
-            tvSelectedService.setText(services[currentServiceIndex]);
+            tvSelectedService.setText(services[currentServiceIndex] + " (Tap icon to change)");
             ibServiceIcon.setImageResource(serviceIcons[currentServiceIndex]);
-            Toast.makeText(this, "Service: " + services[currentServiceIndex], Toast.LENGTH_SHORT).show();
         });
 
-        String[] categories = {"General Medicine", "Dental Surgery", "Cardiovascular Care", "Dermatology Clinic", "Pediatric Health"};
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, categories);
-        spnCategory.setAdapter(spinnerAdapter);
+        String[] categories = {"General Medicine", "Dental Surgery", "Cardiovascular Care", "Pediatrics"};
+        spnCategory.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, categories));
 
         appointmentAdapter = new AppointmentAdapter(this, appointmentList);
         lvAppointments.setAdapter(appointmentAdapter);
 
-        findViewById(R.id.btnSubmitAppointment).setOnClickListener(v -> submitAppointment());
-    }
+        findViewById(R.id.btnSubmitAppointment).setOnClickListener(v -> {
+            String name = etPatientName.getText().toString().trim();
+            if (name.isEmpty()) {
+                etPatientName.setError("Name required");
+                return;
+            }
 
-    private void submitAppointment() {
-        String patientName = etPatientName.getText().toString().trim();
-        if (patientName.isEmpty()) {
-            etPatientName.setError("Patient name is required");
-            return;
-        }
+            int day = datePicker.getDayOfMonth();
+            int month = datePicker.getMonth() + 1;
+            int year = datePicker.getYear();
+            int hour = timePicker.getHour();
+            int minute = timePicker.getMinute();
 
-        String serviceType = services[currentServiceIndex];
-        String category = spnCategory.getSelectedItem().toString();
-        String formattedDate = String.format(Locale.getDefault(), "%04d-%02d-%02d",
-                datePicker.getYear(), datePicker.getMonth() + 1, datePicker.getDayOfMonth());
+            String dateStr = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month, day);
+            String timeStr = String.format(Locale.getDefault(), "%02d:%02d", hour, minute);
 
-        int hour = timePicker.getHour();
-        int minute = timePicker.getMinute();
-        String amPm = (hour >= 12) ? "PM" : "AM";
-        int displayHour = (hour % 12 == 0) ? 12 : (hour % 12);
-        String formattedTime = String.format(Locale.getDefault(), "%02d:%02d %s", displayHour, minute, amPm);
-
-        Appointment newAppointment = new Appointment(patientName, serviceType, category, formattedDate, formattedTime);
-        appointmentList.add(0, newAppointment);
-        appointmentAdapter.notifyDataSetChanged();
-
-        Toast.makeText(this, "Appointment Booked: " + patientName, Toast.LENGTH_SHORT).show();
-        etPatientName.setText("");
+            Appointment appt = new Appointment(name, services[currentServiceIndex],
+                    spnCategory.getSelectedItem().toString(), dateStr + " at " + timeStr);
+            appointmentList.add(0, appt);
+            appointmentAdapter.notifyDataSetChanged();
+            Toast.makeText(this, "Appointment Booked!", Toast.LENGTH_SHORT).show();
+        });
     }
 }
 ```
 
 ---
 
-## 3. How to Build & Install
-
-```bash
-# Build APK
-./gradlew assembleDebug
-
-# Install via ADB to physical device
-adb install -r app/build/outputs/apk/debug/app-debug.apk
-
-# Launch
-adb shell am start -n com.example.appointmentform/.MainActivity
-```
-
----
-
-## 4. Hardware Verification
-- **Test Target:** OnePlus CPH2661 (Android 16, API 36)
-- **Screenshots:**
-  - `Practical_Screenshots/Practical_04/P04_Appointment_Form.png`
-  - `Practical_Screenshots/Practical_04/P04_DateTime_Selection.png`
-  - `Practical_Screenshots/Practical_04/P04_Appointment_Submitted.png`
-- **Result:** Successfully validated ImageButton, Spinner, DatePicker, TimePicker, and dynamic ListView on hardware.
+## 3. Output Screenshots
+- Form Screen: `Practical_Screenshots/Practical_04/P04_Appointment_Form.png`
+- Service & DateTime Selection: `Practical_Screenshots/Practical_04/P04_DateTime_Selection.png`
+- Submitted Appointment in ListView: `Practical_Screenshots/Practical_04/P04_Appointment_Submitted.png`

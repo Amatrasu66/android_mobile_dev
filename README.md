@@ -1,7 +1,9 @@
 # SCS391 Mobile Application Development Lab — Master Portfolio
 
 **Student / Contributor:** Amatrasu66  
+**Student Email:** simransagoosagoo@gmail.com  
 **Course Code:** SCS391 – Mobile App Development Lab  
+**Academic Session:** 2026 – 2027  
 **Platform:** Android Studio (Arch Linux x86_64)  
 **Language:** Java (JDK 21 LTS / Android Studio JBR)  
 **Target Architecture:** Android SDK 36 (VanillaIceCream) / Min SDK 24 (Nougat)  
@@ -11,28 +13,35 @@
 
 ---
 
-## 1. Project Overview
+## 1. Project Overview & Anti-Slop Architecture
 
-This repository hosts the complete, verified, end-to-end deliverables for the **SCS391 Mobile App Development Lab** practical curriculum. It contains 10 independent Android Studio projects developed strictly in **Java** and **XML layouts** following modern **Material Design** conventions.
+This repository hosts the complete, verified, end-to-end deliverables for the **SCS391 Mobile App Development Lab** practical curriculum. It contains 10 independent Android Studio projects developed strictly in **Java** and **XML layouts**.
 
-All applications are compiled with Gradle, installed via ADB directly onto an authorized physical Android smartphone (OnePlus CPH2661 running Android 16), functionally exercised, and evidenced by genuine hardware screenshots embedded both in this repository and in the linked Master Google Document.
+### Anti-Slop Standards Enforced (`ANTI_SLOP_SKILL.md`)
+Every application in this repository strictly adheres to minimalist academic practical standards:
+- **Zero Decorative Slop:** No unnecessary cards, elevated shadows, faux badges, gradients, or marketing illustrations.
+- **Pure Native Controls:** Interfaces utilize direct, purposeful Android widgets (`TextView`, `EditText`, `Button`, `Spinner`, `ImageButton`, `DatePicker`, `TimePicker`, `Toolbar`, `ListView`).
+- **Clean Code Hygiene:** Code focuses purely on syllabus requirements without noisy AI boilerplate comments.
+- **Physical Hardware Verification:** 100% of testing performed on physical hardware (OnePlus CPH2661, Android 16). Zero emulator dependency.
 
 ---
 
 ## 2. Practical Directory & Completion Status
 
-| # | Directory | Practical Name | Type | Status | Evidence |
+| # | Directory | Practical Name | Category | Status | Genuine Screenshots |
 |---|---|---|---|---|---|
-| **01** | `01_Android_Studio_Setup` | Android Studio, SDK, SDK Tools, AVD & JDK Setup | Theoretical / Architecture | **COMPLETE** | Technical Guide & Arch Specs |
-| **02** | `02_Hello_World` | Hello World Java Application | Core Application | **COMPLETE** | `P02_Hello_World.png` |
-| **03** | `03_Intent_Demonstration` | Explicit & Implicit Intents (Data passing, Dialer, Web) | Core Application | **COMPLETE** | 4 Hardware Screenshots |
-| **04** | `04_Appointment_Form` | Appointment Form (ImageButton, Spinner, Pickers, ListView) | UI Components & Events | **COMPLETE** | 3 Hardware Screenshots |
-| **05** | `05_Screen_Orientation` | Portrait and Landscape Orientation Detection & Layouts | Configuration & Layouts | **COMPLETE** | 2 Hardware Screenshots |
-| **06** | `06_Menu_Bar` | Options Menu Bar (Home, Settings, About, Help) | Menus & Navigation | **COMPLETE** | 3 Hardware Screenshots |
-| **07** | `07_SMS_Application` | Prefilled SMS via `ACTION_SENDTO` (Zero Permissions) | Intents & Communication | **COMPLETE** | 2 Hardware Screenshots |
-| **08** | `08_Email_Application` | Prefilled Email via `ACTION_SENDTO` with System Chooser | Intents & Communication | **COMPLETE** | 2 Hardware Screenshots |
-| **09** | `09_CRUD_SQLite` | Student Record Management using SQLiteOpenHelper | Native SQLite Database | **COMPLETE** | 4 Hardware Screenshots |
-| **10** | `10_Application_Deployment` | Signed Release APK Build, Deployment & Security Hardening | Deployment & Packaging | **COMPLETE** | Signed Release APK & 2 Screenshots |
+| **01** | `01_Android_Studio_Setup` | Android Studio, SDK, SDK Tools, AVD & JDK Setup | Theoretical / Architecture | **COMPLETE** | Arch & Environment Specs |
+| **02** | `02_Hello_World` | Hello World Java Application | Core Application | **COMPLETE** | 1 Screenshot (`P02_Hello_World.png`) |
+| **03** | `03_Intent_Demonstration` | Explicit & Implicit Intents (Data passing & Phone Dialer) | Core Application | **COMPLETE** | 3 Screenshots (`Main`, `Explicit`, `Implicit`) |
+| **04** | `04_Appointment_Form` | Appointment Form (ImageButton, Spinner, Pickers, ListView) | UI Components & Events | **COMPLETE** | 3 Screenshots (`Form`, `DateTime`, `Submitted`) |
+| **05** | `05_Screen_Orientation` | Portrait and Landscape Orientation Detection & Layouts | Configuration & Layouts | **COMPLETE** | 2 Screenshots (`Portrait`, `Landscape`) |
+| **06** | `06_Menu_Bar` | Options Menu Bar (Home, Settings, About, Help) | Menus & Navigation | **COMPLETE** | 3 Screenshots (`Closed`, `Open`, `Selected`) |
+| **07** | `07_SMS_Application` | Prefilled SMS via `ACTION_SENDTO` (Zero Permissions) | Intents & Communication | **COMPLETE** | 2 Screenshots (`Form`, `Prefilled`) |
+| **08** | `08_Email_Application` | Prefilled Email via `ACTION_SENDTO` with System Chooser | Intents & Communication | **COMPLETE** | 2 Screenshots (`Form`, `Prefilled`) |
+| **09** | `09_CRUD_SQLite` | Student Record Management using Native SQLiteOpenHelper | Native SQLite Database | **COMPLETE** | 4 Screenshots (`Create`, `Read`, `Update`, `Delete`) |
+| **10** | `10_Application_Deployment` | Signed Release APK Build, Deployment & Signature Verification | Deployment & Packaging | **COMPLETE** | Signed Release APK & 2 Screenshots |
+
+**Total Verified Hardware Screenshots:** Exactly 22 genuine screenshots captured and synchronized to the Master Google Doc.
 
 ---
 
@@ -42,7 +51,7 @@ All applications are compiled with Gradle, installed via ADB directly onto an au
 - **Device Serial:** `2d242b39`
 - **Android OS Version:** Android 16 (Release 16)
 - **API Level:** SDK 36
-- **Screen Resolution:** 1240 x 2772 pixels
+- **Physical Resolution:** 1240 x 2772 pixels
 - **Screen Density:** 560 dpi
 - **Connection Mode:** USB Debugging via Android Debug Bridge (ADB)
 - **Zero Emulator Policy:** All builds verified strictly on bare-metal hardware.
@@ -96,21 +105,23 @@ Android Mobile Development/
 │   ├── release/app-release.apk
 │   └── README.md
 ├── Practical_Screenshots/
-│   ├── Practical_02/
-│   ├── Practical_03/
-│   ├── Practical_04/
-│   ├── Practical_05/
-│   ├── Practical_06/
-│   ├── Practical_07/
-│   ├── Practical_08/
-│   ├── Practical_09/
-│   └── Practical_10/
+│   ├── Practical_02/ (1 screenshot)
+│   ├── Practical_03/ (3 screenshots)
+│   ├── Practical_04/ (3 screenshots)
+│   ├── Practical_05/ (2 screenshots)
+│   ├── Practical_06/ (3 screenshots)
+│   ├── Practical_07/ (2 screenshots)
+│   ├── Practical_08/ (2 screenshots)
+│   ├── Practical_09/ (4 screenshots)
+│   └── Practical_10/ (2 screenshots)
 ├── Documentation/
 │   ├── MASTER_PRACTICAL_FILE.md
-│   ├── PROJECT_OVERVIEW.md
-│   ├── IMPLEMENTATION_PLAN.md
+│   ├── PRACTICAL_PROGRESS.md
 │   ├── TESTING_REPORT.md
-│   └── PRACTICAL_PROGRESS.md
+│   ├── PROJECT_OVERVIEW.md
+│   └── IMPLEMENTATION_PLAN.md
+├── ANTI_SLOP_SKILL.md
+├── GEMINI.md
 ├── .gitignore
 └── README.md
 ```
