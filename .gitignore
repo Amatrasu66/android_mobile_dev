@@ -1,0 +1,24 @@
+# Gradle cache and build outputs
+.gradle/
+build/
+**/build/
+*.apk
+*.aab
+
+# Local configuration
+local.properties
+.idea/
+*.iml
+.DS_Store
+*.log
+
+# Sensitive signing files
+*.jks
+*.keystore
+signing.properties
+keystore.properties
+
+# Core dumps and temporary files
+hs_err_pid*.log
+core.*
+.temp/
