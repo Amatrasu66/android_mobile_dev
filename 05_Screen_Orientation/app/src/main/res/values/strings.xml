@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Practical 05 - Screen Orientation</string>
+    <string name="lab_header">SCS391 Mobile App Development</string>
+    <string name="title_screen_orientation">Screen Orientation Detection</string>
+    <string name="msg_portrait">PORTRAIT MODE DETECTED</string>
+    <string name="msg_landscape">LANDSCAPE MODE DETECTED</string>
+    <string name="sub_portrait">Layout loaded from: res/layout/activity_main.xml (Vertical Orientation)</string>
+    <string name="sub_landscape">Layout loaded from: res/layout-land/activity_main.xml (Horizontal Orientation)</string>
+    <string name="btn_refresh_info">Refresh Configuration</string>
+</resources>

@@ -64,3 +64,17 @@
   - `Practical_Screenshots/Practical_04/P04_Appointment_Submitted.png`
 - **Google Doc Embedded:** Yes (All 3 images synchronized to Master Google Doc)
 - **Verification Status:** PASS
+
+### Practical 05: Screen Orientation Detection & Layouts
+- **Package Name:** `com.example.screenorientation`
+- **Component:** `MainActivity`
+- **Build Status:** SUCCESS (`assembleDebug` in 9s)
+- **Install Command:** `adb install -r 05_Screen_Orientation/app/build/outputs/apk/debug/app-debug.apk`
+- **Installation Output:** `Performing Streamed Install -> Success`
+- **Portrait Verification:** In orientation 0, rendered `res/layout/activity_main.xml` with teal theme and "PORTRAIT MODE DETECTED", resolution `1240 x 2772 px`.
+- **Landscape Verification:** In orientation 1 (`adb shell settings put system user_rotation 1`), system automatically recreated activity and inflated `res/layout-land/activity_main.xml` with orange theme and "LANDSCAPE MODE DETECTED", resolution `2772 x 1240 px`.
+- **Hardware Screenshots:**
+  - `Practical_Screenshots/Practical_05/P05_Portrait_Mode.png` (1240 x 2772 px)
+  - `Practical_Screenshots/Practical_05/P05_Landscape_Mode.png` (2772 x 1240 px)
+- **Google Doc Embedded:** Yes (Both images synchronized to Master Google Doc)
+- **Verification Status:** PASS

@@ -924,3 +924,255 @@ The application was installed on the OnePlus CPH2661 test device and tested thro
 
 ## 9. Result & Conclusion
 The Appointment Form application successfully incorporated `ImageButton`, `Spinner`, `DatePicker`, `TimePicker`, and a live dynamic `ListView`. All validation, scheduling, and dynamic list rendering operations were verified on physical Android hardware.
+
+
+---
+
+# PRACTICAL 05
+
+## 1. Title
+Demonstration of Portrait and Landscape Screen Orientation Detection and Adaptive Layouts.
+
+## 2. Aim
+To develop an Android application in Java that programmatically detects the device's current screen orientation (Portrait or Landscape), displays an appropriate message and screen metrics, and automatically utilizes resource qualifiers (`res/layout` vs `res/layout-land`) to adapt its layout to both orientations.
+
+## 3. Software and Hardware Requirements
+- **IDE:** Android Studio (AI-262 / Ladybug / Meerkat)
+- **Language:** Java (JDK 21 LTS)
+- **Build System:** Gradle 9.1.0 with Android Gradle Plugin 9.0.1
+- **Compile SDK:** API 36 (Android 16) | **Min SDK:** API 24 (Android 7.0)
+- **Core APIs:** `android.content.res.Configuration`, `android.util.DisplayMetrics`
+- **Testing Hardware:** OnePlus CPH2661 (Android 16, API Level 36, USB Debugging)
+
+## 4. Theoretical Background
+
+### 4.1 Runtime Configuration Changes
+In Android, changes in device configuration—such as rotating from portrait to landscape—trigger a runtime event. By default, the Android system terminates the running activity (invoking `onPause()`, `onStop()`, and `onDestroy()`) and recreates it (`onCreate()`, `onStart()`, `onResume()`). This recreation mechanism ensures that the application automatically re-queries resources and selects layouts that best match the new configuration.
+
+### 4.2 Resource Qualifiers (`layout` vs `layout-land`)
+Android allows developers to provide alternative layout directories by appending qualifiers to resource folder names:
+- `res/layout/`: Default layout directory, predominantly utilized for Portrait viewports.
+- `res/layout-land/`: Qualified directory automatically selected by the Android resource manager whenever the device is in Landscape orientation (`Configuration.ORIENTATION_LANDSCAPE`).
+
+### 4.3 Programmatic Orientation Detection
+An Activity can inspect its current orientation at runtime using:
+```java
+int orientation = getResources().getConfiguration().orientation;
+if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+    // Landscape Mode
+} else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+    // Portrait Mode
+}
+```
+
+---
+
+## 5. Algorithm & Procedure
+
+1. **Layout Design:**
+   - Create `res/layout/activity_main.xml` containing a vertically stacked `MaterialCardView` with a teal accent theme indicating Portrait mode.
+   - Create `res/layout-land/activity_main.xml` containing a two-column horizontal layout with an orange accent theme indicating Landscape mode.
+2. **Activity Implementation (`MainActivity.java`):**
+   - In `onCreate()`, call `setContentView(R.layout.activity_main)` to allow Android to load the orientation-appropriate layout.
+   - Query `getResources().getConfiguration().orientation`.
+   - Query `getResources().getDisplayMetrics()` to retrieve width, height, and pixel density.
+   - Update `tvOrientationMessage`, `tvModeBadge`, and `tvDimensions` accordingly.
+3. **Manifest Configuration:**
+   - In `AndroidManifest.xml`, ensure no orientation locks (`android:screenOrientation`) are declared, allowing natural hardware rotation.
+4. **Hardware Verification:**
+   - Install APK on OnePlus CPH2661.
+   - Test initial launch in Portrait mode (`user_rotation 0`) and capture screenshot.
+   - Rotate device to Landscape mode (`user_rotation 1`), verify automatic recreation, and capture screenshot.
+   - Restore device orientation.
+
+---
+
+## 6. Source Code
+
+### 6.1 `MainActivity.java`
+```java
+package com.example.screenorientation;
+
+import android.content.res.Configuration;
+import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+/**
+ * Practical 05: Portrait and Landscape Screen Orientation
+ * Course: SCS391 Mobile Application Development Lab
+ */
+public class MainActivity extends AppCompatActivity {
+
+    private TextView tvOrientationMessage;
+    private TextView tvDimensions;
+    private TextView tvModeBadge;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Automatically selects res/layout/activity_main.xml or res/layout-land/activity_main.xml
+        setContentView(R.layout.activity_main);
+
+        tvOrientationMessage = findViewById(R.id.tvOrientationMessage);
+        tvDimensions = findViewById(R.id.tvDimensions);
+        tvModeBadge = findViewById(R.id.tvModeBadge);
+
+        updateOrientationDetails();
+
+        findViewById(R.id.btnRefresh).setOnClickListener(v -> {
+            updateOrientationDetails();
+            Toast.makeText(this, "Orientation refreshed!", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void updateOrientationDetails() {
+        int orientation = getResources().getConfiguration().orientation;
+
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        int width = metrics.widthPixels;
+        int height = metrics.heightPixels;
+        int density = metrics.densityDpi;
+
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            tvOrientationMessage.setText(R.string.msg_landscape);
+            tvModeBadge.setText("LANDSCAPE MODE");
+            tvDimensions.setText(String.format("Dimensions: %d x %d px | %d dpi (Wide Aspect)", width, height, density));
+        } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            tvOrientationMessage.setText(R.string.msg_portrait);
+            tvModeBadge.setText("PORTRAIT MODE");
+            tvDimensions.setText(String.format("Dimensions: %d x %d px | %d dpi (Tall Aspect)", width, height, density));
+        } else {
+            tvOrientationMessage.setText("ORIENTATION UNDEFINED");
+            tvDimensions.setText(String.format("Dimensions: %d x %d px", width, height));
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        updateOrientationDetails();
+    }
+}
+```
+
+### 6.2 `res/layout/activity_main.xml` (Portrait)
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:padding="24dp">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardOrientation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="6dp"
+        app:cardBackgroundColor="@color/surface"
+        app:strokeWidth="2dp"
+        app:strokeColor="@color/portrait_accent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="32dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lab_header"
+                android:textColor="@color/primary"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.05"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/tvModeBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PORTRAIT ORIENTATION"
+                android:textColor="@color/surface"
+                android:background="@color/portrait_accent"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="6dp"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:id="@+id/tvOrientationMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/msg_portrait"
+                android:textColor="@color/portrait_accent"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:id="@+id/tvLayoutSource"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sub_portrait"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp"
+                android:gravity="center"
+                android:layout_marginBottom="24dp"/>
+
+            <TextView
+                android:id="@+id/tvDimensions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Resolution: Detecting..."
+                android:textColor="@color/text_primary"
+                android:textSize="13sp"
+                android:background="#EDE7F6"
+                android:padding="12dp"
+                android:gravity="center"
+                android:layout_marginBottom="16dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnRefresh"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="@string/btn_refresh_info"
+                android:textSize="14sp"
+                app:cornerRadius="10dp"/>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+```
+
+---
+
+## 7. Output & Hardware Execution Evidence
+
+The application was tested across both hardware orientations on the OnePlus CPH2661 device:
+
+- **Portrait Screen Output:** `Practical_Screenshots/Practical_05/P05_Portrait_Mode.png` (Resolution: 1240 x 2772 px)
+- **Landscape Screen Output:** `Practical_Screenshots/Practical_05/P05_Landscape_Mode.png` (Resolution: 2772 x 1240 px)
+
+## 8. Expected Output
+1. In portrait mode, the vertical layout renders with the message "PORTRAIT MODE DETECTED" and dimensions `1240 x 2772 px`.
+2. When rotated to landscape, the two-column horizontal layout renders with the message "LANDSCAPE MODE DETECTED" and dimensions `2772 x 1240 px`.
+
+## 9. Result & Conclusion
+The Screen Orientation application successfully demonstrated dynamic runtime orientation detection and resource qualification (`layout` vs `layout-land`). Both portrait and landscape orientations were verified on physical Android hardware.
