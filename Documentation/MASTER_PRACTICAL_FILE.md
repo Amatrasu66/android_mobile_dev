@@ -1631,3 +1631,339 @@ The application was tested and validated on the physical OnePlus CPH2661 testing
 
 ## 9. Result & Conclusion
 Practical 07 was successfully implemented and verified on physical hardware. The application cleanly implements SMS composition through the secure, permissionless `Intent.ACTION_SENDTO` architecture, guaranteeing complete privacy and adherence to Android platform best practices.
+
+
+---
+
+# PRACTICAL 08
+
+## 1. Title
+Send Email in Android Studio.
+
+## 2. Aim
+To develop an Android application in Java that provides an input form for recipient email address, subject line, and message body, performs input validation using Android `Patterns.EMAIL_ADDRESS`, constructs an appropriate email intent using `Intent.ACTION_SENDTO` with the `mailto:` URI scheme, presents a system chooser dialog using `Intent.createChooser()`, and defensively handles scenarios where no compatible email client exists on the host device.
+
+## 3. Software and Hardware Requirements
+- **Integrated Development Environment (IDE):** Android Studio
+- **Language:** Java (JDK 21 LTS)
+- **UI Framework:** XML Layouts with Material Design 3
+- **Build System:** Gradle 9.1.0 with Android Gradle Plugin 9.0.1
+- **Testing Device:** Physical OnePlus CPH2661 Smartphone (Android 16, API 36, Serial `2d242b39`)
+
+## 4. Theoretical Background
+### 4.1 Precision Targeting: `ACTION_SENDTO` vs `ACTION_SEND`
+Many Android tutorials incorrectly use `Intent.ACTION_SEND` with MIME type `message/rfc822` to send emails. However, `ACTION_SEND` is a generic sharing action that causes Android to list Bluetooth, WhatsApp, social networks, and file utilities alongside email clients.
+
+The Android best practice is to use:
+```
+Uri mailtoUri = Uri.parse("mailto:" + Uri.encode(recipientEmail));
+Intent emailIntent = new Intent(Intent.ACTION_SENDTO, mailtoUri);
+```
+Because `Intent.ACTION_SENDTO` requires a URI with the `mailto:` scheme, Android filters out all non-email applications at the operating system level, ensuring only true email clients (such as Google Gmail or Microsoft Outlook) are presented to the user.
+
+### 4.2 Standard Email Extras
+Parameters are attached using platform constants:
+- `Intent.EXTRA_EMAIL`: Array of strings representing primary recipient addresses (`new String[]{to}`).
+- `Intent.EXTRA_SUBJECT`: String containing the message subject line.
+- `Intent.EXTRA_TEXT`: CharSequence containing the prefilled message body.
+
+### 4.3 Modern Android Package Visibility (`<queries>`)
+Beginning with Android 11 (API Level 30) and continuing through Android 16 (API Level 36), Android restricts package visibility to prevent apps from querying the full inventory of installed packages. To ensure the implicit `mailto:` intent resolves reliably without declaring broad permissions, the application declares an explicit intent signature in `AndroidManifest.xml`:
+```xml
+<queries>
+    <intent>
+        <action android:name="android.intent.action.SENDTO" />
+        <data android:scheme="mailto" />
+    </intent>
+</queries>
+```
+
+### 4.4 Intent Choosers and Exception Trapping
+Wrapping `emailIntent` inside `Intent.createChooser(emailIntent, "Send Email via:")` ensures that if multiple email clients are installed, the user is presented with a standard system chooser. If no compatible client exists, calling `startActivity()` throws an `ActivityNotFoundException`, which our code intercepts to display a helpful Toast rather than crashing.
+
+---
+
+## 5. Procedure & Step-by-Step Implementation
+1. **Initialize Project:** Create an Empty Views Activity named `EmailApplication` in package `com.example.emailapp`.
+2. **Configure Manifest & Queries:** Declare `<queries>` with `ACTION_SENDTO` and scheme `mailto` to comply with modern package visibility rules.
+3. **Design Material Layout (`activity_main.xml`):**
+   - Place a `MaterialCardView` inside a `ScrollView`.
+   - Embed three `TextInputLayout` widgets:
+     - `etEmailTo` (`inputType="textEmailAddress"`) for recipient address.
+     - `etSubject` (`inputType="text"`) for subject.
+     - `etEmailBody` (`inputType="textMultiLine"`) with minimum 4 lines.
+   - Embed a primary `MaterialButton` (`btnSendEmail`) with an email icon.
+4. **Implement Validation & Intent Logic (`MainActivity.java`):**
+   - Validate recipient string using `Patterns.EMAIL_ADDRESS.matcher(to).matches()`.
+   - Validate that subject and message body are non-empty.
+   - Construct the `mailto:` URI, attach `EXTRA_EMAIL`, `EXTRA_SUBJECT`, and `EXTRA_TEXT`.
+   - Launch via `Intent.createChooser()` within a `try-catch` block.
+5. **Hardware Compilation and Verification:**
+   - Build via `./gradlew assembleDebug`.
+   - Install to the OnePlus phone via `adb install -r`.
+   - Verify UI rendering, field validation, and invocation of the system email chooser dialog.
+
+---
+
+## 6. Source Code
+
+### 6.1 `MainActivity.java`
+```java
+package com.example.emailapp;
+
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.util.Patterns;
+import android.widget.EditText;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+/**
+ * Practical 08: Send Email in Android Studio
+ * Course: SCS391 Mobile Application Development Lab
+ */
+public class MainActivity extends AppCompatActivity {
+
+    private EditText etEmailTo;
+    private EditText etSubject;
+    private EditText etEmailBody;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        etEmailTo = findViewById(R.id.etEmailTo);
+        etSubject = findViewById(R.id.etSubject);
+        etEmailBody = findViewById(R.id.etEmailBody);
+
+        findViewById(R.id.btnSendEmail).setOnClickListener(v -> handleSendEmail());
+    }
+
+    private void handleSendEmail() {
+        String to = etEmailTo.getText().toString().trim();
+        String subject = etSubject.getText().toString().trim();
+        String body = etEmailBody.getText().toString().trim();
+
+        // 1. Recipient Validation
+        if (to.isEmpty()) {
+            etEmailTo.setError("Recipient email cannot be empty");
+            etEmailTo.requestFocus();
+            Toast.makeText(this, "Please enter recipient email", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(to).matches()) {
+            etEmailTo.setError("Please enter a valid email address");
+            etEmailTo.requestFocus();
+            Toast.makeText(this, "Invalid email format", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // 2. Subject Validation
+        if (subject.isEmpty()) {
+            etSubject.setError("Subject line cannot be empty");
+            etSubject.requestFocus();
+            Toast.makeText(this, "Please enter email subject", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // 3. Body Validation
+        if (body.isEmpty()) {
+            etEmailBody.setError("Email body cannot be empty");
+            etEmailBody.requestFocus();
+            Toast.makeText(this, "Please enter message body", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // 4. Construct Email Intent
+        Uri mailtoUri = Uri.parse("mailto:" + Uri.encode(to));
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, mailtoUri);
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{to});
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        emailIntent.putExtra(Intent.EXTRA_TEXT, body);
+
+        // 5. Wrap in Chooser
+        Intent chooserIntent = Intent.createChooser(emailIntent, "Send Email via:");
+
+        try {
+            startActivity(chooserIntent);
+            Toast.makeText(this, "Opening email client...", Toast.LENGTH_SHORT).show();
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "No compatible email client found on device", Toast.LENGTH_LONG).show();
+        }
+    }
+}
+```
+
+### 6.2 `res/layout/activity_main.xml`
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:gravity="center">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/surface"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/stroke_color">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lab_header"
+                    android:textColor="@color/primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.05"
+                    android:layout_marginBottom="4dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_email_app"
+                    android:textColor="@color/text_primary"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/desc_email_app"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="13sp"
+                    android:layout_marginBottom="20dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_recipient_email"
+                    android:textColor="@color/text_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="6dp"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etEmailTo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_recipient_email"
+                        android:text="alex.johnson@university.edu"
+                        android:inputType="textEmailAddress"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_subject"
+                    android:textColor="@color/text_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="6dp"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etSubject"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_subject"
+                        android:text="SCS391 Practical 08 Email Submission"
+                        android:inputType="text"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_message_body"
+                    android:textColor="@color/text_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="6dp"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etEmailBody"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_message_body"
+                        android:text="Dear Instructor,\n\nPlease find the attached execution details for SCS391 Mobile Application Development Lab Practical 08 demonstrating Email Intent dispatch.\n\nRespectfully,\nAlex Johnson"
+                        android:inputType="textMultiLine"
+                        android:minLines="4"
+                        android:gravity="top|start"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSendEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:text="@string/btn_send_email"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="12dp"
+                    app:icon="@android:drawable/ic_dialog_email"
+                    app:iconGravity="textStart"/>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+</ScrollView>
+```
+
+---
+
+## 7. Output & Hardware Execution Evidence
+
+The application was tested and validated on the physical OnePlus CPH2661 testing smartphone:
+
+- **Email Composition Form & Validation:** `Practical_Screenshots/Practical_08/P08_Email_Form.png`
+- **System Chooser Dialog & Prefilled Email Client:** `Practical_Screenshots/Practical_08/P08_Email_Prefilled_App.png`
+
+## 8. Expected Output
+1. The user fills in recipient address, subject line, and message body.
+2. Clicking "Open Email Client" validates all fields.
+3. If valid, an implicit intent with `ACTION_SENDTO` and `mailto:` is dispatched inside a system chooser dialog.
+4. The system presents available email clients (e.g. Gmail) prefilled with recipient, subject, and body content.
+5. The user reviews and manually confirms before sending; no email is sent automatically.
+
+## 9. Result & Conclusion
+Practical 08 was successfully implemented and verified on the physical OnePlus device. The application implements the best-practice Android email dispatch architecture using `Intent.ACTION_SENDTO` with `mailto:` scheme delegation and system chooser integration, ensuring clean separation of concerns and user control.

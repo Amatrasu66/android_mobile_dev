@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Send Email App</string>
+    <string name="lab_header">SCS391 • PRACTICAL 08</string>
+    <string name="title_email_app">Send Email Intent</string>
+    <string name="desc_email_app">Composes email content and delegates to external email clients via Intent.ACTION_SENDTO with prefilled fields.</string>
+    
+    <string name="label_recipient_email">Recipient Email Address</string>
+    <string name="hint_recipient_email">e.g. instructor@university.edu</string>
+    
+    <string name="label_subject">Subject Line</string>
+    <string name="hint_subject">e.g. SCS391 Lab Assignment Submission</string>
+    
+    <string name="label_message_body">Email Message Body</string>
+    <string name="hint_message_body">Enter your message content here...</string>
+    
+    <string name="btn_send_email">Open Email Client</string>
+</resources>

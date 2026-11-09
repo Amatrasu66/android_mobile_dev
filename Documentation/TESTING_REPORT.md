@@ -108,3 +108,18 @@
   - `Practical_Screenshots/Practical_07/P07_SMS_Prefilled_App.png` (Default Messages app opened with recipient and message prefilled)
 - **Google Doc Embedded:** Yes (Both images synchronized to Master Google Doc)
 - **Verification Status:** PASS
+
+
+### Practical 08: Send Email Application
+- **Package Name:** `com.example.emailapp`
+- **Component:** `MainActivity`
+- **Build Status:** SUCCESS (`assembleDebug` in 4s)
+- **Install Command:** `adb install -r 08_Email_Application/app/build/outputs/apk/debug/app-debug.apk`
+- **Installation Output:** `Performing Streamed Install -> Success`
+- **Input Validation Test:** Validated recipient email syntax using `Patterns.EMAIL_ADDRESS`, subject line, and message body; verified error hints.
+- **Intent Chooser Test:** Tapped `btnSendEmail` at (620, 2495) -> Dispatched `Intent.ACTION_SENDTO` with `mailto:` scheme wrapped in `Intent.createChooser()`. The system chooser dialog opened displaying email client options prefilled with recipient, subject, and multi-line body.
+- **Hardware Screenshots:**
+  - `Practical_Screenshots/Practical_08/P08_Email_Form.png` (Material form with validated email inputs)
+  - `Practical_Screenshots/Practical_08/P08_Email_Prefilled_App.png` (System intent chooser opened displaying email application targets)
+- **Google Doc Embedded:** Yes (Both images synchronized to Master Google Doc)
+- **Verification Status:** PASS

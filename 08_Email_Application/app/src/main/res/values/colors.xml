@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#283593</color> <!-- Indigo 800 -->
+    <color name="primary_variant">#1A237E</color> <!-- Indigo 900 -->
+    <color name="secondary">#FF8F00</color> <!-- Amber 800 -->
+    <color name="background">#F8F9FA</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="stroke_color">#E0E0E0</color>
+</resources>
