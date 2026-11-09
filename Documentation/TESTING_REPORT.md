@@ -78,3 +78,18 @@
   - `Practical_Screenshots/Practical_05/P05_Landscape_Mode.png` (2772 x 1240 px)
 - **Google Doc Embedded:** Yes (Both images synchronized to Master Google Doc)
 - **Verification Status:** PASS
+
+### Practical 06: Options Menu Bar
+- **Package Name:** `com.example.menubar`
+- **Component:** `MainActivity` with `MaterialToolbar`
+- **Build Status:** SUCCESS (`assembleDebug` in 9s)
+- **Install Command:** `adb install -r 06_Menu_Bar/app/build/outputs/apk/debug/app-debug.apk`
+- **Installation Output:** `Performing Streamed Install -> Success`
+- **Options Menu Test:** Tapped 3-dot overflow icon at (1170, 112) -> Menu popped open showing Home, Settings, About Application, and Help & Support.
+- **Item Selection Test:** Selected "Settings" -> Status card updated to `"Settings Selected: Opened System Configuration"` and toast displayed.
+- **Hardware Screenshots:**
+  - `Practical_Screenshots/Practical_06/P06_Menu_Bar_Closed.png`
+  - `Practical_Screenshots/Practical_06/P06_Menu_Bar_Open.png`
+  - `Practical_Screenshots/Practical_06/P06_Menu_Item_Selected.png`
+- **Google Doc Embedded:** Yes (All 3 images synchronized to Master Google Doc)
+- **Verification Status:** PASS

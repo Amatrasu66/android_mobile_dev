@@ -1176,3 +1176,187 @@ The application was tested across both hardware orientations on the OnePlus CPH2
 
 ## 9. Result & Conclusion
 The Screen Orientation application successfully demonstrated dynamic runtime orientation detection and resource qualification (`layout` vs `layout-land`). Both portrait and landscape orientations were verified on physical Android hardware.
+
+
+---
+
+# PRACTICAL 06
+
+## 1. Title
+Implementation of an Options Menu Bar in an Android Application.
+
+## 2. Aim
+To design, implement, and verify an Android application in Java that provides an Action Bar with an Options Menu (overflow menu) containing standard options (Home, Settings, About, and Help), handles user selection events, and provides meaningful real-time feedback.
+
+## 3. Software and Hardware Requirements
+- **IDE:** Android Studio (AI-262 / Ladybug / Meerkat)
+- **Language:** Java (JDK 21 LTS)
+- **Build System:** Gradle 9.1.0 with Android Gradle Plugin 9.0.1
+- **Compile SDK:** API 36 (Android 16) | **Min SDK:** API 24 (Android 7.0)
+- **Key Classes:** `android.view.Menu`, `android.view.MenuItem`, `com.google.android.material.appbar.MaterialToolbar`
+- **Testing Hardware:** OnePlus CPH2661 (Android 16, API Level 36, USB Debugging)
+
+## 4. Theoretical Background
+
+### 4.1 Options Menu Architecture
+The Options Menu is the primary collection of menu items for an Android Activity. It houses global navigation actions and configuration settings. In modern Android applications following Material Design, the options menu is rendered within the App Bar / Toolbar as an overflow menu denoted by a 3-dot icon.
+
+### 4.2 Menu Inflation & Lifecycle Callbacks
+1. `onCreateOptionsMenu(Menu menu)`: Called by the framework when initializing the activity options menu. The `MenuInflater` inflates XML definitions into active `Menu` objects:
+   ```java
+   getMenuInflater().inflate(R.menu.menu_main, menu);
+   ```
+2. `onOptionsItemSelected(MenuItem item)`: Invoked whenever the user clicks a menu item. The `item.getItemId()` method matches against resource IDs defined in XML, allowing targeted event execution. Returning `true` indicates the event has been fully consumed.
+
+---
+
+## 5. Algorithm & Procedure
+
+1. **Menu Resource Declaration (`res/menu/menu_main.xml`):**
+   - Create a menu resource file with `<item>` elements for Home, Settings, About Application, and Help & Support.
+   - Configure attributes including `android:id`, `android:title`, and `app:showAsAction="never"` to ensure placement in the overflow menu.
+2. **Toolbar Integration (`activity_main.xml`):**
+   - Embed a `MaterialToolbar` at the top of the layout hierarchy.
+   - Place a central `MaterialCardView` displaying instructional text and a dynamic feedback `TextView` (`@+id/tvMenuFeedback`).
+3. **Event Implementation (`MainActivity.java`):**
+   - Set the toolbar as the activity action bar using `setSupportActionBar(toolbar)`.
+   - Override `onCreateOptionsMenu()` to inflate `R.menu.menu_main`.
+   - Override `onOptionsItemSelected()` to evaluate selected items and update `tvMenuFeedback` with detailed messages while displaying immediate `Toast` popups.
+4. **Hardware Verification:**
+   - Assemble and stream install debug APK onto the OnePlus CPH2661.
+   - Capture initial state with toolbar.
+   - Tap the 3-dot overflow menu icon to reveal options and capture evidence.
+   - Select an item (e.g., Settings) and capture the visual feedback output.
+
+---
+
+## 6. Source Code
+
+### 6.1 `MainActivity.java`
+```java
+package com.example.menubar;
+
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import com.google.android.material.appbar.MaterialToolbar;
+
+/**
+ * Practical 06: Menu Bar (Options Menu)
+ * Course: SCS391 Mobile Application Development Lab
+ */
+public class MainActivity extends AppCompatActivity {
+
+    private TextView tvMenuFeedback;
+    private MaterialToolbar toolbar;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        tvMenuFeedback = findViewById(R.id.tvMenuFeedback);
+
+        findViewById(R.id.btnOpenMenuProgrammatic).setOnClickListener(v -> {
+            if (toolbar != null) {
+                toolbar.showOverflowMenu();
+            } else {
+                openOptionsMenu();
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.menu_home) {
+            String msg = "Home Selected: Navigated to Home Dashboard";
+            tvMenuFeedback.setText(msg);
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (id == R.id.menu_settings) {
+            String msg = "Settings Selected: Opened System Configuration";
+            tvMenuFeedback.setText(msg);
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (id == R.id.menu_about) {
+            String msg = "About Selected: SCS391 Mobile App Dev Lab v1.0";
+            tvMenuFeedback.setText(msg);
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (id == R.id.menu_help) {
+            String msg = "Help & Support Selected: Documentation Active";
+            tvMenuFeedback.setText(msg);
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+}
+```
+
+### 6.2 `res/menu/menu_main.xml`
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_home"
+        android:title="@string/menu_home"
+        android:icon="@android:drawable/ic_menu_today"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/menu_settings"
+        android:title="@string/menu_settings"
+        android:icon="@android:drawable/ic_menu_preferences"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/menu_about"
+        android:title="@string/menu_about"
+        android:icon="@android:drawable/ic_menu_info_details"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/menu_help"
+        android:title="@string/menu_help"
+        android:icon="@android:drawable/ic_menu_help"
+        app:showAsAction="never"/>
+
+</menu>
+```
+
+---
+
+## 7. Output & Hardware Execution Evidence
+
+The application was tested and validated on the physical OnePlus CPH2661 testing smartphone:
+
+- **Action Bar & Main Screen:** `Practical_Screenshots/Practical_06/P06_Menu_Bar_Closed.png`
+- **Expanded Options Menu (Home, Settings, About, Help):** `Practical_Screenshots/Practical_06/P06_Menu_Bar_Open.png`
+- **Menu Item Selection & Dynamic Feedback:** `Practical_Screenshots/Practical_06/P06_Menu_Item_Selected.png`
+
+## 8. Expected Output
+1. The app bar displays the title and the 3-dot overflow menu icon.
+2. Clicking the 3-dot icon opens the options menu showing Home, Settings, About, and Help & Support.
+3. Selecting an item displays a corresponding Toast message and updates the status card text to reflect the action.
+
+## 9. Result & Conclusion
+The Options Menu application was successfully implemented using Java and Android Studio, compiled, and verified on hardware. The complete workflow of defining menu XML structures, action bar integration, and click event dispatching was demonstrated.
