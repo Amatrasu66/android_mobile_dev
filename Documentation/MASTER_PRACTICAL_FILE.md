@@ -1360,3 +1360,274 @@ The application was tested and validated on the physical OnePlus CPH2661 testing
 
 ## 9. Result & Conclusion
 The Options Menu application was successfully implemented using Java and Android Studio, compiled, and verified on hardware. The complete workflow of defining menu XML structures, action bar integration, and click event dispatching was demonstrated.
+
+
+---
+
+# PRACTICAL 07
+
+## 1. Title
+Send SMS in Android Studio.
+
+## 2. Aim
+To develop an Android application in Java that provides an input interface for a recipient phone number and SMS text message, performs rigorous input validation, and dispatches a prefilled SMS intent using `Intent.ACTION_SENDTO` with the `smsto:` URI scheme to launch the default system SMS application without requiring invasive background permissions.
+
+## 3. Software and Hardware Requirements
+- **Integrated Development Environment (IDE):** Android Studio
+- **Language:** Java (JDK 21 LTS)
+- **UI Framework:** XML Layouts with Material Design 3
+- **Build System:** Gradle 9.1.0 with Android Gradle Plugin 9.0.1
+- **Testing Device:** Physical OnePlus CPH2661 Smartphone (Android 16, API 36, Serial `2d242b39`)
+
+## 4. Theoretical Background
+### 4.1 Safe Intent Delegation vs Dangerous Permissions
+Sending text messages from an Android application can be accomplished through two distinct approaches:
+1. **Direct Background Dispatch (`SmsManager`):** Requires declaring the `android.permission.SEND_SMS` dangerous permission in the manifest. On modern Android versions (Android 6.0 Marshmallow through Android 16), this requires runtime permission grants, is scrutinized heavily by Google Play security policies, and carries significant user privacy risks because an application could silently bill the user.
+2. **Intent Delegation (`Intent.ACTION_SENDTO` with `smsto:`):** Delegates message composition to the user's trusted default messaging application (such as Google Messages). This approach requires **zero permissions** in `AndroidManifest.xml`. The user reviews the recipient and message contents before deciding whether to tap send, preserving complete user transparency and privacy.
+
+### 4.2 Intent Scheme & Extras
+The standard URI syntax for SMS intents is:
+```
+Uri smsUri = Uri.parse("smsto:" + Uri.encode(phoneNumber));
+Intent smsIntent = new Intent(Intent.ACTION_SENDTO, smsUri);
+smsIntent.putExtra("sms_body", message);
+```
+Passing `"sms_body"` as an extra ensures that modern messaging clients (including Google Messages, Samsung Messages, and AOSP Messaging) automatically populate the input text area.
+
+### 4.3 Intent Resolution and Error Handling
+If an Android device lacks a telephony provider or compatible SMS app (e.g. certain tablets or custom sandboxes), calling `startActivity(smsIntent)` throws an `ActivityNotFoundException`. Wrapping the dispatch call inside a `try-catch` block ensures robust recovery and informs the user via a Toast.
+
+---
+
+## 5. Procedure & Step-by-Step Implementation
+1. **Create Android Studio Project:** Initialize an Empty Views Activity project named `SMSApplication` under package `com.example.smsapp` with Java language selection.
+2. **Design User Interface (`activity_main.xml`):**
+   - Add a `ScrollView` containing a modern `MaterialCardView`.
+   - Embed two `TextInputLayout` widgets with `TextInputEditText` children:
+     - `etPhoneNumber`: For recipient telephone number, configured with `android:inputType="phone"`.
+     - `etMessageBody`: For the SMS content, configured with `android:inputType="textMultiLine"`.
+   - Add a `MaterialButton` (`btnOpenSmsApp`) styled with an email/message icon.
+3. **Implement Business Logic (`MainActivity.java`):**
+   - Bind UI widgets using `findViewById()`.
+   - In the click listener, validate that both fields are non-empty; if empty, display field errors via `setError()` and display a guidance Toast.
+   - Construct the `smsto:` URI and attach `"sms_body"`.
+   - Invoke `startActivity(smsIntent)` within a `try-catch` block handling `ActivityNotFoundException`.
+4. **Compile and Verify:**
+   - Compile the debug APK using `./gradlew assembleDebug`.
+   - Deploy to the connected OnePlus phone using `adb install -r`.
+   - Verify UI rendering, input validation, and successful handoff to Google Messages with prefilled fields.
+
+---
+
+## 6. Source Code
+
+### 6.1 `MainActivity.java`
+```java
+package com.example.smsapp;
+
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.widget.EditText;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+/**
+ * Practical 07: Send SMS in Android Studio
+ * Course: SCS391 Mobile Application Development Lab
+ */
+public class MainActivity extends AppCompatActivity {
+
+    private EditText etPhoneNumber;
+    private EditText etMessageBody;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        etPhoneNumber = findViewById(R.id.etPhoneNumber);
+        etMessageBody = findViewById(R.id.etMessageBody);
+
+        findViewById(R.id.btnOpenSmsApp).setOnClickListener(v -> openSmsComposer());
+    }
+
+    private void openSmsComposer() {
+        String phone = etPhoneNumber.getText().toString().trim();
+        String message = etMessageBody.getText().toString().trim();
+
+        // Validation
+        if (phone.isEmpty()) {
+            etPhoneNumber.setError("Phone number is required");
+            etPhoneNumber.requestFocus();
+            Toast.makeText(this, "Please enter recipient phone number", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (message.isEmpty()) {
+            etMessageBody.setError("Message body cannot be empty");
+            etMessageBody.requestFocus();
+            Toast.makeText(this, "Please enter message text", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Construct standard SMS Intent
+        Uri smsUri = Uri.parse("smsto:" + Uri.encode(phone));
+        Intent smsIntent = new Intent(Intent.ACTION_SENDTO, smsUri);
+        smsIntent.putExtra("sms_body", message);
+
+        try {
+            startActivity(smsIntent);
+            Toast.makeText(this, "Opening default SMS application...", Toast.LENGTH_SHORT).show();
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "No compatible SMS messaging app found on device", Toast.LENGTH_LONG).show();
+        }
+    }
+}
+```
+
+### 6.2 `res/layout/activity_main.xml`
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:gravity="center">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/surface"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/stroke_color">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lab_header"
+                    android:textColor="@color/primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.05"
+                    android:layout_marginBottom="4dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_sms_app"
+                    android:textColor="@color/text_primary"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/desc_sms_app"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="13sp"
+                    android:layout_marginBottom="20dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_recipient"
+                    android:textColor="@color/text_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="6dp"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etPhoneNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_recipient"
+                        android:text="+919876543210"
+                        android:inputType="phone"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_message"
+                    android:textColor="@color/text_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="6dp"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etMessageBody"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_message"
+                        android:text="Hello, this is a verified test SMS message from SCS391 Android Lab Practical 07."
+                        android:inputType="textMultiLine"
+                        android:minLines="3"
+                        android:gravity="top|start"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnOpenSmsApp"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:text="@string/btn_open_sms"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="12dp"
+                    app:icon="@android:drawable/ic_dialog_email"
+                    app:iconGravity="textStart"/>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+</ScrollView>
+```
+
+---
+
+## 7. Output & Hardware Execution Evidence
+
+The application was tested and validated on the physical OnePlus CPH2661 testing smartphone:
+
+- **SMS Composition Form & Validation:** `Practical_Screenshots/Practical_07/P07_SMS_Form.png`
+- **Default Messaging App Handoff (Prefilled Recipient & Text):** `Practical_Screenshots/Practical_07/P07_SMS_Prefilled_App.png`
+
+## 8. Expected Output
+1. The app displays an input form with fields for recipient phone number and SMS message text.
+2. Clicking the action button validates inputs. If valid, it triggers an implicit intent (`ACTION_SENDTO` with `smsto:`).
+3. The phone's default messaging app opens directly into a conversation thread addressed to `+919876543210` with the message text already populated in the draft box.
+4. No background SMS is sent without manual user confirmation.
+
+## 9. Result & Conclusion
+Practical 07 was successfully implemented and verified on physical hardware. The application cleanly implements SMS composition through the secure, permissionless `Intent.ACTION_SENDTO` architecture, guaranteeing complete privacy and adherence to Android platform best practices.

@@ -7,8 +7,8 @@
 | **03** | Intent Demonstration (Explicit & Implicit) | `03_Intent_Demonstration` | [X] Success | [X] Pass | [X] Captured | [X] Complete | [X] 316996e | COMPLETE |
 | **04** | Appointment Form (ImageButton, Spinner, Pickers, ListView) | `04_Appointment_Form` | [X] Success | [X] Pass | [X] Captured | [X] Complete | [X] 4b71f48 | COMPLETE |
 | **05** | Screen Orientation Detection | `05_Screen_Orientation` | [X] Success | [X] Pass | [X] Captured | [X] Complete | [X] f7760ee | COMPLETE |
-| **06** | Options Menu Bar | `06_Menu_Bar` | [X] Success | [X] Pass | [X] Captured | [X] Complete | [X] Pending | COMPLETE |
-| **07** | SMS Intent Application | `07_SMS_Application` | [ ] | [ ] | [ ] | [ ] | [ ] | NOT STARTED |
+| **06** | Options Menu Bar | `06_Menu_Bar` | [X] Success | [X] Pass | [X] Captured | [X] Complete | [X] 0fa5130 | COMPLETE |
+| **07** | SMS Intent Application | `07_SMS_Application` | [X] Success | [X] Pass | [X] Captured | [X] Complete | [X] Pending | COMPLETE |
 | **08** | Email Intent Application | `08_Email_Application` | [ ] | [ ] | [ ] | [ ] | [ ] | NOT STARTED |
 | **09** | SQLite Student Records (CRUD) | `09_CRUD_SQLite` | [ ] | [ ] | [ ] | [ ] | [ ] | NOT STARTED |
 | **10** | Release Deployment & Signing | `10_Application_Deployment` | [ ] | [ ] | [ ] | [ ] | [ ] | NOT STARTED |

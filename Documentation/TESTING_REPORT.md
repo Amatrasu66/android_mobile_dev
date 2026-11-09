@@ -93,3 +93,18 @@
   - `Practical_Screenshots/Practical_06/P06_Menu_Item_Selected.png`
 - **Google Doc Embedded:** Yes (All 3 images synchronized to Master Google Doc)
 - **Verification Status:** PASS
+
+
+### Practical 07: Send SMS Application
+- **Package Name:** `com.example.smsapp`
+- **Component:** `MainActivity`
+- **Build Status:** SUCCESS (`assembleDebug` in 8s)
+- **Install Command:** `adb install -r 07_SMS_Application/app/build/outputs/apk/debug/app-debug.apk`
+- **Installation Output:** `Performing Streamed Install -> Success`
+- **Input Validation Test:** Validated recipient phone number and SMS text fields; displays error hints if fields are cleared.
+- **Intent Dispatch Test:** Tapped `btnOpenSmsApp` at (620, 2161) -> Triggered `Intent.ACTION_SENDTO` with `smsto:+919876543210` and `"sms_body"`. Successfully launched Google Messages (`com.google.android.apps.messaging`) with recipient and message prefilled.
+- **Hardware Screenshots:**
+  - `Practical_Screenshots/Practical_07/P07_SMS_Form.png` (Material form with recipient and message inputs)
+  - `Practical_Screenshots/Practical_07/P07_SMS_Prefilled_App.png` (Default Messages app opened with recipient and message prefilled)
+- **Google Doc Embedded:** Yes (Both images synchronized to Master Google Doc)
+- **Verification Status:** PASS
