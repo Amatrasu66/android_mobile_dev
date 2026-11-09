@@ -144,3 +144,25 @@
   - `Practical_Screenshots/Practical_09/P09_CRUD_Delete.png` (Record #1 deleted from SQLite database)
 - **Google Doc Embedded:** Yes (All 4 images synchronized to Master Google Doc)
 - **Verification Status:** PASS
+
+
+### Practical 10: Android Application Deployment & Release Packaging
+- **Package Name:** `com.example.deploymentapp`
+- **Application ID:** `com.example.deploymentapp`
+- **Version:** Code: `100` | Name: `1.0.0-release`
+- **Signing Keystore:** `~/.android/scs391_release.jks` (Key: `scs391Release`, RSA 2048-bit)
+- **Release Deliverable:** `10_Application_Deployment/release/app-release.apk`
+- **Build Status:** SUCCESS (`assembleRelease` in 1m 5s)
+- **Signature Verification:** Verified using `apksigner` -> Scheme v2 `true`, SHA-256 Digest `e6bf0aefc5730c06c256b9f80cb90e1e1d15550df59c27c81c0dde30beeb8964`.
+- **Hardware Install Command:** `adb install -r 10_Application_Deployment/release/app-release.apk`
+- **Installation Output:** `Performing Streamed Install -> Success`
+- **Runtime Hardening Verification:** `FLAG_DEBUGGABLE` reports `FALSE (Hardened Production Build)`.
+- **Runtime Certificate Extraction:** Extracted signing certificate SHA-256 fingerprint matching `apksigner` verification digest.
+- **Additional Release Deliverables Built & Signed:**
+  - `02_Hello_World/release/app-release.apk` (Signed Release APK)
+  - `09_CRUD_SQLite/release/app-release.apk` (Signed Release APK)
+- **Hardware Screenshots:**
+  - `Practical_Screenshots/Practical_10/P10_Release_Execution.png` (Production Release Dashboard on hardware showing `FLAG_DEBUGGABLE: FALSE`, version specs, and cryptographic fingerprint)
+  - `Practical_Screenshots/Practical_10/P10_Release_Verification_Details.png` (Real-time dynamic re-verification of deployment parameters)
+- **Google Doc Embedded:** Yes (Both images synchronized to Master Google Doc)
+- **Verification Status:** PASS

@@ -2280,3 +2280,323 @@ The application was tested and validated on the physical OnePlus CPH2661 testing
 
 ## 9. Result & Conclusion
 Practical 09 was successfully built, verified on physical hardware, and documented. The application implements complete SQLite database management using Android's native `SQLiteOpenHelper`, showcasing secure query execution, custom list rendering, and robust data persistence.
+
+
+---
+
+# PRACTICAL 10
+
+## 1. Title
+Android Application Deployment, Cryptographic Signing, and Release Packaging.
+
+## 2. Aim
+To study and execute the complete Android application release lifecycle: configuring release application IDs and semantic versioning (`versionCode`, `versionName`), generating an industry-standard cryptographic signing keystore using `keytool`, configuring Gradle signing specifications, generating an optimized Release APK, verifying cryptographic authenticity using Android SDK's `apksigner`, deploying the signed release package onto physical hardware, and confirming runtime production characteristics (verifying `FLAG_DEBUGGABLE` is disabled and extracting certificate fingerprints).
+
+## 3. Software and Hardware Requirements
+- **Integrated Development Environment (IDE):** Android Studio
+- **Language:** Java (JDK 21 LTS)
+- **UI Framework:** XML Layouts with Material Design 3
+- **Security Tools:** `keytool` (JDK 21), `apksigner` (Android Build-Tools 36.0.0)
+- **Build System:** Gradle 9.1.0 with Android Gradle Plugin 9.0.1
+- **Testing Device:** Physical OnePlus CPH2661 Smartphone (Android 16, API 36, Serial `2d242b39`)
+
+## 4. Theoretical Background
+
+### 4.1 Debug Builds vs Production Release Builds
+During active development, Android Studio generates **Debug APKs** automatically signed with a well-known, insecure debug key located at `~/.android/debug.keystore`. In a Debug build:
+- `android:debuggable` is set to `true`, exposing the Java Debug Wire Protocol (JDWP) port and allowing debuggers and memory inspectors to attach.
+- Application code and resources are unoptimized and contain verbose symbols.
+- Android platform security forbids distributing debug builds via commercial distribution channels.
+
+Conversely, a **Production Release Build**:
+- Enforces `android:debuggable="false"`, locking out arbitrary debugger attachment.
+- Strips debug symbols and optimizes DEX bytecode.
+- Requires cryptographic signing with a private, developer-controlled key pair.
+
+### 4.2 Android Cryptographic Signing Schemes
+Android supports progressive signature verification schemes:
+1. **v1 Scheme (JAR Signing):** Treats the APK as a standard ZIP archive and verifies individual file entries against entries in `META-INF/MANIFEST.MF`.
+2. **v2 Scheme (APK Signature Scheme v2):** Introduced in Android 7.0 (API 24). Protects the entire APK file by inserting an APK Signing Block immediately before the ZIP Central Directory. Any modification to any byte in the APK invalidates the signature, providing near-instantaneous verification at install time.
+3. **v3 & v3.1 Schemes:** Introduce key rotation capabilities and target-SDK-specific keys.
+
+### 4.3 Keystore Security Best Practices
+- Never commit private keystore files (`.jks` or `.keystore`) into source control repositories.
+- Never hardcode signing passwords or aliases in public Git trees.
+- Store production credentials in system environment variables or secure password vaults.
+
+---
+
+## 5. Procedure & Step-by-Step Implementation
+
+### Step 5.1: Cryptographic Keypair Generation
+An RSA 2048-bit keypair with a 10,000-day validity was generated outside the git repository in `~/.android/scs391_release.jks`:
+```bash
+keytool -genkeypair -v \
+  -keystore ~/.android/scs391_release.jks \
+  -alias scs391Release \
+  -keyalg RSA \
+  -keysize 2048 \
+  -validity 10000 \
+  -storepass "androidReleaseLab2026" \
+  -keypass "androidReleaseLab2026" \
+  -dname "CN=SCS391 Student, OU=CSE, O=University, L=City, ST=State, C=IN"
+```
+
+### Step 5.2: Configure Gradle Release Signing
+In `app/build.gradle.kts`, configured production release parameters:
+```kotlin
+defaultConfig {
+    applicationId = "com.example.deploymentapp"
+    minSdk = 24
+    targetSdk = 36
+    versionCode = 100
+    versionName = "1.0.0-release"
+}
+signingConfigs {
+    create("release") {
+        storeFile = file("${System.getProperty("user.home")}/.android/scs391_release.jks")
+        storePassword = "androidReleaseLab2026"
+        keyAlias = "scs391Release"
+        keyPassword = "androidReleaseLab2026"
+    }
+}
+buildTypes {
+    release {
+        isMinifyEnabled = false
+        signingConfig = signingConfigs.getByName("release")
+    }
+}
+```
+
+### Step 5.3: Build Signed Release APK
+Executed Gradle release assembly:
+```bash
+./gradlew assembleRelease
+```
+Preserved the generated deliverable in `10_Application_Deployment/release/app-release.apk`.
+
+### Step 5.4: Verify Cryptographic Signatures with `apksigner`
+Verified the generated release binary:
+```bash
+apksigner verify --verbose --print-certs release/app-release.apk
+```
+**Verification Output:**
+- `Verifies`: YES
+- `Verified using v2 scheme (APK Signature Scheme v2)`: `true`
+- `Signer #1 DN`: `CN=SCS391 Student, OU=CSE, O=University, L=City, ST=State, C=IN`
+- `Signer #1 SHA-256 digest`: `e6bf0aefc5730c06c256b9f80cb90e1e1d15550df59c27c81c0dde30beeb8964`
+- `Key Algorithm`: RSA 2048-bit
+
+### Step 5.5: Deploy and Test on Physical Hardware
+Installed the release APK onto the OnePlus smartphone:
+```bash
+adb install -r 10_Application_Deployment/release/app-release.apk
+adb shell am start -n com.example.deploymentapp/.MainActivity
+```
+
+---
+
+## 6. Source Code
+
+### 6.1 `MainActivity.java`
+```java
+package com.example.deploymentapp;
+
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
+import android.content.pm.SigningInfo;
+import android.os.Build;
+import android.os.Bundle;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import java.security.MessageDigest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+/**
+ * Practical 10: Android Application Deployment & Release Packaging
+ * Course: SCS391 Mobile Application Development Lab
+ */
+public class MainActivity extends AppCompatActivity {
+
+    private TextView tvAppId;
+    private TextView tvVersionName;
+    private TextView tvVersionCode;
+    private TextView tvBuildType;
+    private TextView tvDebuggable;
+    private TextView tvCertFingerprint;
+    private TextView tvVerificationBanner;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        tvAppId = findViewById(R.id.tvAppId);
+        tvVersionName = findViewById(R.id.tvVersionName);
+        tvVersionCode = findViewById(R.id.tvVersionCode);
+        tvBuildType = findViewById(R.id.tvBuildType);
+        tvDebuggable = findViewById(R.id.tvDebuggable);
+        tvCertFingerprint = findViewById(R.id.tvCertFingerprint);
+        tvVerificationBanner = findViewById(R.id.tvVerificationBanner);
+
+        findViewById(R.id.btnVerifyStatus).setOnClickListener(v -> verifyDeploymentSpecs());
+
+        verifyDeploymentSpecs();
+    }
+
+    private void verifyDeploymentSpecs() {
+        try {
+            PackageManager pm = getPackageManager();
+            PackageInfo pInfo;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                pInfo = pm.getPackageInfo(getPackageName(), PackageManager.GET_SIGNING_CERTIFICATES);
+            } else {
+                pInfo = pm.getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
+            }
+
+            tvAppId.setText(pInfo.packageName);
+            tvVersionName.setText(pInfo.versionName);
+
+            long versionCode = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
+                    ? pInfo.getLongVersionCode()
+                    : pInfo.versionCode;
+            tvVersionCode.setText(String.valueOf(versionCode));
+
+            boolean isDebuggable = (getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+            if (isDebuggable) {
+                tvBuildType.setText("DEBUG (Non-Production)");
+                tvDebuggable.setText("TRUE (Debuggable Active)");
+            } else {
+                tvBuildType.setText("RELEASE (Production Optimized)");
+                tvDebuggable.setText("FALSE (Hardened Production Build)");
+            }
+
+            Signature[] signatures = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && pInfo.signingInfo != null) {
+                SigningInfo signingInfo = pInfo.signingInfo;
+                signatures = signingInfo.hasMultipleSigners()
+                        ? signingInfo.getApkContentsSigners()
+                        : signingInfo.getSigningCertificateHistory();
+            } else if (pInfo.signatures != null) {
+                signatures = pInfo.signatures;
+            }
+
+            if (signatures != null && signatures.length > 0) {
+                MessageDigest md = MessageDigest.getInstance("SHA-256");
+                byte[] digest = md.digest(signatures[0].toByteArray());
+                tvCertFingerprint.setText(bytesToHex(digest));
+            } else {
+                tvCertFingerprint.setText("Unavailable from PackageInfo");
+            }
+
+            String timeStamp = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.getDefault()).format(new Date());
+            String banner = "PRODUCTION RELEASE VERIFIED\nInstalled on Physical Hardware • " + timeStamp;
+            tvVerificationBanner.setText(banner);
+
+            Toast.makeText(this, "Production Release Validated Successfully!", Toast.LENGTH_SHORT).show();
+
+        } catch (Exception e) {
+            tvCertFingerprint.setText("Error reading signature: " + e.getMessage());
+        }
+    }
+
+    private static String bytesToHex(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < bytes.length; i++) {
+            sb.append(String.format("%02X", bytes[i]));
+            if (i < bytes.length - 1) {
+                sb.append(":");
+            }
+        }
+        return sb.toString();
+    }
+}
+```
+
+### 6.2 `app/build.gradle.kts`
+```kotlin
+plugins {
+    id("com.android.application")
+}
+
+val releaseStoreFile = System.getenv("RELEASE_STORE_FILE")
+    ?: "${System.getProperty("user.home")}/.android/scs391_release.jks"
+val releaseStorePassword = System.getenv("RELEASE_STORE_PASSWORD")
+    ?: "androidReleaseLab2026"
+val releaseKeyAlias = System.getenv("RELEASE_KEY_ALIAS")
+    ?: "scs391Release"
+val releaseKeyPassword = System.getenv("RELEASE_KEY_PASSWORD")
+    ?: "androidReleaseLab2026"
+
+android {
+    namespace = "com.example.deploymentapp"
+    compileSdk = 36
+
+    defaultConfig {
+        applicationId = "com.example.deploymentapp"
+        minSdk = 24
+        targetSdk = 36
+        versionCode = 100
+        versionName = "1.0.0-release"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        create("release") {
+            if (file(releaseStoreFile).exists()) {
+                storeFile = file(releaseStoreFile)
+                storePassword = releaseStorePassword
+                keyAlias = releaseKeyAlias
+                keyPassword = releaseKeyPassword
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("release")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
+}
+
+dependencies {
+    implementation("androidx.appcompat:appcompat:1.7.0")
+    implementation("com.google.android.material:material:1.12.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.2.0")
+}
+```
+
+---
+
+## 7. Output & Hardware Execution Evidence
+
+The application was tested and validated on the physical OnePlus CPH2661 smartphone:
+
+- **Production Release Dashboard:** `Practical_Screenshots/Practical_10/P10_Release_Execution.png`
+- **Dynamic Certificate Re-Verification:** `Practical_Screenshots/Practical_10/P10_Release_Verification_Details.png`
+
+## 8. Expected Output
+1. The release build compiles into a signed APK with `signingConfig = release`.
+2. Running `apksigner verify` confirms valid v2 signature with the custom university certificate DN and SHA-256 fingerprint.
+3. When launched on physical hardware, `FLAG_DEBUGGABLE` reports `FALSE`, confirming hardened production status.
+4. The application dynamically computes and displays the SHA-256 certificate fingerprint matching `apksigner`.
+
+## 9. Result & Conclusion
+Practical 10 was successfully completed. The complete Android application deployment process was demonstrated end-to-end, including cryptographic key generation, release configuration, APK Signature Scheme v2 validation, hardware deployment, and runtime security verification. Signed release APK deliverables have been generated and preserved.

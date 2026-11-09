@@ -10,8 +10,8 @@
 | **06** | Options Menu Bar | `06_Menu_Bar` | [X] Success | [X] Pass | [X] Captured | [X] Complete | [X] 0fa5130 | COMPLETE |
 | **07** | SMS Intent Application | `07_SMS_Application` | [X] Success | [X] Pass | [X] Captured | [X] Complete | [X] 8b246ec | COMPLETE |
 | **08** | Email Intent Application | `08_Email_Application` | [X] Success | [X] Pass | [X] Captured | [X] Complete | [X] b7198ef | COMPLETE |
-| **09** | SQLite Student Records (CRUD) | `09_CRUD_SQLite` | [X] Success | [X] Pass | [X] Captured | [X] Complete | [X] Pending | COMPLETE |
-| **10** | Release Deployment & Signing | `10_Application_Deployment` | [ ] | [ ] | [ ] | [ ] | [ ] | NOT STARTED |
+| **09** | SQLite Student Records (CRUD) | `09_CRUD_SQLite` | [X] Success | [X] Pass | [X] Captured | [X] Complete | [X] a274d9a | COMPLETE |
+| **10** | Release Deployment & Signing | `10_Application_Deployment` | [X] Success | [X] Pass | [X] Captured | [X] Complete | [X] Pending | COMPLETE |
 
 ---
 **Device Serial:** `2d242b39` (OnePlus CPH2661, Android 16, API 36)  
