@@ -442,3 +442,231 @@ The application successfully launches on the Android device and displays "Hello 
 
 ## 9. Result & Conclusion
 The "Hello World" native Android application was successfully developed in Java using Android Studio, compiled using Gradle, installed onto a physical OnePlus smartphone, and verified. The fundamental concepts of Activity lifecycle, layout inflation, widget referencing, and device deployment were demonstrated.
+
+
+---
+
+# PRACTICAL 03
+
+## 1. Title
+Development of an Android Application in Java to Demonstrate Intents (Explicit and Implicit).
+
+## 2. Aim
+To develop a native Android application demonstrating:
+1. **Explicit Intent:** Navigating between activities within the application and passing payload data through Intent Extras.
+2. **Implicit Intent:** Invoking external system-managed applications (Web Browser and Phone Dialer) using standard Android action filters and URIs.
+
+## 3. Software and Hardware Requirements
+- **IDE:** Android Studio (AI-262 / Ladybug / Meerkat)
+- **Language:** Java (JDK 21 LTS)
+- **Build System:** Gradle 9.1.0 with Android Gradle Plugin 9.0.1
+- **Compile SDK:** API 36 (Android 16) | **Min SDK:** API 24 (Android 7.0)
+- **Key Classes:** `android.content.Intent`, `android.net.Uri`, `android.widget.EditText`, `com.google.android.material.button.MaterialButton`
+- **Testing Hardware:** OnePlus CPH2661 (Android 16, API Level 36, USB Debugging)
+
+## 4. Theoretical Background
+
+### 4.1 Concept of Intent in Android
+An `Intent` is an asynchronous messaging object used to request an action from another app component. Intents facilitate runtime binding between separate components (activities, services, broadcast receivers).
+
+### 4.2 Explicit Intents
+An Explicit Intent specifies the exact target component by providing the fully-qualified class name of the activity (`new Intent(Context packageContext, Class<?> cls)`). Explicit intents are typically used within an application because the developer controls internal package components. Data payloads are packaged as key-value pairs using `intent.putExtra(String name, value)` and unpacked using `getIntent().getStringExtra(name)`.
+
+### 4.3 Implicit Intents
+An Implicit Intent does not name a specific destination component. Instead, it declares a general action to perform (e.g., `Intent.ACTION_VIEW`, `Intent.ACTION_DIAL`), accompanied by data represented as a Uniform Resource Identifier (`Uri`). The Android system evaluates all installed applications' `<intent-filter>` declarations in their manifests to resolve an application capable of handling the action.
+
+---
+
+## 5. Algorithm & Procedure
+
+### 5.1 Explicit Intent Workflow
+1. In `MainActivity`, instantiate an `EditText` for user input and a button `btnLaunchExplicit`.
+2. On click, create an explicit Intent targeting `SecondActivity.class`:
+   ```java
+   Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+   intent.putExtra(EXTRA_MESSAGE, message);
+   intent.putExtra(EXTRA_TIMESTAMP, System.currentTimeMillis());
+   startActivity(intent);
+   ```
+3. In `SecondActivity`, retrieve the extras in `onCreate()`:
+   ```java
+   String msg = getIntent().getStringExtra(MainActivity.EXTRA_MESSAGE);
+   ```
+4. Display the retrieved message and timestamp in designated `TextView` widgets.
+5. Provide a finish button to pop `SecondActivity` off the back stack.
+
+### 5.2 Implicit Intent Workflow
+1. **Web Browser Action:**
+   - Parse web URI: `Uri webpage = Uri.parse("https://developer.android.com");`.
+   - Instantiate intent: `new Intent(Intent.ACTION_VIEW, webpage);`.
+   - Wrap in `try-catch` and call `startActivity(webIntent);`.
+2. **Phone Dialer Action:**
+   - Parse telephone URI: `Uri phone = Uri.parse("tel:9876543210");`.
+   - Instantiate intent: `new Intent(Intent.ACTION_DIAL, phone);`.
+   - Call `startActivity(dialerIntent);`.
+
+---
+
+## 6. Source Code
+
+### 6.1 `MainActivity.java`
+```java
+package com.example.intentdemo;
+
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.widget.EditText;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+/**
+ * Practical 03: Intent Demonstration
+ * Course: SCS391 Mobile Application Development Lab
+ */
+public class MainActivity extends AppCompatActivity {
+
+    public static final String EXTRA_MESSAGE = "com.example.intentdemo.EXTRA_MESSAGE";
+    public static final String EXTRA_TIMESTAMP = "com.example.intentdemo.EXTRA_TIMESTAMP";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        EditText etMessage = findViewById(R.id.etMessage);
+
+        // 3.1 Explicit Intent Demonstration
+        findViewById(R.id.btnLaunchExplicit).setOnClickListener(v -> {
+            String message = etMessage.getText().toString().trim();
+            if (message.isEmpty()) {
+                message = "Default SCS391 Practical Payload";
+            }
+
+            Intent explicitIntent = new Intent(MainActivity.this, SecondActivity.class);
+            explicitIntent.putExtra(EXTRA_MESSAGE, message);
+            explicitIntent.putExtra(EXTRA_TIMESTAMP, System.currentTimeMillis());
+            startActivity(explicitIntent);
+        });
+
+        // 3.2 Implicit Intent (Action A: Open Website)
+        findViewById(R.id.btnOpenWeb).setOnClickListener(v -> {
+            Uri webpage = Uri.parse("https://developer.android.com");
+            Intent webIntent = new Intent(Intent.ACTION_VIEW, webpage);
+            try {
+                startActivity(webIntent);
+            } catch (Exception e) {
+                Toast.makeText(MainActivity.this, "No web browser application found", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // 3.2 Implicit Intent (Action B: Open Phone Dialer)
+        findViewById(R.id.btnOpenDialer).setOnClickListener(v -> {
+            Uri phoneUri = Uri.parse("tel:9876543210");
+            Intent dialerIntent = new Intent(Intent.ACTION_DIAL, phoneUri);
+            try {
+                startActivity(dialerIntent);
+            } catch (Exception e) {
+                Toast.makeText(MainActivity.this, "No phone dialer application found", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+}
+```
+
+### 6.2 `SecondActivity.java`
+```java
+package com.example.intentdemo;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+/**
+ * Target Activity for Explicit Intent Demonstration.
+ */
+public class SecondActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_second);
+
+        TextView tvReceivedMessage = findViewById(R.id.tvReceivedMessage);
+        TextView tvTimestamp = findViewById(R.id.tvTimestamp);
+
+        // Retrieve passed extras from the invoking Intent
+        Intent incomingIntent = getIntent();
+        String message = incomingIntent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+        long timestamp = incomingIntent.getLongExtra(MainActivity.EXTRA_TIMESTAMP, 0L);
+
+        if (message != null) {
+            tvReceivedMessage.setText(message);
+        } else {
+            tvReceivedMessage.setText("No message received");
+        }
+
+        if (timestamp > 0) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+            tvTimestamp.setText("Received at: " + sdf.format(new Date(timestamp)));
+        }
+
+        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
+    }
+}
+```
+
+### 6.3 `AndroidManifest.xml`
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@android:drawable/sym_def_app_icon"
+        android:label="@string/app_name"
+        android:roundIcon="@android:drawable/sym_def_app_icon"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.IntentDemo">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".SecondActivity"
+            android:exported="false"
+            android:label="@string/second_activity_title" />
+
+    </application>
+
+</manifest>
+```
+
+---
+
+## 7. Output & Hardware Execution Evidence
+
+The application was installed and verified on the OnePlus CPH2661 test smartphone via ADB.
+
+- **Main Demonstration Screen:** `Practical_Screenshots/Practical_03/P03_Main_Screen.png`
+- **Explicit Intent Execution:** `Practical_Screenshots/Practical_03/P03_Explicit_Intent_Result.png`
+- **Implicit Intent (Phone Dialer):** `Practical_Screenshots/Practical_03/P03_Implicit_Intent_Dialer.png`
+- **Implicit Intent (Web Browser):** `Practical_Screenshots/Practical_03/P03_Implicit_Intent_Web.png`
+
+## 8. Expected Output
+1. Pressing "Launch Second Activity" opens `SecondActivity` displaying the user-entered payload message and formatted timestamp.
+2. Pressing "Open Phone Dialer" launches the native phone dialer with `9876543210` prefilled.
+3. Pressing "Open Website" launches the system web browser pointing to `developer.android.com`.
+
+## 9. Result & Conclusion
+The Intent demonstration application was successfully developed, installed, and validated on physical Android hardware. The principles of explicit inter-activity navigation with data passing and implicit intent delegation to system applications were fully demonstrated.

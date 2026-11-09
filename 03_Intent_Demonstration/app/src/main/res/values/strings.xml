@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Practical 03 - Intent Demo</string>
+    <string name="lab_header">SCS391 Mobile App Development</string>
+    <string name="explicit_title">3.1 Explicit Intent</string>
+    <string name="explicit_desc">Navigate to SecondActivity and pass payload data.</string>
+    <string name="hint_enter_message">Enter message or student name...</string>
+    <string name="btn_launch_explicit">Launch Second Activity</string>
+    <string name="implicit_title">3.2 Implicit Intent</string>
+    <string name="implicit_desc">Trigger external system applications using standard intent filters.</string>
+    <string name="btn_open_web">Open Website (developer.android.com)</string>
+    <string name="btn_open_dialer">Open Phone Dialer (tel:9876543210)</string>
+    <string name="second_activity_title">Second Activity</string>
+    <string name="received_header">Payload Data Received Successfully</string>
+    <string name="btn_back">Back to Main Activity</string>
+</resources>

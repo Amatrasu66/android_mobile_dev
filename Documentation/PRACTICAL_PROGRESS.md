@@ -3,8 +3,8 @@
 | # | Practical Title | Project Directory | Build | Phone Tested | Screenshots | Google Doc | Git Status | Overall State |
 |---|---|---|---|---|---|---|---|---|
 | **01** | Android Studio Setup & Architecture | `01_Android_Studio_Setup` | N/A (Theory) | N/A (Theory) | [X] Verified | [X] Complete | [X] b143ddb | COMPLETE |
-| **02** | Hello World Application | `02_Hello_World` | [X] Success | [X] Pass | [X] Captured | [X] Complete | [X] Pending | COMPLETE |
-| **03** | Intent Demonstration (Explicit & Implicit) | `03_Intent_Demonstration` | [ ] | [ ] | [ ] | [ ] | [ ] | NOT STARTED |
+| **02** | Hello World Application | `02_Hello_World` | [X] Success | [X] Pass | [X] Captured | [X] Complete | [X] 2aee953 | COMPLETE |
+| **03** | Intent Demonstration (Explicit & Implicit) | `03_Intent_Demonstration` | [X] Success | [X] Pass | [X] Captured | [X] Complete | [X] Pending | COMPLETE |
 | **04** | Appointment Form (ImageButton, Spinner, Pickers, ListView) | `04_Appointment_Form` | [ ] | [ ] | [ ] | [ ] | [ ] | NOT STARTED |
 | **05** | Screen Orientation Detection | `05_Screen_Orientation` | [ ] | [ ] | [ ] | [ ] | [ ] | NOT STARTED |
 | **06** | Options Menu Bar | `06_Menu_Bar` | [ ] | [ ] | [ ] | [ ] | [ ] | NOT STARTED |
