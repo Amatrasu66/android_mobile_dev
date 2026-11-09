@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Practical 02 - Hello World</string>
+    <string name="lab_header">SCS391 Mobile App Development Lab</string>
+    <string name="hello_world">Hello World!</string>
+    <string name="welcome_subtext">Native Java &amp; XML Implementation</string>
+    <string name="device_info">Target: Android 16 (API 36)</string>
+</resources>

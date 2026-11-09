@@ -177,3 +177,268 @@ The Android development workstation is expected to have a fully operational Java
 
 ## 8. Result & Conclusion
 The installation, architectural study, and configuration of Android Studio, Android SDK Platforms and Build-Tools, AVD environment, and JDK 21 LTS were completed and verified successfully. The development environment is ready to compile and deploy native Android applications.
+
+
+---
+
+# PRACTICAL 02
+
+## 1. Title
+Development of an Android Application in Java to Display "Hello World" in Android Studio.
+
+## 2. Aim
+To develop, build, install, and execute a native Android application using the Java programming language and XML layouts to display the traditional "Hello World!" message within a modern Material Design user interface.
+
+## 3. Software and Hardware Requirements
+- **IDE:** Android Studio (AI-262 / Ladybug / Meerkat)
+- **Language:** Java (JDK 21 LTS)
+- **Build System:** Gradle 9.1.0 with Android Gradle Plugin 9.0.1
+- **Compile SDK:** API 36 (Android 16) | **Min SDK:** API 24 (Android 7.0)
+- **UI Components:** `androidx.constraintlayout.widget.ConstraintLayout`, `com.google.android.material.card.MaterialCardView`, `TextView`
+- **Testing Hardware:** OnePlus CPH2661 (Android 16, API Level 36, 1240x2772 px, 560 dpi)
+
+## 4. Theoretical Background
+
+### 4.1 Android Application Architecture
+Every Android application consists of four fundamental building blocks:
+1. **Activity:** Represents a single screen with a user interface. It acts as the visual container where users interact.
+2. **Service:** A component running in the background to perform long-running operations.
+3. **Broadcast Receiver:** Listens for system-wide or application-level broadcast announcements.
+4. **Content Provider:** Manages a shared set of app data.
+
+### 4.2 Activity Lifecycle & View Hierarchy
+When an Activity starts, the Android OS invokes its lifecycle methods:
+- `onCreate()`: Called when the activity is first created. This is where static setup occurs: creating views, binding data to lists, and calling `setContentView(int layoutResID)`.
+- `setContentView()`: Inflates the specified XML layout resource file into active memory as a hierarchy of Java `View` and `ViewGroup` objects.
+
+### 4.3 ConstraintLayout & Material Design 3
+`ConstraintLayout` is a flexible layout manager that allows widgets to be positioned and sized relative to sibling views or parent boundaries, maintaining a flat view hierarchy for optimal rendering performance. Material Design cards (`MaterialCardView`) provide elevated surfaces with rounded corners and consistent elevation shadows.
+
+---
+
+## 5. Algorithm & Procedure
+
+1. **Project Creation:** Create an Android project using the *Empty Views Activity* template with Java selected as the programming language.
+2. **Layout Design (`activity_main.xml`):**
+   - Root the layout in a `ConstraintLayout`.
+   - Place a `MaterialCardView` anchored to parent top, bottom, start, and end.
+   - Inside the card, arrange a vertical `LinearLayout` containing:
+     - Header `TextView` ("SCS391 Mobile App Development Lab").
+     - Primary `TextView` (`@+id/tvHelloWorld`) styled with 32sp bold typography.
+     - Subtitle `TextView` detailing the implementation framework.
+     - Hardware status pill `TextView` indicating target API level.
+3. **Logic Implementation (`MainActivity.java`):**
+   - Extend `AppCompatActivity`.
+   - Override `onCreate(Bundle savedInstanceState)`.
+   - Call `super.onCreate(savedInstanceState)`.
+   - Call `setContentView(R.layout.activity_main)` to inflate the view hierarchy.
+   - Reference `findViewById(R.id.tvHelloWorld)` and bind text.
+4. **Manifest Declaration (`AndroidManifest.xml`):**
+   - Declare the activity with `android:exported="true"`.
+   - Add the `<intent-filter>` containing `ACTION_MAIN` and `CATEGORY_LAUNCHER`.
+5. **Compilation & Installation:**
+   - Compile the debug APK using `./gradlew assembleDebug`.
+   - Stream the APK onto the connected OnePlus CPH2661 using `adb install -r <apk>`.
+6. **Execution & Hardware Verification:**
+   - Launch the application: `adb shell am start -n com.example.helloworld/.MainActivity`.
+   - Verify UI rendering and capture hardware screenshot using ADB screencap.
+
+---
+
+## 6. Source Code
+
+### 6.1 `MainActivity.java`
+```java
+package com.example.helloworld;
+
+import android.os.Bundle;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+
+/**
+ * Practical 02: Hello World Application
+ * Course: SCS391 Mobile Application Development Lab
+ */
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Inflate the XML layout into the active View hierarchy
+        setContentView(R.layout.activity_main);
+
+        // Bind TextView widget
+        TextView tvHelloWorld = findViewById(R.id.tvHelloWorld);
+        tvHelloWorld.setText(R.string.hello_world);
+    }
+}
+```
+
+### 6.2 `res/layout/activity_main.xml`
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:padding="24dp">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="6dp"
+        app:cardBackgroundColor="@color/surface"
+        app:strokeWidth="1dp"
+        app:strokeColor="#DADCE0"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="32dp">
+
+            <TextView
+                android:id="@+id/tvLabHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lab_header"
+                android:textColor="@color/primary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.05"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/tvHelloWorld"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/hello_world"
+                android:textColor="@color/text_primary"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/tvSubtext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/welcome_subtext"
+                android:textColor="@color/text_secondary"
+                android:textSize="15sp"
+                android:layout_marginBottom="20dp"/>
+
+            <TextView
+                android:id="@+id/tvDeviceInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/device_info"
+                android:textColor="@color/primary"
+                android:background="@color/accent_chip"
+                android:paddingHorizontal="14dp"
+                android:paddingVertical="6dp"
+                android:textSize="12sp"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+```
+
+### 6.3 `AndroidManifest.xml`
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@android:drawable/sym_def_app_icon"
+        android:label="@string/app_name"
+        android:roundIcon="@android:drawable/sym_def_app_icon"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.HelloWorld">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>
+```
+
+### 6.4 `res/values/strings.xml`
+```xml
+<resources>
+    <string name="app_name">Practical 02 - Hello World</string>
+    <string name="lab_header">SCS391 Mobile App Development Lab</string>
+    <string name="hello_world">Hello World!</string>
+    <string name="welcome_subtext">Native Java &amp; XML Implementation</string>
+    <string name="device_info">Target: Android 16 (API 36)</string>
+</resources>
+```
+
+### 6.5 `app/build.gradle.kts`
+```kotlin
+plugins {
+    id("com.android.application")
+}
+
+android {
+    namespace = "com.example.helloworld"
+    compileSdk = 36
+
+    defaultConfig {
+        applicationId = "com.example.helloworld"
+        minSdk = 24
+        targetSdk = 36
+        versionCode = 1
+        versionName = "1.0"
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation("androidx.appcompat:appcompat:1.7.0")
+    implementation("com.google.android.material:material:1.12.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.2.0")
+}
+```
+
+---
+
+## 7. Output & Hardware Execution Evidence
+
+The application was built via Gradle, installed onto the authorized OnePlus CPH2661 smartphone running Android 16 via ADB, and executed.
+
+- **Captured Screenshot Reference:** `Practical_Screenshots/Practical_02/P02_Hello_World.png`
+- **Device Display Output:** The smartphone screen opens directly into the main activity displaying the Material Card with the header "SCS391 Mobile App Development Lab", bold primary text "Hello World!", subtext "Native Java & XML Implementation", and the hardware status badge "Target: Android 16 (API 36)".
+
+## 8. Expected Output
+The application successfully launches on the Android device and displays "Hello World!" in the center of the screen with proper typography and Material card styling.
+
+## 9. Result & Conclusion
+The "Hello World" native Android application was successfully developed in Java using Android Studio, compiled using Gradle, installed onto a physical OnePlus smartphone, and verified. The fundamental concepts of Activity lifecycle, layout inflation, widget referencing, and device deployment were demonstrated.
