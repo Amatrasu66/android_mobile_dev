@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#00695C</color>
+    <color name="primary_variant">#004D40</color>
+    <color name="secondary">#0288D1</color>
+    <color name="background">#F5F7FA</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#616161</color>
+    <color name="stroke_color">#E0E0E0</color>
+    
+    <color name="btn_create_color">#2E7D32</color>
+    <color name="btn_read_color">#1565C0</color>
+    <color name="btn_update_color">#E65100</color>
+    <color name="btn_delete_color">#C62828</color>
+</resources>

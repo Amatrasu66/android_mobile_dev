@@ -1967,3 +1967,316 @@ The application was tested and validated on the physical OnePlus CPH2661 testing
 
 ## 9. Result & Conclusion
 Practical 08 was successfully implemented and verified on the physical OnePlus device. The application implements the best-practice Android email dispatch architecture using `Intent.ACTION_SENDTO` with `mailto:` scheme delegation and system chooser integration, ensuring clean separation of concerns and user control.
+
+
+---
+
+# PRACTICAL 09
+
+## 1. Title
+CRUD Operations using SQLite in Android Studio.
+
+## 2. Aim
+To develop a Student Record Management Android application in Java implementing native SQLite database persistence via `SQLiteOpenHelper`, supporting the four fundamental database operations: CREATE (Insert student), READ (Query and display all records in a custom ListView), UPDATE (Modify existing student details by ID), and DELETE (Remove a record by ID), alongside rigorous validation and persistence verification.
+
+## 3. Software and Hardware Requirements
+- **Integrated Development Environment (IDE):** Android Studio
+- **Language:** Java (JDK 21 LTS)
+- **UI Framework:** XML Layouts with Material Design 3
+- **Database Engine:** Embedded SQLite Database (`SQLiteOpenHelper`)
+- **Build System:** Gradle 9.1.0 with Android Gradle Plugin 9.0.1
+- **Testing Device:** Physical OnePlus CPH2661 Smartphone (Android 16, API 36, Serial `2d242b39`)
+
+## 4. Theoretical Background
+### 4.1 Native SQLite Architecture in Android
+Android embeds the lightweight, transactional, zero-configuration SQLite relational database engine directly into the operating system runtime. Every Android application can manage its own private SQLite databases stored securely in its internal storage sandbox at `/data/data/<package_name>/databases/`. These databases require zero external server configuration, execute with near-zero latency, and persist across app terminations and device reboots.
+
+### 4.2 Role of `SQLiteOpenHelper`
+The `SQLiteOpenHelper` abstract class provides best-practice lifecycle management for SQLite databases:
+1. `onCreate(SQLiteDatabase db)`: Called once when the database file is first created on disk. Executes table creation DDL statements.
+2. `onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)`: Called when the database version increments, facilitating schema migrations, table additions, or schema resets.
+3. `getWritableDatabase()` & `getReadableDatabase()`: Provide connection handles to perform read/write queries while automatically managing threading locks.
+
+### 4.3 CRUD Mapping and SQL Injection Prevention
+Direct SQL string concatenation (`"SELECT * FROM users WHERE name = '" + name + "'"` ) is a critical security vulnerability. Android mitigates SQL injection by providing strongly typed mapping APIs:
+- **CREATE (`db.insert()`):** Uses `ContentValues` key-value pairs to bind column names to values securely.
+- **READ (`db.query()`):** Returns a typed `Cursor` object allowing iteration over matched rows via positional indices and column getters.
+- **UPDATE (`db.update()`):** Accepts parameterized `whereClause` with `whereArgs` (e.g. `id = ?`, `new String[]{String.valueOf(id)}`), ensuring sanitized input.
+- **DELETE (`db.delete()`):** Removes rows safely using parameterized selection criteria and returns the count of affected rows.
+
+---
+
+## 5. Procedure & Step-by-Step Implementation
+1. **Initialize Project:** Create an Empty Views Activity named `CRUDSQLite` under package `com.example.crudsqlite`.
+2. **Define Data Model (`Student.java`):** Encapsulate student entity properties: `id`, `name`, `email`, and `course`.
+3. **Implement Database Manager (`DatabaseHelper.java`):**
+   - Extend `SQLiteOpenHelper`, define database `StudentDB.db` and table `students`.
+   - Write parameterized methods: `insertStudent()`, `getAllStudents()`, `updateStudent()`, and `deleteStudent()`.
+4. **Create UI Components & Custom Adapter:**
+   - Design `item_student.xml` with an ID badge, name, email, and course labels.
+   - Implement `StudentAdapter` extending `ArrayAdapter<Student>` to bind database rows to list cards.
+   - Design `activity_main.xml` with four input fields, four CRUD action buttons (`btnInsert`, `btnViewAll`, `btnUpdate`, `btnDelete`), a clear button, status banner, and a `ListView`.
+5. **Implement Activity Logic (`MainActivity.java`):**
+   - Wire CRUD button listeners to database helper methods.
+   - Attach an `OnItemClickListener` to the `ListView` so clicking any row populates form fields for immediate updating or deletion.
+   - Validate all user inputs and provide real-time Toast and banner feedback.
+6. **Compile and Verify on Hardware:**
+   - Assemble debug APK and install onto the OnePlus smartphone.
+   - Verify CREATE (Alice Smith, Bob Miller), READ ALL, UPDATE (Robert Miller), and DELETE (ID 1).
+
+---
+
+## 6. Source Code
+
+### 6.1 `DatabaseHelper.java`
+```java
+package com.example.crudsqlite;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import java.util.ArrayList;
+import java.util.List;
+
+public class DatabaseHelper extends SQLiteOpenHelper {
+
+    private static final String DATABASE_NAME = "StudentDB.db";
+    private static final int DATABASE_VERSION = 1;
+
+    public static final String TABLE_STUDENTS = "students";
+    public static final String COL_ID = "id";
+    public static final String COL_NAME = "name";
+    public static final String COL_EMAIL = "email";
+    public static final String COL_COURSE = "course";
+
+    private static final String CREATE_TABLE_QUERY = "CREATE TABLE " + TABLE_STUDENTS + " ("
+            + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + COL_NAME + " TEXT NOT NULL, "
+            + COL_EMAIL + " TEXT NOT NULL, "
+            + COL_COURSE + " TEXT NOT NULL"
+            + ");";
+
+    public DatabaseHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(CREATE_TABLE_QUERY);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_STUDENTS);
+        onCreate(db);
+    }
+
+    public long insertStudent(String name, String email, String course) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COL_NAME, name);
+        values.put(COL_EMAIL, email);
+        values.put(COL_COURSE, course);
+
+        return db.insert(TABLE_STUDENTS, null, values);
+    }
+
+    public List<Student> getAllStudents() {
+        List<Student> studentList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+
+        try {
+            cursor = db.query(TABLE_STUDENTS,
+                    new String[]{COL_ID, COL_NAME, COL_EMAIL, COL_COURSE},
+                    null, null, null, null,
+                    COL_ID + " ASC");
+
+            if (cursor != null && cursor.moveToFirst()) {
+                int idIdx = cursor.getColumnIndexOrThrow(COL_ID);
+                int nameIdx = cursor.getColumnIndexOrThrow(COL_NAME);
+                int emailIdx = cursor.getColumnIndexOrThrow(COL_EMAIL);
+                int courseIdx = cursor.getColumnIndexOrThrow(COL_COURSE);
+
+                do {
+                    int id = cursor.getInt(idIdx);
+                    String name = cursor.getString(nameIdx);
+                    String email = cursor.getString(emailIdx);
+                    String course = cursor.getString(courseIdx);
+                    studentList.add(new Student(id, name, email, course));
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return studentList;
+    }
+
+    public int updateStudent(int id, String name, String email, String course) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COL_NAME, name);
+        values.put(COL_EMAIL, email);
+        values.put(COL_COURSE, course);
+
+        return db.update(TABLE_STUDENTS, values, COL_ID + " = ?", new String[]{String.valueOf(id)});
+    }
+
+    public int deleteStudent(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(TABLE_STUDENTS, COL_ID + " = ?", new String[]{String.valueOf(id)});
+    }
+}
+```
+
+### 6.2 `MainActivity.java`
+```java
+package com.example.crudsqlite;
+
+import android.os.Bundle;
+import android.util.Patterns;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity {
+
+    private EditText etStudentId, etStudentName, etStudentEmail, etStudentCourse;
+    private TextView tvStatus, tvListHeader;
+    private ListView lvStudents;
+
+    private DatabaseHelper dbHelper;
+    private StudentAdapter adapter;
+    private List<Student> studentList;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        dbHelper = new DatabaseHelper(this);
+        studentList = new ArrayList<>();
+
+        etStudentId = findViewById(R.id.etStudentId);
+        etStudentName = findViewById(R.id.etStudentName);
+        etStudentEmail = findViewById(R.id.etStudentEmail);
+        etStudentCourse = findViewById(R.id.etStudentCourse);
+        tvStatus = findViewById(R.id.tvStatus);
+        tvListHeader = findViewById(R.id.tvListHeader);
+        lvStudents = findViewById(R.id.lvStudents);
+
+        adapter = new StudentAdapter(this, studentList);
+        lvStudents.setAdapter(adapter);
+
+        findViewById(R.id.btnInsert).setOnClickListener(v -> performCreate());
+        findViewById(R.id.btnViewAll).setOnClickListener(v -> performRead(true));
+        findViewById(R.id.btnUpdate).setOnClickListener(v -> performUpdate());
+        findViewById(R.id.btnDelete).setOnClickListener(v -> performDelete());
+        findViewById(R.id.btnClear).setOnClickListener(v -> clearFormFields());
+
+        lvStudents.setOnItemClickListener((parent, view, position, id) -> {
+            Student selected = studentList.get(position);
+            etStudentId.setText(String.valueOf(selected.getId()));
+            etStudentName.setText(selected.getName());
+            etStudentEmail.setText(selected.getEmail());
+            etStudentCourse.setText(selected.getCourse());
+
+            String msg = "Loaded Record #" + selected.getId() + " into editor.";
+            tvStatus.setText(msg);
+            Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+        });
+
+        performRead(false);
+    }
+
+    private void performCreate() {
+        String name = etStudentName.getText().toString().trim();
+        String email = etStudentEmail.getText().toString().trim();
+        String course = etStudentCourse.getText().toString().trim();
+
+        if (name.isEmpty() || email.isEmpty() || course.isEmpty()) {
+            Toast.makeText(this, "Please fill in Name, Email, and Course", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        long insertedId = dbHelper.insertStudent(name, email, course);
+        if (insertedId != -1) {
+            tvStatus.setText("SUCCESS: Created Student Record #" + insertedId);
+            clearFormFields();
+            performRead(false);
+        }
+    }
+
+    private void performRead(boolean showToast) {
+        studentList.clear();
+        studentList.addAll(dbHelper.getAllStudents());
+        adapter.notifyDataSetChanged();
+        tvListHeader.setText("Stored Student Records Database (" + studentList.size() + " Total)");
+    }
+
+    private void performUpdate() {
+        String idStr = etStudentId.getText().toString().trim();
+        if (idStr.isEmpty()) return;
+        int id = Integer.parseInt(idStr);
+
+        int rows = dbHelper.updateStudent(id,
+                etStudentName.getText().toString().trim(),
+                etStudentEmail.getText().toString().trim(),
+                etStudentCourse.getText().toString().trim());
+        if (rows > 0) {
+            tvStatus.setText("SUCCESS: Updated Student Record #" + id);
+            performRead(false);
+        }
+    }
+
+    private void performDelete() {
+        String idStr = etStudentId.getText().toString().trim();
+        if (idStr.isEmpty()) return;
+        int id = Integer.parseInt(idStr);
+
+        int rows = dbHelper.deleteStudent(id);
+        if (rows > 0) {
+            tvStatus.setText("SUCCESS: Deleted Student Record #" + id);
+            clearFormFields();
+            performRead(false);
+        }
+    }
+
+    private void clearFormFields() {
+        etStudentId.setText("");
+        etStudentName.setText("");
+        etStudentEmail.setText("");
+        etStudentCourse.setText("");
+    }
+}
+```
+
+---
+
+## 7. Output & Hardware Execution Evidence
+
+The application was tested and validated on the physical OnePlus CPH2661 testing smartphone across all four operations:
+
+- **CREATE (Insert Record):** `Practical_Screenshots/Practical_09/P09_CRUD_Create.png`
+- **READ (Query All Records):** `Practical_Screenshots/Practical_09/P09_CRUD_Read.png`
+- **UPDATE (Modify Record by ID):** `Practical_Screenshots/Practical_09/P09_CRUD_Update.png`
+- **DELETE (Delete Record by ID):** `Practical_Screenshots/Practical_09/P09_CRUD_Delete.png`
+
+## 8. Expected Output
+1. **CREATE:** Entering student details and tapping "INSERT RECORD" writes to SQLite and updates the list view immediately with an auto-incremented ID badge.
+2. **READ ALL:** Tapping "VIEW ALL" displays all stored student records with total count summary.
+3. **UPDATE:** Selecting a record or typing an existing ID allows updating name, email, or course; tapping "UPDATE BY ID" modifies the database row and refreshes the display.
+4. **DELETE:** Supplying an ID and tapping "DELETE BY ID" permanently deletes the record and removes it from the list.
+5. All operations survive process death and persist in SQLite storage.
+
+## 9. Result & Conclusion
+Practical 09 was successfully built, verified on physical hardware, and documented. The application implements complete SQLite database management using Android's native `SQLiteOpenHelper`, showcasing secure query execution, custom list rendering, and robust data persistence.

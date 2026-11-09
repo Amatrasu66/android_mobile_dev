@@ -123,3 +123,24 @@
   - `Practical_Screenshots/Practical_08/P08_Email_Prefilled_App.png` (System intent chooser opened displaying email application targets)
 - **Google Doc Embedded:** Yes (Both images synchronized to Master Google Doc)
 - **Verification Status:** PASS
+
+
+### Practical 09: CRUD Operations using SQLite
+- **Package Name:** `com.example.crudsqlite`
+- **Database File:** `/data/data/com.example.crudsqlite/databases/StudentDB.db`
+- **Component:** `MainActivity` with `DatabaseHelper` (SQLiteOpenHelper)
+- **Build Status:** SUCCESS (`assembleDebug` in 8s)
+- **Install Command:** `adb install -r 09_CRUD_SQLite/app/build/outputs/apk/debug/app-debug.apk`
+- **Installation Output:** `Performing Streamed Install -> Success`
+- **CREATE Test:** Inserted records for "Alice Smith" (`alice.smith@university.edu`, "Computer Science") and "Bob Miller" (`bob.miller@university.edu`, "Electrical Engineering"). Verified auto-increment IDs (#1, #2) and immediate dynamic list view updates.
+- **READ ALL Test:** Tapped `btnViewAll` -> Queried all rows via `Cursor` in `getAllStudents()`, updating header to "Stored Student Records Database (2 Total)".
+- **UPDATE Test:** Tapped `btnUpdate` on ID #2 -> Changed name to "Robert Miller", email to `robert.miller@university.edu`, course to "Robotics & AI". Verified row update in SQLite and live list refresh.
+- **DELETE Test:** Tapped `btnDelete` on ID #1 -> Record #1 deleted from SQLite table `students`. List dynamically refreshed showing 1 remaining record (Robert Miller).
+- **Persistence Verification:** Application restarted; database state retained across lifecycles.
+- **Hardware Screenshots:**
+  - `Practical_Screenshots/Practical_09/P09_CRUD_Create.png` (Record inserted and database status updated)
+  - `Practical_Screenshots/Practical_09/P09_CRUD_Read.png` (All student records listed in custom ListView cards)
+  - `Practical_Screenshots/Practical_09/P09_CRUD_Update.png` (Record #2 updated to Robert Miller with instant reflection)
+  - `Practical_Screenshots/Practical_09/P09_CRUD_Delete.png` (Record #1 deleted from SQLite database)
+- **Google Doc Embedded:** Yes (All 4 images synchronized to Master Google Doc)
+- **Verification Status:** PASS
