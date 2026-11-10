@@ -63,12 +63,33 @@ Every application in this repository strictly adheres to minimalist academic pra
 
 ---
 
-## 4. Release Deliverables
+## 4. Release Deliverables & Pre-Compiled APKs
 
-Pre-built signed release APK packages signed with APK Signature Scheme v2 (RSA 2048-bit, SHA-256 Digest) are preserved directly in the project repositories:
-- `15_Application_Deployment/release/app-release.apk`
-- `11_CRUD_SQLite/release/app-release.apk`
-- `02_Hello_World/release/app-release.apk`
+Pre-built installable APK packages are provided for all 14 practical applications, both in a centralized top-level directory and within each individual project folder:
+
+### Centralized APK Directory: `APKs/`
+- `APKs/P02_Hello_World.apk` (`com.example.helloworld`)
+- `APKs/P03_Implicit_Intent.apk` (`com.example.implicitintent`)
+- `APKs/P04_Explicit_Intent.apk` (`com.example.explicitintent`)
+- `APKs/P05_Screen_Orientation.apk` (`com.example.screenorientation`)
+- `APKs/P06_Picker_View.apk` (`com.example.pickerview`)
+- `APKs/P07_List_View.apk` (`com.example.listviewapp`)
+- `APKs/P08_Theme_Application.apk` (`com.example.themeapp`)
+- `APKs/P09_Menu_Bar.apk` (`com.example.menubar`)
+- `APKs/P10_User_Preferences.apk` (`com.example.userpreferences`)
+- `APKs/P11_CRUD_SQLite.apk` (`com.example.crudsqlite`)
+- `APKs/P12_SMS_Application.apk` (`com.example.smsapplication`)
+- `APKs/P13_Email_Application.apk` (`com.example.emailapp`)
+- `APKs/P14_Google_Maps_Location.apk` (`com.example.googlemapslocation`)
+- `APKs/P15_Application_Deployment.apk` (`com.example.deploymentapp`)
+
+### Individual Project Release Directories
+Each project directory also contains a self-contained release package under `<project_dir>/release/app-release.apk` for modular distribution.
+
+To install all applications onto a connected Android smartphone:
+```bash
+for apk in APKs/*.apk; do adb install -r "$apk"; done
+```
 
 ---
 

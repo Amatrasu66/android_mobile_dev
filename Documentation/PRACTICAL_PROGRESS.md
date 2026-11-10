@@ -6,7 +6,7 @@
 - **Execution Target:** Physical Smartphone (OnePlus CPH2661, Android 16, API 36, Serial `2d242b39`)
 - **Emulator Usage:** 0% (Strict hardware execution only)
 - **Genuine Device Screenshots:** 27 Captured and Synchronized to Google Docs
-- **Release Deliverables:** Signed Production APKs (`02_Hello_World`, `11_CRUD_SQLite`, `15_Application_Deployment`)
+- **Release Deliverables:** 14 Compiled & Verified APKs (`APKs/` catalog and per-project `release/` directories)
 - **Master Google Document ID:** `1pA0UY_HGMcekwgpwh4SVj7VfuM3f5R5iSJUdMKYosSw`
 - **Master Google Document URL:** https://docs.google.com/document/d/1pA0UY_HGMcekwgpwh4SVj7VfuM3f5R5iSJUdMKYosSw/edit
 - **GitHub Repository:** https://github.com/Amatrasu66/android_mobile_dev.git

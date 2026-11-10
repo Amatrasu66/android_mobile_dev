@@ -4,6 +4,7 @@ build/
 **/build/
 *.apk
 !**/release/*.apk
+!APKs/*.apk
 *.aab
 
 # Local configuration
