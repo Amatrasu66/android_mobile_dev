@@ -1,15 +1,13 @@
 # SCS391 Mobile Application Development Lab — Master Portfolio
 
-**Student / Contributor:** Amatrasu66  
-**Student Email:** simransagoosagoo@gmail.com  
+**Student / Contributor:** Amatrasu66
 **Course Code:** SCS391 – Mobile App Development Lab  
 **Academic Session:** 2026 – 2027  
 **Platform:** Android Studio (Arch Linux x86_64)  
 **Language:** Java (JDK 21 LTS / Android Studio JBR)  
 **Target Architecture:** Android SDK 36 (VanillaIceCream) / Min SDK 24 (Nougat)  
 **Primary Testing Device:** OnePlus CPH2661 (Android 16, API Level 36, Physical USB Debugging, Serial `2d242b39`)  
-**GitHub Repository:** [https://github.com/Amatrasu66/android_mobile_dev.git](https://github.com/Amatrasu66/android_mobile_dev.git)  
-**Master Google Document:** [SCS391 – Mobile App Development Practical File](https://docs.google.com/document/d/1pA0UY_HGMcekwgpwh4SVj7VfuM3f5R5iSJUdMKYosSw/edit)
+**GitHub Repository:**
 
 ---
 
