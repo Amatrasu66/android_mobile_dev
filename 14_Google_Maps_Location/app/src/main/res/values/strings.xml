@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Practical 14 - Google Maps Location</string>
+    <string name="maps_title">Google Maps Location Display</string>
+    <string name="opt_given_location">Given Location (Golden Temple, Amritsar)</string>
+    <string name="opt_current_location">Use Device Current Location</string>
+    <string name="btn_open_maps">Open in Google Maps</string>
+</resources>

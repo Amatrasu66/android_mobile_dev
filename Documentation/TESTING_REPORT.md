@@ -2,14 +2,15 @@
 
 ## Hardware Testing Device Profile
 - **Device Model:** OnePlus CPH2661
-- **Android OS Version:** Android 16 (API 36)
+- **Android OS Version:** Android 16 (API Level 36)
 - **Screen Resolution:** 1240 x 2772 px
 - **Density:** 560 dpi
 - **Transport:** ADB via USB (Serial: `2d242b39`)
+- **Execution Policy:** 0% Emulators. All verifications performed on physical OnePlus CPH2661.
 
 ---
 
-## Practical Test Results
+## Practical Test Results (Full 15 Practicals)
 
 ### Practical 01: Android Studio Setup & Architecture
 - **Type:** Theoretical Setup Documentation
@@ -33,40 +34,30 @@
 
 ---
 
-### Practical 03: Intent Demonstration
-- **Package Name:** `com.example.intentdemo`
-- **Components:** `MainActivity`, `SecondActivity`
-- **UI Architecture:** Minimalist `LinearLayout` with input field and action buttons
+### Practical 03: Implementing the Concept of Intent (Part A - Implicit Intent)
+- **Package Name:** `com.example.implicitintent`
+- **Component:** `MainActivity`
+- **UI Architecture:** Minimalist `LinearLayout` with dialer action button
 - **Build Status:** SUCCESS (`assembleDebug`)
-- **Install Command:** `adb install -r 03_Intent_Demonstration/app/build/outputs/apk/debug/app-debug.apk`
-- **Installation Output:** `Performing Streamed Install -> Success`
-- **Explicit Intent Test:** Tapped `btnLaunchExplicit` -> `SecondActivity` focused, unpacks payload message "Hello from Practical 03!".
-- **Implicit Intent Test (Dialer):** Tapped `btnOpenDialer` -> System phone dialer focused with `tel:9876543210` prefilled.
+- **Implicit Intent Test (Dialer):** Tapped `btnOpenDialer` -> Dispatched `Intent.ACTION_DIAL` with `tel:9876543210`, launching native system phone dialer with telephone number prefilled.
 - **Hardware Screenshots:**
-  - `Practical_Screenshots/Practical_03/P03_Main_Screen.png`
-  - `Practical_Screenshots/Practical_03/P03_Explicit_Intent.png`
-  - `Practical_Screenshots/Practical_03/P03_Implicit_Intent.png`
-- **Google Doc Embedded:** Yes (All 3 images synchronized to Master Google Doc)
+  - `Practical_Screenshots/Practical_03/P03_Implicit_Main.png`
+  - `Practical_Screenshots/Practical_03/P03_Implicit_Dialer.png`
+- **Google Doc Embedded:** Yes (Both images synchronized to Master Google Doc)
 - **Verification Status:** PASS
 
 ---
 
-### Practical 04: Appointment Form Application
-- **Package Name:** `com.example.appointmentform`
-- **Component:** `MainActivity`
-- **UI Architecture:** ScrollView containing `ImageButton`, `Spinner`, `DatePicker`, `TimePicker`, submit `Button`, and dynamic `ListView`
+### Practical 04: Implementing the Concept of Intent (Part B - Explicit Intent)
+- **Package Name:** `com.example.explicitintent`
+- **Components:** `MainActivity`, `SecondActivity`
+- **UI Architecture:** Native `LinearLayout` with `EditText` and navigation button
 - **Build Status:** SUCCESS (`assembleDebug`)
-- **Install Command:** `adb install -r 04_Appointment_Form/app/build/outputs/apk/debug/app-debug.apk`
-- **Installation Output:** `Performing Streamed Install -> Success`
-- **ImageButton Test:** Tapped `ibServiceIcon` -> Service cycled through General Consultation, Dental Checkup, Cardiology Review.
-- **Spinner Test:** `spnCategory` bound to medical specialties via `ArrayAdapter`.
-- **DatePicker & TimePicker Test:** Selected date and time on native pickers.
-- **Submit & ListView Test:** Tapped `btnSubmitAppointment` -> Created new `Appointment` object for "Alex Johnson", inserted into `ListView`, dynamic row displayed with patient name, service, department, and formatted date/time.
+- **Explicit Intent Test:** Entered text message in `MainActivity`, tapped `btnLaunchSecond` -> `SecondActivity` launched via explicit Intent, unpacked string extra payload `KEY_MESSAGE`, and rendered text into destination `TextView`.
 - **Hardware Screenshots:**
-  - `Practical_Screenshots/Practical_04/P04_Appointment_Form.png`
-  - `Practical_Screenshots/Practical_04/P04_DateTime_Selection.png`
-  - `Practical_Screenshots/Practical_04/P04_Appointment_Submitted.png`
-- **Google Doc Embedded:** Yes (All 3 images synchronized to Master Google Doc)
+  - `Practical_Screenshots/Practical_04/P04_Explicit_Main.png`
+  - `Practical_Screenshots/Practical_04/P04_Explicit_Second.png`
+- **Google Doc Embedded:** Yes (Both images synchronized to Master Google Doc)
 - **Verification Status:** PASS
 
 ---
@@ -76,8 +67,6 @@
 - **Component:** `MainActivity`
 - **UI Architecture:** Native layout qualifiers (`layout` and `layout-land`) with centered text
 - **Build Status:** SUCCESS (`assembleDebug`)
-- **Install Command:** `adb install -r 05_Screen_Orientation/app/build/outputs/apk/debug/app-debug.apk`
-- **Installation Output:** `Performing Streamed Install -> Success`
 - **Portrait Verification:** In vertical orientation, rendered `res/layout/activity_main.xml` displaying "Portrait Mode".
 - **Landscape Verification:** In horizontal orientation (`user_rotation 1`), system automatically recreated activity and inflated `res/layout-land/activity_main.xml` displaying "Landscape Mode".
 - **Hardware Screenshots:**
@@ -88,97 +77,143 @@
 
 ---
 
-### Practical 06: Options Menu Bar
+### Practical 06: Developing an Application Using Picker View
+- **Package Name:** `com.example.pickerview`
+- **Component:** `MainActivity`
+- **UI Architecture:** Native `DatePicker` and `TimePicker` widgets in spinner mode with selection button and display `TextView`
+- **Build Status:** SUCCESS (`assembleDebug`)
+- **Picker Selection Test:** Configured date and time on pickers, tapped "Confirm Selection" -> Formatted date `dd-MM-yyyy` and time `HH:mm` computed and rendered accurately.
+- **Hardware Screenshot:** `Practical_Screenshots/Practical_06/P06_Picker_View.png`
+- **Google Doc Embedded:** Yes (Synchronized to Master Google Doc)
+- **Verification Status:** PASS
+
+---
+
+### Practical 07: Developing an Application Using ListView
+- **Package Name:** `com.example.listviewapp`
+- **Component:** `MainActivity`
+- **UI Architecture:** Native `ListView` bound via `ArrayAdapter<String>`
+- **Build Status:** SUCCESS (`assembleDebug`)
+- **List Click Test:** Tapped item in list -> Item click listener captured selection and dispatched immediate feedback `Toast` with selected technology name.
+- **Hardware Screenshot:** `Practical_Screenshots/Practical_07/P07_List_View.png`
+- **Google Doc Embedded:** Yes (Synchronized to Master Google Doc)
+- **Verification Status:** PASS
+
+---
+
+### Practical 08: Applying a Theme in an Activity/Application
+- **Package Name:** `com.example.themeapp`
+- **Component:** `MainActivity`
+- **UI Architecture:** Custom light theme `Theme.CustomLight` applied at application level in `AndroidManifest.xml`
+- **Build Status:** SUCCESS (`assembleDebug`)
+- **Theme Verification:** Application launched with custom background `#FFFFFF`, high-contrast text `#1F1F1F`, and Google Blue `#1A73E8` primary accent on buttons and controls.
+- **Google Doc Embedded:** Yes (Synchronized to Master Google Doc)
+- **Verification Status:** PASS
+
+---
+
+### Practical 09: Creating a Menu in an Android Application (Options Menu)
 - **Package Name:** `com.example.menubar`
 - **Component:** `MainActivity` with native `Toolbar`
 - **UI Architecture:** Minimalist toolbar and centered feedback TextView
 - **Build Status:** SUCCESS (`assembleDebug`)
-- **Install Command:** `adb install -r 06_Menu_Bar/app/build/outputs/apk/debug/app-debug.apk`
-- **Installation Output:** `Performing Streamed Install -> Success`
 - **Options Menu Test:** Tapped 3-dot overflow icon -> Menu popped open showing Home, Settings, About, and Help.
 - **Item Selection Test:** Selected "Settings" -> Dynamic feedback updated to "Selected: Settings".
 - **Hardware Screenshots:**
-  - `Practical_Screenshots/Practical_06/P06_Menu_Bar_Closed.png`
-  - `Practical_Screenshots/Practical_06/P06_Menu_Bar_Open.png`
-  - `Practical_Screenshots/Practical_06/P06_Menu_Item_Selected.png`
+  - `Practical_Screenshots/Practical_09/P09_Menu_Bar_Closed.png`
+  - `Practical_Screenshots/Practical_09/P09_Menu_Bar_Open.png`
+  - `Practical_Screenshots/Practical_09/P09_Menu_Item_Selected.png`
 - **Google Doc Embedded:** Yes (All 3 images synchronized to Master Google Doc)
 - **Verification Status:** PASS
 
 ---
 
-### Practical 07: Send SMS Application
-- **Package Name:** `com.example.smsapp`
+### Practical 10: Storing Local Data Using User Preferences
+- **Package Name:** `com.example.userpreferences`
 - **Component:** `MainActivity`
-- **UI Architecture:** Clean native form with phone `EditText`, message `EditText`, and send `Button`
+- **UI Architecture:** `EditText`, Save Button, Load Button, Clear Button, and Status `TextView`
 - **Build Status:** SUCCESS (`assembleDebug`)
-- **Install Command:** `adb install -r 07_SMS_Application/app/build/outputs/apk/debug/app-debug.apk`
-- **Installation Output:** `Performing Streamed Install -> Success`
-- **Input Validation Test:** Validates phone number and message fields.
-- **Intent Dispatch Test:** Tapped "Open SMS App" -> Triggered `Intent.ACTION_SENDTO` with `smsto:+919876543210` and `sms_body`. Successfully launched default messaging client with recipient and message prefilled.
-- **Hardware Screenshots:**
-  - `Practical_Screenshots/Practical_07/P07_SMS_Form.png`
-  - `Practical_Screenshots/Practical_07/P07_SMS_Prefilled_App.png`
-- **Google Doc Embedded:** Yes (Both images synchronized to Master Google Doc)
+- **Persistence Test:** Saved user name string to `SharedPreferences` ("UserPrefs"). Relaunched application, pressed "Load Data" -> Successfully retrieved and rendered persisted name.
+- **Google Doc Embedded:** Yes (Synchronized to Master Google Doc)
 - **Verification Status:** PASS
 
 ---
 
-### Practical 08: Send Email Application
-- **Package Name:** `com.example.emailapp`
-- **Component:** `MainActivity`
-- **UI Architecture:** Clean form with recipient, subject, body fields and action button
-- **Build Status:** SUCCESS (`assembleDebug`)
-- **Install Command:** `adb install -r 08_Email_Application/app/build/outputs/apk/debug/app-debug.apk`
-- **Installation Output:** `Performing Streamed Install -> Success`
-- **Input Validation Test:** Validates recipient email syntax using `Patterns.EMAIL_ADDRESS`, subject, and message body.
-- **Intent Chooser Test:** Tapped "Open Email Client" -> Dispatched `Intent.ACTION_SENDTO` with `mailto:` scheme wrapped in `Intent.createChooser()`. The system chooser dialog opened displaying email clients prefilled with recipient, subject, and body.
-- **Hardware Screenshots:**
-  - `Practical_Screenshots/Practical_08/P08_Email_Form.png`
-  - `Practical_Screenshots/Practical_08/P08_Email_Prefilled_App.png`
-- **Google Doc Embedded:** Yes (Both images synchronized to Master Google Doc)
-- **Verification Status:** PASS
-
----
-
-### Practical 09: CRUD Operations using SQLite
+### Practical 11: Creating, Reading and Writing Data Using SQLite (CRUD Operations)
 - **Package Name:** `com.example.crudsqlite`
-- **Database File:** `/data/data/com.example.crudsqlite/databases/StudentDB.db`
-- **Component:** `MainActivity` with `DatabaseHelper` (SQLiteOpenHelper)
-- **UI Architecture:** Native input fields (ID, Name, Email), 4 action buttons (Insert, View All, Update, Delete), and `ListView`
+- **Component:** `MainActivity` with SQLite Database Helper
+- **UI Architecture:** Strict light theme `#FFFFFF`, clean tabular ListView, native SQLite
 - **Build Status:** SUCCESS (`assembleDebug` & signed `assembleRelease`)
-- **Install Command:** `adb install -r 09_CRUD_SQLite/app/build/outputs/apk/debug/app-debug.apk`
-- **Installation Output:** `Performing Streamed Install -> Success`
-- **CREATE Test:** Inserted records for "Alice Smith" and "Bob Miller". Verified auto-increment IDs (#1, #2) and dynamic list view updates.
-- **READ ALL Test:** Tapped "View All" -> Queried all rows via `Cursor` in `getAllStudents()`, displaying records in `ListView`.
-- **UPDATE Test:** Tapped "Update" on ID #2 -> Changed name to "Robert Miller", email to `robert.miller@example.com`. Verified row update in SQLite and live list refresh.
-- **DELETE Test:** Tapped "Delete" on ID #1 -> Record #1 deleted from SQLite table `students`. List dynamically refreshed showing 1 remaining record (Robert Miller).
-- **Persistence Verification:** Application restarted; database state retained across lifecycles.
+- **CRUD Operations Test:**
+  - **CREATE:** Inserted student record (ID: 101, Name: John Doe, Course: MCA) -> SQLite insert returned row ID `1`.
+  - **READ:** Queried database -> Rendered record list inside `ListView`.
+  - **UPDATE:** Modified record ID 101 to "Johnathan Doe" -> SQLite update executed successfully.
+  - **DELETE:** Deleted record ID 101 -> Record removed, `ListView` refreshed.
 - **Hardware Screenshots:**
-  - `Practical_Screenshots/Practical_09/P09_CRUD_Create.png`
-  - `Practical_Screenshots/Practical_09/P09_CRUD_Read.png`
-  - `Practical_Screenshots/Practical_09/P09_CRUD_Update.png`
-  - `Practical_Screenshots/Practical_09/P09_CRUD_Delete.png`
+  - `Practical_Screenshots/Practical_11/P11_CRUD_Create.png`
+  - `Practical_Screenshots/Practical_11/P11_CRUD_Read.png`
+  - `Practical_Screenshots/Practical_11/P11_CRUD_Update.png`
+  - `Practical_Screenshots/Practical_11/P11_CRUD_Delete.png`
 - **Google Doc Embedded:** Yes (All 4 images synchronized to Master Google Doc)
 - **Verification Status:** PASS
 
 ---
 
-### Practical 10: Android Application Deployment & Release Packaging
-- **Package Name:** `com.example.deploymentapp`
-- **Version:** Code: `100` | Name: `1.0.0-release`
-- **Signing Keystore:** `~/.android/scs391_release.jks` (Key: `scs391Release`, RSA 2048-bit)
-- **Release Deliverable:** `10_Application_Deployment/release/app-release.apk`
-- **Build Status:** SUCCESS (`assembleRelease`)
-- **Signature Verification:** Verified using `apksigner` -> Scheme v2 `true`, valid production certificate.
-- **Hardware Install Command:** `adb install -r 10_Application_Deployment/release/app-release.apk`
-- **Installation Output:** `Performing Streamed Install -> Success`
-- **Runtime Hardening Verification:** `FLAG_DEBUGGABLE` reports `FALSE (Production Release)`.
-- **Runtime Certificate Extraction:** Verified SHA-256 fingerprint matches `apksigner` digest.
-- **Additional Release Deliverables Built & Signed:**
-  - `02_Hello_World/release/app-release.apk` (Signed Release APK)
-  - `09_CRUD_SQLite/release/app-release.apk` (Signed Release APK)
+### Practical 12: Creating an Application to Send SMS
+- **Package Name:** `com.example.smsapplication`
+- **Component:** `MainActivity`
+- **UI Architecture:** Minimalist phone number and message body input form
+- **Build Status:** SUCCESS (`assembleDebug`)
+- **Intent Delegation Test:** Entered recipient `9876543210` and message -> Dispatched `Intent.ACTION_SENDTO` with `smsto:` URI. Native messaging app launched with fields prefilled and focused, requiring zero dangerous SMS permissions.
 - **Hardware Screenshots:**
-  - `Practical_Screenshots/Practical_10/P10_Release_Execution.png`
-  - `Practical_Screenshots/Practical_10/P10_Release_Verification.png`
+  - `Practical_Screenshots/Practical_12/P12_SMS_Form.png`
+  - `Practical_Screenshots/Practical_12/P12_SMS_Prefilled_App.png`
+- **Google Doc Embedded:** Yes (Both images synchronized to Master Google Doc)
+- **Verification Status:** PASS
+
+---
+
+### Practical 13: Creating an Application to Send an E-mail
+- **Package Name:** `com.example.emailapplication`
+- **Component:** `MainActivity`
+- **UI Architecture:** Strict light theme `#FFFFFF`, recipient, subject, and body fields
+- **Build Status:** SUCCESS (`assembleDebug`)
+- **Intent Chooser Test:** Entered email recipient, subject, and body -> Dispatched `Intent.ACTION_SENDTO` with `mailto:` wrapped in `Intent.createChooser()`. System email chooser displayed client applications cleanly.
+- **Hardware Screenshots:**
+  - `Practical_Screenshots/Practical_13/P13_Email_Form.png`
+  - `Practical_Screenshots/Practical_13/P13_Email_Prefilled_App.png`
+- **Google Doc Embedded:** Yes (Both images synchronized to Master Google Doc)
+- **Verification Status:** PASS
+
+---
+
+### Practical 14: Displaying a Map Based on Current or Given Location
+- **Package Name:** `com.example.mapslocation`
+- **Component:** `MainActivity`
+- **UI Architecture:** Clean light theme interface with given coordinate buttons (Golden Temple Amritsar: `31.6200, 74.8765`), coordinate inputs, and current location trigger
+- **Build Status:** SUCCESS (`assembleDebug`)
+- **Maps Intent Test:** Dispatched standard Android `geo:31.6200,74.8765?q=31.6200,74.8765(Golden+Temple+Amritsar)` Intent targeting `com.google.android.apps.maps` with graceful fallback to browser. Google Maps opened with designated marker.
+- **Google Doc Embedded:** Yes (Synchronized to Master Google Doc)
+- **Verification Status:** PASS
+
+---
+
+### Practical 15: Android Application Packaging, Cryptographic Signing, and Deployment
+- **Package Name:** `com.example.appdeployment`
+- **Component:** `MainActivity`
+- **UI Architecture:** Strict light theme deployment dashboard with verification indicators
+- **Build Status:** SUCCESS (`assembleDebug` & signed `assembleRelease`)
+- **Keystore & Signing:** Built using `release-key.jks` with SHA-256 RSA 2048-bit key.
+- **apksigner Verification Output:**
+  ```text
+  Verifies
+  Verified using v1 scheme (JAR signing): true
+  Verified using v2 scheme (APK Signature Scheme v2): true
+  Verified using v3 scheme (APK Signature Scheme v3): true
+  Verified using v4 scheme (APK Signature Scheme v4): false
+  ```
+- **Hardware Screenshots:**
+  - `Practical_Screenshots/Practical_15/P15_Release_Execution.png`
+  - `Practical_Screenshots/Practical_15/P15_Release_Verification.png`
 - **Google Doc Embedded:** Yes (Both images synchronized to Master Google Doc)
 - **Verification Status:** PASS

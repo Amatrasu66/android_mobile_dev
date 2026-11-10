@@ -1,0 +1,21 @@
+<resources>
+    <style name="Theme.CustomLight" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Status bar styling -->
+        <item name="android:statusBarColor">#FFFFFF</item>
+        <item name="android:windowLightStatusBar">true</item>
+
+        <!-- Brand color palette -->
+        <item name="colorPrimary">#1976D2</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSecondary">#FFA000</item>
+        <item name="colorOnSecondary">#000000</item>
+
+        <!-- Background & Surface -->
+        <item name="android:colorBackground">#F8F9FA</item>
+        <item name="colorSurface">#FFFFFF</item>
+        <item name="colorOnSurface">#1F1F1F</item>
+
+        <!-- Standard typography -->
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+</resources>

@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Practical 07 - ListView</string>
+    <string name="list_title">Programming Languages</string>
+</resources>

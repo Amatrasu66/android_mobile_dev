@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Practical 10 - User Preferences</string>
+    <string name="pref_title">User Preferences (SharedPreferences)</string>
+    <string name="hint_user_name">Enter your name</string>
+    <string name="btn_save_pref">Save Preference</string>
+    <string name="btn_load_pref">Load Preference</string>
+</resources>

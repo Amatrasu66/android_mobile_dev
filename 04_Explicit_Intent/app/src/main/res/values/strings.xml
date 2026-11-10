@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Practical 04 - Explicit Intent</string>
+    <string name="main_title">Explicit Intent Demonstration</string>
+    <string name="hint_message">Enter message for Second Activity</string>
+    <string name="default_message">Hello from Practical 04!</string>
+    <string name="btn_open_second">Open Second Activity</string>
+    <string name="second_title">Second Activity</string>
+    <string name="label_received">Received Message:</string>
+</resources>

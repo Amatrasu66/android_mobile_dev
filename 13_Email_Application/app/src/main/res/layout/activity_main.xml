@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="#FFFFFF">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send Email Application"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="#1F1F1F"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="24dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recipient Email:"
+        android:textStyle="bold"
+        android:textColor="#1F1F1F"
+        android:layout_marginBottom="6dp"/>
+
+    <EditText
+        android:id="@+id/etEmailTo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter recipient email"
+        android:text="alex.johnson@university.edu"
+        android:textColor="#1F1F1F"
+        android:textColorHint="#757575"
+        android:inputType="textEmailAddress"
+        android:padding="12dp"
+        android:background="@android:drawable/editbox_background_normal"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Subject Line:"
+        android:textStyle="bold"
+        android:textColor="#1F1F1F"
+        android:layout_marginBottom="6dp"/>
+
+    <EditText
+        android:id="@+id/etSubject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter subject"
+        android:text="SCS391 Practical 13 Submission"
+        android:textColor="#1F1F1F"
+        android:textColorHint="#757575"
+        android:inputType="text"
+        android:padding="12dp"
+        android:background="@android:drawable/editbox_background_normal"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Message Body:"
+        android:textStyle="bold"
+        android:textColor="#1F1F1F"
+        android:layout_marginBottom="6dp"/>
+
+    <EditText
+        android:id="@+id/etEmailBody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter message text"
+        android:text="Hello, this is a test email message."
+        android:textColor="#1F1F1F"
+        android:textColorHint="#757575"
+        android:inputType="textMultiLine"
+        android:minLines="3"
+        android:gravity="top|start"
+        android:padding="12dp"
+        android:background="@android:drawable/editbox_background_normal"
+        android:layout_marginBottom="24dp"/>
+
+    <Button
+        android:id="@+id/btnSendEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Open Email Client"/>
+
+</LinearLayout>

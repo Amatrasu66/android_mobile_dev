@@ -1,0 +1,8 @@
+<resources>
+    <style name="Theme.GoogleMapsLocation" parent="Theme.Material3.Light.NoActionBar">
+        <item name="android:statusBarColor">#FFFFFF</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:colorBackground">#FFFFFF</item>
+        <item name="colorPrimary">#1A73E8</item>
+    </style>
+</resources>

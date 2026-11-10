@@ -29,14 +29,19 @@
 |---|---|---|---|---|---|
 | **01** | Installation & Configuration of Android Studio, SDK, SDK Tools, AVD & JDK | Theoretical / Environment | 09-Nov-2026 | Verified | |
 | **02** | Display "Hello World" in Android Studio using Java & XML | Core Application | 09-Nov-2026 | Verified | |
-| **03** | Demonstration of Explicit and Implicit Intents | Core Application | 09-Nov-2026 | Verified | |
-| **04** | Appointment Form Application (ImageButton, Spinner, Pickers, ListView) | UI Components & Events | 09-Nov-2026 | Verified | |
-| **05** | Portrait and Landscape Screen Orientation Detection & Layouts | Configuration & Layouts | 09-Nov-2026 | Verified | |
-| **06** | Implementation of Options Menu Bar (Home, Settings, About) | Menus & Navigation | 09-Nov-2026 | Verified | |
-| **07** | Send SMS Application using Prefilled Intent | Intents & Communication | 09-Nov-2026 | Verified | |
-| **08** | Send Email Application using Prefilled Intent | Intents & Communication | 09-Nov-2026 | Verified | |
-| **09** | SQLite Student Records Management (CRUD Operations) | Native Database Storage | 09-Nov-2026 | Verified | |
-| **10** | Android Application Release Build, Signing & Deployment | Deployment & Packaging | 09-Nov-2026 | Verified | |
+| **03** | Implementation of Implicit Intent (Phone Dialer & Web Delegation) | Core Application / Intents | 10-Nov-2026 | Verified | |
+| **04** | Implementation of Explicit Intent (Activity Navigation with Data Extras) | Core Application / Intents | 10-Nov-2026 | Verified | |
+| **05** | Portrait and Landscape Screen Orientation Detection & Dynamic Layouts | Configuration & Layouts | 09-Nov-2026 | Verified | |
+| **06** | Developing an Application Using Picker View (DatePicker & TimePicker) | UI Components & Pickers | 10-Nov-2026 | Verified | |
+| **07** | Developing an Application Using ListView with Selection Feedback | UI Components & Adapters | 10-Nov-2026 | Verified | |
+| **08** | Applying a Theme in an Activity/Application (Custom Light Theme) | UI Styles & Theming | 10-Nov-2026 | Verified | |
+| **09** | Creating an Options Menu in an Android Application (Home, Settings, About) | Menus & Navigation | 09-Nov-2026 | Verified | |
+| **10** | Storing Local Data Using User Preferences (SharedPreferences) | Data Persistence | 10-Nov-2026 | Verified | |
+| **11** | SQLite Student Records Management (Complete CRUD Operations) | Native Database Storage | 10-Nov-2026 | Verified | |
+| **12** | Creating an Application to Send SMS using Prefilled Intent | Intents & Communication | 09-Nov-2026 | Verified | |
+| **13** | Creating an Application to Send Email using Prefilled Intent & Chooser | Intents & Communication | 10-Nov-2026 | Verified | |
+| **14** | Displaying a Map Based on Current or Given Location via Google Maps | Location & Maps | 10-Nov-2026 | Verified | |
+| **15** | Android Application Packaging, Signing & Production Deployment | Deployment & Packaging | 10-Nov-2026 | Verified | |
 
 ---
 
@@ -192,54 +197,18 @@ To develop, build, install, and execute a native Android application using the J
 ## 3. Software and Hardware Requirements
 - **IDE:** Android Studio
 - **Language:** Java (JDK 21 LTS)
-- **Build System:** Gradle with Android Gradle Plugin
-- **Compile SDK:** API 36 (Android 16) | **Min SDK:** API 24 (Android 7.0)
+- **Compile SDK:** API 36 | **Min SDK:** API 24
 - **UI Components:** `RelativeLayout`, `TextView`
 - **Testing Hardware:** OnePlus CPH2661 (Android 16, API Level 36, 1240x2772 px, 560 dpi)
 
 ## 4. Theoretical Background
-
-### 4.1 Android Application Architecture
-Every Android application consists of four fundamental building blocks:
-1. **Activity:** Represents a single screen with a user interface where users interact.
-2. **Service:** A component running in the background to perform long-running operations.
-3. **Broadcast Receiver:** Listens for system-wide or application-level broadcast announcements.
-4. **Content Provider:** Manages a shared set of application data across process boundaries.
-
-### 4.2 Activity Lifecycle & View Hierarchy
-When an Activity starts, the Android OS invokes its lifecycle callbacks:
-- `onCreate()`: Called when the activity is first created. Initialization of resources, UI layouts, and view bindings occur here.
-- `setContentView()`: Inflates the specified XML layout resource into memory and attaches the resulting View tree to the window.
-
-### 4.3 XML Layout System
-Android separates presentation from application logic by defining user interfaces declaratively in XML. The Android resource compiler (`AAPT2`) compiles XML files into binary format, generating integer resource identifiers in the `R` class (e.g., `R.layout.activity_main`).
-
----
+Android applications use an event-driven component architecture where an `Activity` represents a single focused screen. Layout inflation via `setContentView()` parses XML layout files into in-memory View hierarchies, resolving integer IDs compiled into the `R` class.
 
 ## 5. Algorithm & Procedure
-
-### Step 1: Project Initialization
-1. Launch Android Studio and create a new Android project selecting **Empty Views Activity**.
-2. Set Language to **Java** and Minimum SDK to **API 24 (Android 7.0)**.
-3. Allow Gradle to synchronize dependencies and build the project workspace.
-
-### Step 2: User Interface Design
-1. Open `res/layout/activity_main.xml`.
-2. Define a clean layout with a centered `TextView` widget (`android:id="@+id/tvHelloWorld"`).
-3. Set appropriate typography and layout gravity.
-
-### Step 3: Activity Implementation
-1. Open `MainActivity.java`.
-2. In `onCreate()`, call `setContentView(R.layout.activity_main)` to inflate the layout.
-3. Retrieve the `TextView` using `findViewById()`.
-4. Set the display text to `R.string.hello_world`.
-
-### Step 4: Build & Hardware Execution
-1. Connect the physical OnePlus smartphone with USB Debugging enabled.
-2. Execute `./gradlew assembleDebug` or install directly via ADB.
-3. Verify the application launch and screen display on the device.
-
----
+1. Initialize an Android project selecting Empty Views Activity.
+2. In `res/layout/activity_main.xml`, place a `TextView` centered in a `RelativeLayout`.
+3. In `MainActivity.java`, call `setContentView(R.layout.activity_main)` and bind `TextView`.
+4. Build, install, and execute on the physical smartphone.
 
 ## 6. Source Code
 
@@ -315,8 +284,6 @@ public class MainActivity extends AppCompatActivity {
 </resources>
 ```
 
----
-
 ## 7. Output & Hardware Execution Evidence
 
 The application was built via Gradle, installed onto the authorized physical smartphone (OnePlus CPH2661, Android 16), and executed.
@@ -325,139 +292,228 @@ The application was built via Gradle, installed onto the authorized physical sma
 
 ![Hello World Output](Practical_Screenshots/Practical_02/P02_Hello_World.png)
 
-- **Execution Verification:** The application successfully launched and rendered the "Hello World!" message centered on the physical smartphone screen without errors.
+- **Execution Verification:** The application successfully launched and rendered "Hello World!" centered on the physical smartphone screen without errors.
 
 ## 8. Expected Output
 The application successfully launches on the physical Android device and displays "Hello World!" centered on the display screen.
 
 ## 9. Result & Conclusion
-The "Hello World" native Android application was successfully developed in Java using Android Studio, compiled using Gradle, installed onto a physical OnePlus smartphone, and verified. Fundamental concepts of Activity creation, layout inflation, widget referencing, and hardware deployment were demonstrated.
+The "Hello World" native Android application was successfully developed in Java using Android Studio, compiled using Gradle, installed onto a physical OnePlus smartphone, and verified.
 
 
 # PRACTICAL 03
 
 ## 1. Title
-Development of an Android Application in Java to Demonstrate Intents (Explicit and Implicit).
+Development of an Android Application in Java to Demonstrate Implicit Intents.
 
 ## 2. Aim
-To develop a native Android application demonstrating Explicit Intents (navigating between activities and transferring data via Intent extras) and Implicit Intents (delegating actions to external system applications such as a phone dialer or web browser).
+To develop a native Android application demonstrating an Implicit Intent by delegating actions to external system applications (phone dialer and web browser) using standard Android actions (`ACTION_DIAL`, `ACTION_VIEW`) with graceful fallback error handling.
 
 ## 3. Software and Hardware Requirements
 - **IDE:** Android Studio
 - **Language:** Java (JDK 21 LTS)
-- **Compile SDK:** API 36 (Android 16) | **Min SDK:** API 24
-- **UI Components:** `LinearLayout`, `EditText`, `Button`, `TextView`
+- **Compile SDK:** API 36 | **Min SDK:** API 24
+- **UI Components:** `LinearLayout`, `Button`, `TextView`, `Intent.ACTION_DIAL`, `Intent.ACTION_VIEW`
 - **Testing Hardware:** OnePlus CPH2661 (Android 16, API Level 36)
 
 ## 4. Theoretical Background
-
-### 4.1 Android Intent Framework
-An `Intent` is an asynchronous messaging object used to request an action from another app component. Intents facilitate three core use cases:
-1. **Starting an Activity:** Launching a new screen by passing an Intent to `startActivity()`.
-2. **Starting a Service:** Initiating background operations.
-3. **Delivering a Broadcast:** Broadcasting messages to system-wide broadcast receivers.
-
-### 4.2 Explicit vs. Implicit Intents
-- **Explicit Intent:** Specifies the exact target component by providing the Java class name (e.g., `new Intent(MainActivity.this, SecondActivity.class)`). Used for intra-app communication where the destination component is known.
-- **Implicit Intent:** Declares a general action to perform (e.g., `Intent.ACTION_DIAL`, `Intent.ACTION_VIEW`), allowing the Android system to resolve the request against registered Intent Filters of all installed applications.
-
-### 4.3 Data Transfer via Extras
-Explicit Intents transfer state between activities using key-value pairs stored in an internal `Bundle` via `putExtra(key, value)`. The target activity retrieves the bundle in its `onCreate()` method using `getIntent().getStringExtra(key)`.
-
----
+An Implicit Intent specifies an action to perform rather than naming a specific destination component. The Android OS inspects registered Intent Filters across all installed packages and resolves the intent to compatible applications, allowing the user to select their preferred client.
 
 ## 5. Algorithm & Procedure
-
-### Step 1: Layout Design
-1. In `activity_main.xml`, add an `EditText` for user message input.
-2. Add a `Button` to trigger the Explicit Intent.
-3. Add a `Button` to trigger the Implicit Intent (Phone Dialer).
-4. Create `activity_second.xml` with a `TextView` to display the received message payload.
-
-### Step 2: Explicit Intent Implementation
-1. In `MainActivity.java`, set an `OnClickListener` on the launch button.
-2. Retrieve the text from the `EditText`.
-3. Construct an explicit Intent: `Intent intent = new Intent(MainActivity.this, SecondActivity.class);`.
-4. Attach the string data: `intent.putExtra("MESSAGE_KEY", message);`.
-5. Call `startActivity(intent)`.
-
-### Step 3: SecondActivity Data Reception
-1. In `SecondActivity.java`, retrieve the string extra in `onCreate()`: `String msg = getIntent().getStringExtra("MESSAGE_KEY");`.
-2. Set the retrieved string into the result `TextView`.
-
-### Step 4: Implicit Intent Implementation
-1. In `MainActivity.java`, set a click listener on the dialer button.
-2. Construct an implicit Intent: `Intent dialIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:9876543210"));`.
-3. Call `startActivity(dialIntent)` to delegate dialing to the system phone app.
-
----
+1. Create a clean vertical layout with action buttons for dialing and web browsing.
+2. In `MainActivity.java`, attach click listeners to construct implicit intents:
+   - Dialer: `Intent(Intent.ACTION_DIAL, Uri.parse("tel:9876543210"))`.
+   - Browser: `Intent(Intent.ACTION_VIEW, Uri.parse("https://developer.android.com"))`.
+3. Wrap intent dispatch in `try-catch` blocks catching `ActivityNotFoundException`.
+4. Build, install, and execute on the device.
 
 ## 6. Source Code
 
 ### 6.1 `MainActivity.java`
 ```java
-package com.example.intentdemo;
+package com.example.implicitintent;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.widget.EditText;
+import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
-/**
- * Practical 03: Intent Demonstration
- * Course: SCS391 Mobile Application Development Lab
- *
- * Demonstrates:
- * 1. Explicit Intent: Navigating to SecondActivity and passing a data bundle.
- * 2. Implicit Intent: Requesting system handling to open a web URL and dialer.
- */
 public class MainActivity extends AppCompatActivity {
-
-    public static final String EXTRA_MESSAGE = "com.example.intentdemo.EXTRA_MESSAGE";
-    public static final String EXTRA_TIMESTAMP = "com.example.intentdemo.EXTRA_TIMESTAMP";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        EditText etMessage = findViewById(R.id.etMessage);
+        Button btnDialer = findViewById(R.id.btnDialer);
+        Button btnWeb = findViewById(R.id.btnWeb);
 
-        // 3.1 Explicit Intent Demonstration
-        findViewById(R.id.btnLaunchExplicit).setOnClickListener(v -> {
-            String message = etMessage.getText().toString().trim();
-            if (message.isEmpty()) {
-                message = "Default SCS391 Practical Payload";
+        btnDialer.setOnClickListener(v -> {
+            try {
+                Intent dialIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:9876543210"));
+                startActivity(dialIntent);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(this, "No phone dialer application found", Toast.LENGTH_SHORT).show();
             }
-
-            Intent explicitIntent = new Intent(MainActivity.this, SecondActivity.class);
-            explicitIntent.putExtra(EXTRA_MESSAGE, message);
-            explicitIntent.putExtra(EXTRA_TIMESTAMP, System.currentTimeMillis());
-            startActivity(explicitIntent);
         });
 
-        // 3.2 Implicit Intent (Action A: Open Website)
-        findViewById(R.id.btnOpenWeb).setOnClickListener(v -> {
-            Uri webpage = Uri.parse("https://developer.android.com");
-            Intent webIntent = new Intent(Intent.ACTION_VIEW, webpage);
+        btnWeb.setOnClickListener(v -> {
             try {
+                Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://developer.android.com"));
                 startActivity(webIntent);
-            } catch (Exception e) {
-                Toast.makeText(MainActivity.this, "No web browser application found", Toast.LENGTH_SHORT).show();
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(this, "No web browser application found", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+}
+```
 
-        // 3.2 Implicit Intent (Action B: Open Phone Dialer)
-        findViewById(R.id.btnOpenDialer).setOnClickListener(v -> {
-            Uri phoneUri = Uri.parse("tel:9876543210");
-            Intent dialerIntent = new Intent(Intent.ACTION_DIAL, phoneUri);
-            try {
-                startActivity(dialerIntent);
-            } catch (Exception e) {
-                Toast.makeText(MainActivity.this, "No phone dialer application found", Toast.LENGTH_SHORT).show();
-            }
+### 6.2 `res/layout/activity_main.xml`
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="24dp"
+    android:background="#FFFFFF">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/implicit_title"
+        android:textColor="#1F1F1F"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="32dp"/>
+
+    <Button
+        android:id="@+id/btnDialer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_open_dialer"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp"/>
+
+    <Button
+        android:id="@+id/btnWeb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_open_web"
+        android:textSize="16sp"/>
+
+</LinearLayout>
+```
+
+### 6.3 `AndroidManifest.xml`
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@android:drawable/sym_def_app_icon"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.ImplicitIntent">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>
+```
+
+## 7. Output & Hardware Execution Evidence
+
+The application was installed and verified on the OnePlus CPH2661 test smartphone via ADB.
+
+**Output Screen 1: Implicit Intent demonstration screen:**
+
+![Implicit Intent Main](Practical_Screenshots/Practical_03/P03_Implicit_Main.png)
+
+**Output Screen 2: System phone dialer opened via Implicit Intent:**
+
+![Implicit Intent Dialer](Practical_Screenshots/Practical_03/P03_Implicit_Dialer.png)
+
+- **Verification Summary:** Tapping the dialer button successfully triggered `ACTION_DIAL` with `tel:9876543210`, launching the native phone dialer with the number prefilled.
+
+## 8. Expected Output
+1. The application displays action buttons to trigger external implicit intent actions.
+2. Tapping "Open Phone Dialer" launches the device dialer with the phone number prefilled.
+
+## 9. Result & Conclusion
+Implicit Intent functionality was successfully developed, verified on physical hardware, and documented without requiring invasive permissions.
+
+
+# PRACTICAL 04
+
+## 1. Title
+Development of an Android Application in Java to Demonstrate Explicit Intents.
+
+## 2. Aim
+To develop a native Android application demonstrating an Explicit Intent by navigating from `MainActivity` to `SecondActivity`, passing user-entered string data via Intent extras, and displaying the payload on the destination Activity.
+
+## 3. Software and Hardware Requirements
+- **IDE:** Android Studio
+- **Language:** Java (JDK 21 LTS)
+- **Compile SDK:** API 36 | **Min SDK:** API 24
+- **UI Components:** `LinearLayout`, `EditText`, `Button`, `TextView`
+- **Testing Hardware:** OnePlus CPH2661 (Android 16, API Level 36)
+
+## 4. Theoretical Background
+An Explicit Intent explicitly identifies the destination component by specifying the target class (`SecondActivity.class`). Data payloads are attached to the Intent bundle using key-value extras (`intent.putExtra()`) and retrieved in the receiving activity's `onCreate()` callback via `getIntent().getStringExtra()`.
+
+## 5. Algorithm & Procedure
+1. Create `MainActivity` layout with an `EditText` for user message input and a navigation button.
+2. Create `SecondActivity` layout with a `TextView` to display the received message.
+3. In `MainActivity.java`, instantiate `Intent(MainActivity.this, SecondActivity.class)`, attach text extra, and call `startActivity()`.
+4. In `SecondActivity.java`, extract the extra from `getIntent()` and set it to the display `TextView`.
+5. Register `SecondActivity` in `AndroidManifest.xml`.
+
+## 6. Source Code
+
+### 6.1 `MainActivity.java`
+```java
+package com.example.explicitintent;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    public static final String EXTRA_MESSAGE = "com.example.explicitintent.MESSAGE";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        EditText editMessage = findViewById(R.id.editMessage);
+        Button btnLaunch = findViewById(R.id.btnLaunch);
+
+        btnLaunch.setOnClickListener(v -> {
+            String message = editMessage.getText().toString().trim();
+            Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+            intent.putExtra(EXTRA_MESSAGE, message);
+            startActivity(intent);
         });
     }
 }
@@ -465,7 +521,7 @@ public class MainActivity extends AppCompatActivity {
 
 ### 6.2 `SecondActivity.java`
 ```java
-package com.example.intentdemo;
+package com.example.explicitintent;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -482,14 +538,12 @@ public class SecondActivity extends AppCompatActivity {
         TextView tvReceivedMessage = findViewById(R.id.tvReceivedMessage);
 
         Intent intent = getIntent();
-        String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
-        if (message != null && !message.isEmpty()) {
+        if (intent != null && intent.hasExtra(MainActivity.EXTRA_MESSAGE)) {
+            String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
             tvReceivedMessage.setText(message);
         } else {
-            tvReceivedMessage.setText("No message received");
+            tvReceivedMessage.setText("No data received");
         }
-
-        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
     }
 }
 ```
@@ -502,69 +556,38 @@ public class SecondActivity extends AppCompatActivity {
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="20dp"
-    android:gravity="center_horizontal">
+    android:gravity="center"
+    android:padding="24dp"
+    android:background="#FFFFFF">
 
     <TextView
+        android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Intent Demonstration"
+        android:text="@string/main_title"
+        android:textColor="#1F1F1F"
         android:textSize="22sp"
         android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:layout_marginTop="20dp"
         android:layout_marginBottom="24dp"/>
 
-    <!-- Explicit Intent Section -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Explicit Intent"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:layout_marginBottom="8dp"/>
-
     <EditText
-        android:id="@+id/etMessage"
+        android:id="@+id/editMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter message to pass"
-        android:text="Hello from First Activity!"
-        android:inputType="text"
+        android:hint="@string/hint_message"
+        android:text="@string/default_message"
+        android:textColor="#1F1F1F"
+        android:textColorHint="#757575"
+        android:background="@android:drawable/editbox_background_normal"
         android:padding="12dp"
-        android:background="@android:drawable/edit_text"
-        android:layout_marginBottom="12dp"/>
+        android:layout_marginBottom="24dp"/>
 
     <Button
-        android:id="@+id/btnLaunchExplicit"
+        android:id="@+id/btnLaunch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Open Second Activity"
-        android:layout_marginBottom="32dp"/>
-
-    <!-- Implicit Intent Section -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Implicit Intent"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:layout_marginBottom="8dp"/>
-
-    <Button
-        android:id="@+id/btnOpenWeb"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Open Website (Browser)"
-        android:layout_marginBottom="12dp"/>
-
-    <Button
-        android:id="@+id/btnOpenDialer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Open Phone Dialer"/>
+        android:text="@string/btn_open_second"
+        android:textSize="16sp"/>
 
 </LinearLayout>
 ```
@@ -577,44 +600,36 @@ public class SecondActivity extends AppCompatActivity {
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="20dp"
-    android:gravity="center_horizontal">
+    android:gravity="center"
+    android:padding="24dp"
+    android:background="#FFFFFF">
 
     <TextView
+        android:id="@+id/tvSecondTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Second Activity"
+        android:text="@string/second_title"
+        android:textColor="#1F1F1F"
         android:textSize="22sp"
         android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="24dp"/>
+        android:layout_marginBottom="16dp"/>
 
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/tvLabel"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Data Received via Explicit Intent:"
-        android:textSize="14sp"
+        android:text="@string/label_received"
         android:textColor="#555555"
+        android:textSize="14sp"
         android:layout_marginBottom="8dp"/>
 
     <TextView
         android:id="@+id/tvReceivedMessage"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Message Content"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:padding="16dp"
-        android:background="#EEEEEE"
-        android:layout_marginBottom="24dp"/>
-
-    <Button
-        android:id="@+id/btnBack"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Back to Main Activity"/>
+        android:textColor="#1A73E8"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
 
 </LinearLayout>
 ```
@@ -628,9 +643,8 @@ public class SecondActivity extends AppCompatActivity {
         android:allowBackup="true"
         android:icon="@android:drawable/sym_def_app_icon"
         android:label="@string/app_name"
-        android:roundIcon="@android:drawable/sym_def_app_icon"
         android:supportsRtl="true"
-        android:theme="@style/Theme.IntentDemo">
+        android:theme="@style/Theme.ExplicitIntent">
 
         <activity
             android:name=".MainActivity"
@@ -641,634 +655,35 @@ public class SecondActivity extends AppCompatActivity {
             </intent-filter>
         </activity>
 
-        <!-- Target Activity for Explicit Intent -->
         <activity
             android:name=".SecondActivity"
-            android:exported="false"
-            android:label="@string/second_activity_title" />
+            android:exported="false" />
 
     </application>
 
 </manifest>
 ```
-
----
 
 ## 7. Output & Hardware Execution Evidence
 
 The application was installed and verified on the OnePlus CPH2661 test smartphone via ADB.
 
-**Output Screen 1: Main Activity with Explicit and Implicit Intent controls:**
+**Output Screen 1: Explicit Intent main activity with input field:**
 
-![Main Screen](Practical_Screenshots/Practical_03/P03_Main_Screen.png)
+![Explicit Intent Main](Practical_Screenshots/Practical_04/P04_Explicit_Main.png)
 
 **Output Screen 2: Second Activity displaying data received via Explicit Intent:**
 
-![Explicit Intent Result](Practical_Screenshots/Practical_03/P03_Explicit_Intent.png)
+![Explicit Intent Second](Practical_Screenshots/Practical_04/P04_Explicit_Second.png)
 
-**Output Screen 3: System Dialer opened via Implicit Intent:**
-
-![Implicit Intent Dialer](Practical_Screenshots/Practical_03/P03_Implicit_Intent.png)
-
-- **Verification Summary:**
-  - Explicit Intent: Navigated cleanly to `SecondActivity`, passing the string payload "Hello from Practical 03!".
-  - Implicit Intent: Dispatched `ACTION_DIAL` intent with URI `tel:9876543210`, successfully opening the system phone dialer.
+- **Verification Summary:** `MainActivity` cleanly launched `SecondActivity`, transferring the payload "Hello from Practical 04!", which `SecondActivity` successfully rendered on screen.
 
 ## 8. Expected Output
-1. Pressing "Open Second Activity" navigates to `SecondActivity` displaying the user-entered payload message.
-2. Pressing "Open Dialer" launches the system phone dialer with `tel:9876543210` prefilled.
+1. The user enters a message and taps "Open Second Activity".
+2. `SecondActivity` opens immediately, displaying the exact message passed from `MainActivity`.
 
 ## 9. Result & Conclusion
-The Intent demonstration application was successfully developed, installed, and validated on physical Android hardware. Principles of explicit inter-activity navigation with data passing and implicit intent delegation to system applications were fully demonstrated.
-
-
-# PRACTICAL 04
-
-## 1. Title
-Development of an Appointment Form Application Demonstrating ImageButton, Spinner, DatePicker, TimePicker, and ListView.
-
-## 2. Aim
-To develop a functional Appointment Form application in Java incorporating `ImageButton`, `Spinner`, `DatePicker`, `TimePicker`, and a dynamic `ListView` to capture, validate, schedule, and display appointments.
-
-## 3. Software and Hardware Requirements
-- **IDE:** Android Studio
-- **Language:** Java (JDK 21 LTS)
-- **Compile SDK:** API 36 | **Min SDK:** API 24
-- **UI Components:** `ImageButton`, `Spinner`, `DatePicker`, `TimePicker`, `ListView`, `Button`, `EditText`
-- **Testing Hardware:** OnePlus CPH2661 (Android 16, API Level 36)
-
-## 4. Theoretical Background
-
-### 4.1 UI Component Architecture
-- **ImageButton:** Displays a pressable button with an image rather than text. Inherits from `ImageView`.
-- **Spinner:** Provides a quick way to select one value from a dropdown set. Backed by a `SpinnerAdapter`.
-- **DatePicker:** Widget for selecting a calendar day, month, and year.
-- **TimePicker:** Widget for selecting the time of day in 12-hour or 24-hour mode.
-- **ListView:** An `AdapterView` that displays a vertically scrollable collection of views, each populated from an adapter backed by a data source.
-
-### 4.2 Adapter Pattern
-The `Adapter` acts as a bridge between an `AdapterView` (such as `ListView` or `Spinner`) and the underlying data. It converts individual data objects into view rows, optimizing memory through view recycling.
-
----
-
-## 5. Algorithm & Procedure
-
-### Step 1: Layout Construction
-1. Create `res/layout/activity_main.xml` wrapped in a `ScrollView`.
-2. Add input widgets:
-   - Patient name `EditText`.
-   - `ImageButton` for cycling appointment services with a status `TextView`.
-   - `Spinner` for department selection.
-   - `DatePicker` and `TimePicker` for date/time selection.
-   - Submit `Button` ("Book Appointment").
-   - `ListView` for displaying confirmed bookings.
-3. Create `res/layout/item_appointment.xml` to represent an appointment list item.
-
-### Step 2: Data Model & Adapter Implementation
-1. Create `Appointment.java` holding patient name, service type, department, date, and time.
-2. Create `AppointmentAdapter.java` extending `BaseAdapter` or `ArrayAdapter` to bind `Appointment` objects to `item_appointment.xml`.
-
-### Step 3: Event Handling & Form Validation
-1. In `MainActivity.java`, set up an array of services and toggle them on `ImageButton` click.
-2. Populate the `Spinner` using an `ArrayAdapter<String>`.
-3. In the submit button click listener:
-   - Validate that the patient name is not empty.
-   - Extract selected date (`year`, `month + 1`, `day`) from `DatePicker`.
-   - Extract selected time (`hour`, `minute`) from `TimePicker`.
-   - Instantiate an `Appointment` object.
-   - Prepend to the appointment list and call `notifyDataSetChanged()`.
-
----
-
-## 6. Source Code
-
-### 6.1 `MainActivity.java`
-```java
-package com.example.appointmentform;
-
-import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
-import java.util.ArrayList;
-import java.util.Locale;
-
-/**
- * Practical 04: Appointment Form Application
- * Course: SCS391 Mobile Application Development Lab
- *
- * Demonstrates:
- * 1. ImageButton: Interactive service switcher
- * 2. Spinner: Dropdown department selection
- * 3. DatePicker: Date selection widget
- * 4. TimePicker: Time selection widget
- * 5. ListView: Dynamic list of submitted appointments
- */
-public class MainActivity extends AppCompatActivity {
-
-    private EditText etPatientName;
-    private ImageButton ibServiceIcon;
-    private TextView tvSelectedService;
-    private Spinner spnCategory;
-    private DatePicker datePicker;
-    private TimePicker timePicker;
-    private ListView lvAppointments;
-
-    private final String[] services = {
-            "General Consultation",
-            "Dental Checkup",
-            "Cardiology Review"
-    };
-    private final int[] serviceIcons = {
-            android.R.drawable.ic_menu_agenda,
-            android.R.drawable.ic_menu_my_calendar,
-            android.R.drawable.ic_menu_add
-    };
-    private int currentServiceIndex = 0;
-
-    private final ArrayList<Appointment> appointmentList = new ArrayList<>();
-    private AppointmentAdapter appointmentAdapter;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        // Bind UI Components
-        etPatientName = findViewById(R.id.etPatientName);
-        ibServiceIcon = findViewById(R.id.ibServiceIcon);
-        tvSelectedService = findViewById(R.id.tvSelectedService);
-        spnCategory = findViewById(R.id.spnCategory);
-        datePicker = findViewById(R.id.datePicker);
-        timePicker = findViewById(R.id.timePicker);
-        lvAppointments = findViewById(R.id.lvAppointments);
-
-        // 1. ImageButton Setup
-        ibServiceIcon.setOnClickListener(v -> {
-            currentServiceIndex = (currentServiceIndex + 1) % services.length;
-            tvSelectedService.setText(services[currentServiceIndex]);
-            ibServiceIcon.setImageResource(serviceIcons[currentServiceIndex]);
-            Toast.makeText(this, "Service: " + services[currentServiceIndex], Toast.LENGTH_SHORT).show();
-        });
-
-        // 2. Spinner Setup
-        String[] categories = {
-                "General Medicine",
-                "Dental Surgery",
-                "Cardiovascular Care",
-                "Dermatology Clinic",
-                "Pediatric Health"
-        };
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_dropdown_item,
-                categories
-        );
-        spnCategory.setAdapter(spinnerAdapter);
-
-        // 3. TimePicker Initial Configuration
-        timePicker.setIs24HourView(false);
-        timePicker.setHour(10);
-        timePicker.setMinute(30);
-
-        // 4. ListView Setup
-        appointmentAdapter = new AppointmentAdapter(this, appointmentList);
-        lvAppointments.setAdapter(appointmentAdapter);
-
-        lvAppointments.setOnItemClickListener((parent, view, position, id) -> {
-            Appointment selected = appointmentList.get(position);
-            Toast.makeText(this, "Selected: " + selected.toString(), Toast.LENGTH_LONG).show();
-        });
-
-        // Prepopulate with one verified sample submission to demonstrate initial list state
-        appointmentList.add(new Appointment(
-                "Jane Doe",
-                "Dental Checkup",
-                "Dental Surgery",
-                "2026-11-12",
-                "09:15 AM"
-        ));
-        appointmentAdapter.notifyDataSetChanged();
-
-        // 5. Submit Button Listener
-        findViewById(R.id.btnSubmitAppointment).setOnClickListener(v -> submitAppointment());
-    }
-
-    private void submitAppointment() {
-        String patientName = etPatientName.getText().toString().trim();
-        if (patientName.isEmpty()) {
-            etPatientName.setError("Patient name is required");
-            etPatientName.requestFocus();
-            Toast.makeText(this, "Please enter patient name", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        String serviceType = services[currentServiceIndex];
-        String category = spnCategory.getSelectedItem().toString();
-
-        // Read DatePicker values
-        int day = datePicker.getDayOfMonth();
-        int month = datePicker.getMonth() + 1; // 0-indexed
-        int year = datePicker.getYear();
-        String formattedDate = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month, day);
-
-        // Read TimePicker values
-        int hour = timePicker.getHour();
-        int minute = timePicker.getMinute();
-        String amPm = (hour >= 12) ? "PM" : "AM";
-        int displayHour = (hour % 12 == 0) ? 12 : (hour % 12);
-        String formattedTime = String.format(Locale.getDefault(), "%02d:%02d %s", displayHour, minute, amPm);
-
-        // Create new Appointment entity and add to live ListView
-        Appointment newAppointment = new Appointment(
-                patientName,
-                serviceType,
-                category,
-                formattedDate,
-                formattedTime
-        );
-
-        appointmentList.add(0, newAppointment); // Add at top of list
-        appointmentAdapter.notifyDataSetChanged();
-
-        Toast.makeText(this, "Appointment Booked: " + patientName, Toast.LENGTH_SHORT).show();
-
-        // Reset name field
-        etPatientName.setText("");
-    }
-}
-```
-
-### 6.2 `Appointment.java`
-```java
-package com.example.appointmentform;
-
-/**
- * Model class representing a booked appointment entity.
- */
-public class Appointment {
-    private final String patientName;
-    private final String serviceType;
-    private final String category;
-    private final String date;
-    private final String time;
-
-    public Appointment(String patientName, String serviceType, String category, String date, String time) {
-        this.patientName = patientName;
-        this.serviceType = serviceType;
-        this.category = category;
-        this.date = date;
-        this.time = time;
-    }
-
-    public String getPatientName() {
-        return patientName;
-    }
-
-    public String getServiceType() {
-        return serviceType;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    @Override
-    public String toString() {
-        return patientName + " - " + serviceType + " (" + category + ") on " + date + " at " + time;
-    }
-}
-```
-
-### 6.3 `AppointmentAdapter.java`
-```java
-package com.example.appointmentform;
-
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import java.util.List;
-
-/**
- * Custom ArrayAdapter to bind Appointment items to the ListView.
- */
-public class AppointmentAdapter extends ArrayAdapter<Appointment> {
-
-    public AppointmentAdapter(@NonNull Context context, @NonNull List<Appointment> appointments) {
-        super(context, 0, appointments);
-    }
-
-    @NonNull
-    @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_appointment, parent, false);
-        }
-
-        Appointment appointment = getItem(position);
-        if (appointment != null) {
-            TextView tvPatient = convertView.findViewById(R.id.tvItemPatient);
-            TextView tvService = convertView.findViewById(R.id.tvItemService);
-            TextView tvCategory = convertView.findViewById(R.id.tvItemCategory);
-            TextView tvDateTime = convertView.findViewById(R.id.tvItemDateTime);
-
-            tvPatient.setText(appointment.getPatientName());
-            tvService.setText(appointment.getServiceType());
-            tvCategory.setText("Department: " + appointment.getCategory());
-            tvDateTime.setText("Date: " + appointment.getDate() + " | Time: " + appointment.getTime());
-        }
-
-        return convertView;
-    }
-}
-```
-
-### 6.4 `res/layout/activity_main.xml`
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Appointment Form"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
-            android:layout_marginBottom="16dp"/>
-
-        <!-- 1. Patient Name -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Patient Name:"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
-            android:layout_marginBottom="4dp"/>
-
-        <EditText
-            android:id="@+id/etPatientName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter patient name"
-            android:text="Alex Johnson"
-            android:inputType="textPersonName"
-            android:padding="10dp"
-            android:background="@android:drawable/edit_text"
-            android:layout_marginBottom="14dp"/>
-
-        <!-- 2. ImageButton Service Selection -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Select Service (ImageButton):"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
-            android:layout_marginBottom="4dp"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:padding="8dp"
-            android:background="#F0F0F0"
-            android:layout_marginBottom="14dp">
-
-            <ImageButton
-                android:id="@+id/ibServiceIcon"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@android:drawable/ic_menu_agenda"
-                android:background="@android:drawable/btn_default"
-                android:contentDescription="Select Service"/>
-
-            <TextView
-                android:id="@+id/tvSelectedService"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="General Consultation (Tap icon to change)"
-                android:textColor="@android:color/black"
-                android:textSize="14sp"
-                android:layout_marginStart="12dp"/>
-        </LinearLayout>
-
-        <!-- 3. Spinner Category Selection -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Select Department (Spinner):"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
-            android:layout_marginBottom="4dp"/>
-
-        <Spinner
-            android:id="@+id/spnCategory"
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:layout_marginBottom="14dp"/>
-
-        <!-- 4. DatePicker -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Select Date (DatePicker):"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
-            android:layout_marginBottom="4dp"/>
-
-        <DatePicker
-            android:id="@+id/datePicker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:datePickerMode="spinner"
-            android:calendarViewShown="false"
-            android:layout_marginBottom="14dp"/>
-
-        <!-- 5. TimePicker -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Select Time (TimePicker):"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
-            android:layout_marginBottom="4dp"/>
-
-        <TimePicker
-            android:id="@+id/timePicker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:timePickerMode="spinner"
-            android:layout_marginBottom="16dp"/>
-
-        <!-- Submit Button -->
-        <Button
-            android:id="@+id/btnSubmitAppointment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Book Appointment"
-            android:layout_marginBottom="20dp"/>
-
-        <!-- 6. Submitted Appointments (ListView) -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Submitted Appointments (ListView):"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
-            android:layout_marginBottom="8dp"/>
-
-        <ListView
-            android:id="@+id/lvAppointments"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:divider="@null"
-            android:dividerHeight="0dp"
-            android:nestedScrollingEnabled="true"
-            android:layout_marginBottom="16dp"/>
-
-    </LinearLayout>
-</ScrollView>
-```
-
-### 6.5 `res/layout/item_appointment.xml`
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="10dp"
-    android:background="@android:color/white">
-
-    <TextView
-        android:id="@+id/tvItemPatient"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Patient Name"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"/>
-
-    <TextView
-        android:id="@+id/tvItemService"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="General Consultation"
-        android:textColor="#333333"
-        android:textSize="13sp"/>
-
-    <TextView
-        android:id="@+id/tvItemCategory"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Category: General Medicine"
-        android:textColor="#555555"
-        android:textSize="13sp"/>
-
-    <TextView
-        android:id="@+id/tvItemDateTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Date &amp; Time"
-        android:textColor="#777777"
-        android:textSize="12sp"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#DDDDDD"
-        android:layout_marginTop="8dp"/>
-
-</LinearLayout>
-```
-
-### 6.6 `AndroidManifest.xml`
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <application
-        android:allowBackup="true"
-        android:icon="@android:drawable/sym_def_app_icon"
-        android:label="@string/app_name"
-        android:roundIcon="@android:drawable/sym_def_app_icon"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.AppointmentForm">
-
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-    </application>
-
-</manifest>
-```
-
----
-
-## 7. Output & Hardware Execution Evidence
-
-The application was installed on the OnePlus CPH2661 test device and tested through its complete booking lifecycle.
-
-**Output Screen 1: Appointment booking form with required native widgets:**
-
-![Appointment Form](Practical_Screenshots/Practical_04/P04_Appointment_Form.png)
-
-**Output Screen 2: Date and Time selection on physical device:**
-
-![Date Time Selection](Practical_Screenshots/Practical_04/P04_DateTime_Selection.png)
-
-**Output Screen 3: Submitted appointment displayed inside ListView:**
-
-![Submitted Appointment](Practical_Screenshots/Practical_04/P04_Appointment_Submitted.png)
-
-- **Verification Summary:** All five required widgets (`ImageButton`, `Spinner`, `DatePicker`, `TimePicker`, `ListView`) functioned properly. Submitting the form dynamically added the appointment entry into the `ListView`.
-
-## 8. Expected Output
-1. The user inputs patient details, selects service via `ImageButton`, chooses category from `Spinner`, and adjusts `DatePicker` and `TimePicker`.
-2. Pressing "Book Appointment" validates input and creates a new entry inside the `ListView` displaying the patient name, service, department, date, and time.
-
-## 9. Result & Conclusion
-The Appointment Form application successfully incorporated `ImageButton`, `Spinner`, `DatePicker`, `TimePicker`, and a live dynamic `ListView`. Form validation, scheduling, and dynamic list rendering operations were verified on physical Android hardware.
+Explicit Intent inter-activity navigation and data passing were successfully implemented, verified on physical hardware, and documented.
 
 
 # PRACTICAL 05
@@ -1277,7 +692,7 @@ The Appointment Form application successfully incorporated `ImageButton`, `Spinn
 Demonstration of Portrait and Landscape Screen Orientation Detection and Layout Switching.
 
 ## 2. Aim
-To develop a native Android application that detects device screen orientation (Portrait and Landscape) dynamically at runtime and automatically loads orientation-specific XML layouts.
+To develop a native Android application that detects device screen orientation dynamically at runtime and automatically loads orientation-specific XML layouts (`layout` vs `layout-land`).
 
 ## 3. Software and Hardware Requirements
 - **IDE:** Android Studio
@@ -1287,44 +702,13 @@ To develop a native Android application that detects device screen orientation (
 - **Testing Hardware:** OnePlus CPH2661 (Android 16, API Level 36)
 
 ## 4. Theoretical Background
-
-### 4.1 Android Configuration Changes & Resource Qualifiers
-When the physical orientation changes between portrait and landscape, Android triggers a configuration change. By default, the system destroys and recreates the current Activity (`onPause` -> `onStop` -> `onDestroy` -> `onCreate`).
-During layout inflation, Android uses resource folder qualifiers to pick the best layout:
-- `res/layout/activity_main.xml`: Default layout, used in Portrait orientation.
-- `res/layout-land/activity_main.xml`: Used automatically in Landscape orientation.
-
-### 4.2 Runtime Orientation Detection
-An Activity can inspect the active orientation programmatically via:
-```java
-int orientation = getResources().getConfiguration().orientation;
-if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-    // Landscape mode logic
-} else {
-    // Portrait mode logic
-}
-```
-
----
+When physical screen orientation changes, Android triggers a configuration change, recreating the activity and resolving resources using folder qualifiers (`res/layout/` for Portrait and `res/layout-land/` for Landscape).
 
 ## 5. Algorithm & Procedure
-
-### Step 1: Layout Construction
-1. Create `res/layout/activity_main.xml` containing a centered `TextView` with the text "Portrait Mode".
-2. Create the landscape resource folder `res/layout-land/`.
-3. In `res/layout-land/activity_main.xml`, add a centered `TextView` with the text "Landscape Mode".
-
-### Step 2: Activity Logic
-1. In `MainActivity.java`, call `setContentView(R.layout.activity_main)` inside `onCreate()`.
-2. Query `getResources().getConfiguration().orientation`.
-3. Update the `TextView` text to confirm the detected orientation.
-
-### Step 3: Hardware Verification
-1. Install the application on the OnePlus smartphone.
-2. Launch in default vertical orientation to verify Portrait layout.
-3. Rotate the device to horizontal orientation (`user_rotation 1`) to verify Landscape layout inflation.
-
----
+1. Create `res/layout/activity_main.xml` with text "Portrait Mode".
+2. Create `res/layout-land/activity_main.xml` with text "Landscape Mode".
+3. In `MainActivity.java`, query `getResources().getConfiguration().orientation` in `onCreate()` and update display text.
+4. Test both orientations on physical hardware.
 
 ## 6. Source Code
 
@@ -1464,8 +848,6 @@ public class MainActivity extends AppCompatActivity {
 </manifest>
 ```
 
----
-
 ## 7. Output & Hardware Execution Evidence
 
 The application was tested across both hardware orientations on the OnePlus CPH2661 device:
@@ -1478,20 +860,480 @@ The application was tested across both hardware orientations on the OnePlus CPH2
 
 ![Landscape Mode](Practical_Screenshots/Practical_05/P05_Landscape_Mode.png)
 
-- **Verification Summary:** In vertical hold, the system inflated `res/layout/activity_main.xml` displaying "Portrait Mode". When rotated horizontally, Android automatically recreated the activity and inflated `res/layout-land/activity_main.xml` displaying "Landscape Mode".
+- **Verification Summary:** Vertical hold inflated `layout/activity_main.xml` ("Portrait Mode"). Rotating to horizontal orientation (`user_rotation 1`) recreated the activity and inflated `layout-land/activity_main.xml` ("Landscape Mode").
 
 ## 8. Expected Output
-1. In portrait mode, the vertical layout renders with the message "Portrait Mode".
-2. When rotated to landscape, the layout renders with the message "Landscape Mode".
+1. In portrait mode, the display renders "Portrait Mode".
+2. When rotated horizontally, the display automatically switches and renders "Landscape Mode".
 
 ## 9. Result & Conclusion
-The Screen Orientation application successfully demonstrated dynamic runtime orientation detection and resource qualification (`layout` vs `layout-land`). Both portrait and landscape orientations were verified on physical Android hardware.
+Screen orientation detection and dynamic resource qualification were successfully demonstrated and verified on physical hardware.
 
 
 # PRACTICAL 06
 
 ## 1. Title
-Implementation of an Options Menu Bar in Android Studio using Java.
+Developing an Application Using Picker View (DatePicker and TimePicker).
+
+## 2. Aim
+To develop a native Android application demonstrating DatePicker and TimePicker widgets to capture user-selected calendar dates and times and display the formatted selection.
+
+## 3. Software and Hardware Requirements
+- **IDE:** Android Studio
+- **Language:** Java (JDK 21 LTS)
+- **Compile SDK:** API 36 | **Min SDK:** API 24
+- **UI Components:** `DatePicker`, `TimePicker`, `Button`, `TextView`
+- **Testing Hardware:** OnePlus CPH2661 (Android 16, API Level 36)
+
+## 4. Theoretical Background
+`DatePicker` and `TimePicker` provide standard, intuitive controls for selecting dates (day, month, year) and times (hour, minute) adhering to platform conventions.
+
+## 5. Algorithm & Procedure
+1. Create a scrollable light-theme layout containing `DatePicker`, `TimePicker`, submit `Button`, and result `TextView`.
+2. In `MainActivity.java`, attach a click listener to the button.
+3. Extract `getDayOfMonth()`, `getMonth() + 1`, `getYear()` from `DatePicker`, and `getHour()`, `getMinute()` from `TimePicker`.
+4. Format the extracted date/time values and display in `txtResult`.
+
+## 6. Source Code
+
+### 6.1 `MainActivity.java`
+```java
+package com.example.pickerview;
+
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.TextView;
+import android.widget.TimePicker;
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.Locale;
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        DatePicker datePicker = findViewById(R.id.datePicker);
+        TimePicker timePicker = findViewById(R.id.timePicker);
+        TextView txtResult = findViewById(R.id.txtResult);
+        Button btnShow = findViewById(R.id.btnShow);
+
+        btnShow.setOnClickListener(v -> {
+            int day = datePicker.getDayOfMonth();
+            int month = datePicker.getMonth() + 1;
+            int year = datePicker.getYear();
+            int hour = timePicker.getHour();
+            int minute = timePicker.getMinute();
+
+            String formattedResult = String.format(Locale.getDefault(),
+                    "Selected Date: %02d/%02d/%04d\nSelected Time: %02d:%02d",
+                    day, month, year, hour, minute);
+            txtResult.setText(formattedResult);
+        });
+    }
+}
+```
+
+### 6.2 `res/layout/activity_main.xml`
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/picker_title"
+            android:textColor="#1F1F1F"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp"/>
+
+        <DatePicker
+            android:id="@+id/datePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:calendarViewShown="false"
+            android:datePickerMode="spinner"
+            android:layout_marginBottom="16dp"/>
+
+        <TimePicker
+            android:id="@+id/timePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:timePickerMode="spinner"
+            android:layout_marginBottom="16dp"/>
+
+        <Button
+            android:id="@+id/btnShow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_show_selection"
+            android:textSize="16sp"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:id="@+id/txtResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#1A73E8"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"/>
+
+    </LinearLayout>
+</ScrollView>
+```
+
+### 6.3 `AndroidManifest.xml`
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@android:drawable/sym_def_app_icon"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.PickerView">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>
+```
+
+## 7. Output & Hardware Execution Evidence
+
+The application was tested and verified on the OnePlus CPH2661 smartphone:
+
+**Output Screen: Date and Time selection on physical device:**
+
+![Picker View Output](Practical_Screenshots/Practical_06/P06_Picker_View.png)
+
+- **Verification Summary:** Date and time widgets operated smoothly in spinner mode, and clicking "Show Selection" accurately displayed the selected date and time.
+
+## 8. Expected Output
+The application displays date and time pickers. Tapping "Show Selection" formats and renders the chosen date and time below the controls.
+
+## 9. Result & Conclusion
+The Picker View application was successfully developed, verified on physical hardware, and documented.
+
+
+# PRACTICAL 07
+
+## 1. Title
+Developing an Application Using ListView with Dynamic Selection Feedback.
+
+## 2. Aim
+To develop a native Android application demonstrating the `ListView` widget populated with a dataset via `ArrayAdapter`, handling item click events to display interactive user feedback.
+
+## 3. Software and Hardware Requirements
+- **IDE:** Android Studio
+- **Language:** Java (JDK 21 LTS)
+- **Compile SDK:** API 36 | **Min SDK:** API 24
+- **UI Components:** `ListView`, `ArrayAdapter<String>`, `Toast`
+- **Testing Hardware:** OnePlus CPH2661 (Android 16, API Level 36)
+
+## 4. Theoretical Background
+`ListView` is a vertically scrollable `AdapterView` that displays rows backed by an `Adapter`. The `ArrayAdapter` binds an array of objects to view items (such as `android.R.layout.simple_list_item_1`) using view recycling for memory efficiency.
+
+## 5. Algorithm & Procedure
+1. Create a layout with a title `TextView` and `ListView`.
+2. Define a String array of programming languages.
+3. Instantiate `ArrayAdapter<String>` and attach it to the `ListView` via `setAdapter()`.
+4. Attach `OnItemClickListener` to show a `Toast` with the selected item name.
+
+## 6. Source Code
+
+### 6.1 `MainActivity.java`
+```java
+package com.example.listviewapp;
+
+import android.os.Bundle;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        String[] languages = {"Java", "Kotlin", "Python", "C", "C++", "JavaScript", "Dart", "Swift", "Go", "Rust"};
+        ListView listView = findViewById(R.id.listView);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_list_item_1, languages);
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener((parent, view, position, id) ->
+                Toast.makeText(this, "Selected: " + languages[position], Toast.LENGTH_SHORT).show());
+    }
+}
+```
+
+### 6.2 `res/layout/activity_main.xml`
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#FFFFFF">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/list_title"
+        android:textColor="#1F1F1F"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"/>
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="#E0E0E0"
+        android:dividerHeight="1dp"/>
+
+</LinearLayout>
+```
+
+### 6.3 `AndroidManifest.xml`
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@android:drawable/sym_def_app_icon"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.ListViewApp">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>
+```
+
+## 7. Output & Hardware Execution Evidence
+
+The application was tested and verified on the OnePlus CPH2661 smartphone:
+
+**Output Screen: ListView populated with items on physical device:**
+
+![ListView Output](Practical_Screenshots/Practical_07/P07_List_View.png)
+
+- **Verification Summary:** The list populated cleanly with item rows, and tapping any item triggered an interactive feedback message.
+
+## 8. Expected Output
+A scrollable list of programming languages is displayed. Tapping an item shows its name in a Toast.
+
+## 9. Result & Conclusion
+The ListView application was successfully built, verified on physical hardware, and documented.
+
+
+# PRACTICAL 08
+
+## 1. Title
+Applying a Theme in an Activity/Application (Custom Light Theme).
+
+## 2. Aim
+To develop a native Android application demonstrating how to define a custom light theme in XML resources (`res/values/themes.xml`) and apply it globally at the application level to enforce consistent typography, surface, and brand accent colors.
+
+## 3. Software and Hardware Requirements
+- **IDE:** Android Studio
+- **Language:** Java (JDK 21 LTS)
+- **Compile SDK:** API 36 | **Min SDK:** API 24
+- **UI Components:** `LinearLayout`, `Button`, `TextView`, Theme Attributes (`?attr/colorPrimary`)
+- **Testing Hardware:** OnePlus CPH2661 (Android 16, API Level 36)
+
+## 4. Theoretical Background
+Themes in Android allow styling all views in an activity or application centrally. By inheriting from `Theme.Material3.Light.NoActionBar` and overriding attributes (`colorPrimary`, `colorOnPrimary`, `colorBackground`), applications maintain consistent visual branding.
+
+## 5. Algorithm & Procedure
+1. In `res/values/themes.xml`, define style `Theme.CustomLight` specifying brand colors and background.
+2. In `AndroidManifest.xml`, apply the theme to the `<application>` tag.
+3. In `activity_main.xml`, reference theme attributes like `?attr/colorPrimary` for text and controls.
+4. Build and verify the rendered themed interface.
+
+## 6. Source Code
+
+### 6.1 `MainActivity.java`
+```java
+package com.example.themeapp;
+
+import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
+}
+```
+
+### 6.2 `res/values/themes.xml`
+```xml
+<resources>
+    <style name="Theme.CustomLight" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Status bar styling -->
+        <item name="android:statusBarColor">#FFFFFF</item>
+        <item name="android:windowLightStatusBar">true</item>
+
+        <!-- Brand color palette -->
+        <item name="colorPrimary">#1976D2</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSecondary">#FFA000</item>
+        <item name="colorOnSecondary">#000000</item>
+
+        <!-- Background & Surface -->
+        <item name="android:colorBackground">#F8F9FA</item>
+        <item name="colorSurface">#FFFFFF</item>
+        <item name="colorOnSurface">#1F1F1F</item>
+
+        <!-- Standard typography -->
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+</resources>
+```
+
+### 6.3 `res/layout/activity_main.xml`
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="24dp">
+
+    <TextView
+        android:id="@+id/tvThemeTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/theme_title"
+        android:textColor="?attr/colorPrimary"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:id="@+id/tvThemeSubtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/theme_subtitle"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="16sp"
+        android:layout_marginBottom="24dp"/>
+
+    <Button
+        android:id="@+id/btnSample"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_sample"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:id="@+id/tvThemeInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/theme_info"
+        android:textColor="#555555"
+        android:textSize="14sp"/>
+
+</LinearLayout>
+```
+
+### 6.4 `AndroidManifest.xml`
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@android:drawable/sym_def_app_icon"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.CustomLight">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>
+```
+
+## 7. Output & Hardware Execution Evidence
+
+The application was built via Gradle, verified, and executed:
+
+**Output Screen: Custom Light Theme applied to application:**
+
+- **Execution Verification:** The application successfully launched applying `Theme.CustomLight`, rendering high-contrast blue primary accents on a clean light background `#F8F9FA`.
+
+## 8. Expected Output
+The application opens using the custom light theme, displaying configured colors and clean typography.
+
+## 9. Result & Conclusion
+Theme definition and application-wide theme inheritance were successfully demonstrated and documented.
+
+
+# PRACTICAL 09
+
+## 1. Title
+Creating an Options Menu in an Android Application (Home, Settings, About, Help).
 
 ## 2. Aim
 To develop a native Android application demonstrating an Options Menu with items (Home, Settings, About, Help) inflated via XML and handled through menu callback methods.
@@ -1500,36 +1342,18 @@ To develop a native Android application demonstrating an Options Menu with items
 - **IDE:** Android Studio
 - **Language:** Java (JDK 21 LTS)
 - **Compile SDK:** API 36 | **Min SDK:** API 24
-- **UI Components:** `androidx.appcompat.widget.Toolbar`, `TextView`, Options Menu
+- **UI Components:** `Toolbar`, `TextView`, Options Menu
 - **Testing Hardware:** OnePlus CPH2661 (Android 16, API Level 36)
 
 ## 4. Theoretical Background
-
-### 4.1 Options Menu Architecture
-The Options Menu is the primary collection of menu items for an activity. On modern Android versions, menu items are placed in the app bar (Toolbar) or collapsed into the 3-dot overflow menu.
-
-### 4.2 Lifecycle Callbacks for Menus
-1. `onCreateOptionsMenu(Menu menu)`: Called by the framework when the activity's options menu is first displayed. The `MenuInflater` inflates the menu XML resource into the `Menu` object.
-2. `onOptionsItemSelected(MenuItem item)`: Invoked whenever the user selects any menu item. The callback receives the selected `MenuItem`, whose integer ID (`item.getItemId()`) is used to execute the corresponding action.
-
----
+The Options Menu provides primary action and navigation items for an Activity. Menus are defined declaratively in `res/menu/`, inflated in `onCreateOptionsMenu()`, and actions are processed in `onOptionsItemSelected()`.
 
 ## 5. Algorithm & Procedure
-
-### Step 1: Menu Resource Definition
-1. Create `res/menu/menu_main.xml`.
-2. Define `<item>` entries for Home, Settings, About, and Help with appropriate IDs and titles.
-
-### Step 2: Layout Construction
-1. In `res/layout/activity_main.xml`, add a `Toolbar` widget at the top (`@+id/toolbar`).
-2. Add a `TextView` in the center (`@+id/tvMenuFeedback`) to display selected item feedback.
-
-### Step 3: Activity Implementation
-1. In `MainActivity.java`, call `setSupportActionBar(toolbar)` in `onCreate()`.
-2. Override `onCreateOptionsMenu()` and call `getMenuInflater().inflate(R.menu.menu_main, menu)`.
-3. Override `onOptionsItemSelected()`, switch on `item.getItemId()`, and update `tvMenuFeedback` with the selected item name.
-
----
+1. Create `res/menu/menu_main.xml` defining items for Home, Settings, About, Help.
+2. In `activity_main.xml`, add a `Toolbar` at the top and a feedback `TextView` in the center.
+3. In `MainActivity.java`, call `setSupportActionBar(toolbar)`.
+4. Override `onCreateOptionsMenu()` to inflate the menu resource.
+5. Override `onOptionsItemSelected()` to handle item selections and update feedback text.
 
 ## 6. Source Code
 
@@ -1689,158 +1513,108 @@ public class MainActivity extends AppCompatActivity {
 </manifest>
 ```
 
----
-
 ## 7. Output & Hardware Execution Evidence
 
-The application was tested and validated on the physical OnePlus CPH2661 testing smartphone:
+The application was tested and validated on the OnePlus CPH2661 smartphone:
 
 **Output Screen 1: Main application screen with action bar:**
 
-![Menu Bar Closed](Practical_Screenshots/Practical_06/P06_Menu_Bar_Closed.png)
+![Menu Bar Closed](Practical_Screenshots/Practical_09/P09_Menu_Bar_Closed.png)
 
 **Output Screen 2: Options Menu expanded showing menu items:**
 
-![Menu Bar Open](Practical_Screenshots/Practical_06/P06_Menu_Bar_Open.png)
+![Menu Bar Open](Practical_Screenshots/Practical_09/P09_Menu_Bar_Open.png)
 
 **Output Screen 3: Feedback displayed after selecting Settings menu item:**
 
-![Menu Item Selected](Practical_Screenshots/Practical_06/P06_Menu_Item_Selected.png)
+![Menu Item Selected](Practical_Screenshots/Practical_09/P09_Menu_Item_Selected.png)
 
-- **Verification Summary:**
-  - Screen 1 confirms the native `Toolbar` loaded properly.
-  - Screen 2 shows the 3-dot overflow menu expanded displaying Home, Settings, About, and Help.
-  - Screen 3 shows dynamic feedback ("Selected: Settings") upon selecting an item.
+- **Verification Summary:** Screen 1 confirms native `Toolbar` loaded; Screen 2 shows the 3-dot overflow menu expanded; Screen 3 shows dynamic feedback ("Selected: Settings").
 
 ## 8. Expected Output
-1. The application displays an app bar with the title and a 3-dot overflow menu icon.
-2. Tapping the overflow icon expands the menu showing all options.
-3. Selecting any menu item updates the feedback display text accordingly.
+Tapping the overflow icon expands the menu showing all options. Selecting an option displays corresponding feedback.
 
 ## 9. Result & Conclusion
-The Options Menu application was successfully developed, installed, and validated on physical hardware. Menu inflation, action bar integration, and menu event dispatching were verified.
+The Options Menu application was successfully developed, verified on physical hardware, and documented.
 
 
-# PRACTICAL 07
+# PRACTICAL 10
 
 ## 1. Title
-Development of an Android Application in Java to Send SMS using Prefilled Intent.
+Storing Local Data Using User Preferences (SharedPreferences).
 
 ## 2. Aim
-To develop a native Android application that prepares recipient and message data, validates inputs, and delegates SMS dispatch to the system messaging client using `Intent.ACTION_SENDTO` with prefilled parameters.
+To develop a native Android application demonstrating lightweight key-value data persistence using `SharedPreferences`, saving user data to persistent device storage and loading it across application lifecycle sessions.
 
 ## 3. Software and Hardware Requirements
 - **IDE:** Android Studio
 - **Language:** Java (JDK 21 LTS)
 - **Compile SDK:** API 36 | **Min SDK:** API 24
-- **UI Components:** `LinearLayout`, `EditText`, `Button`
+- **UI Components:** `SharedPreferences`, `EditText`, `Button`, `TextView`
 - **Testing Hardware:** OnePlus CPH2661 (Android 16, API Level 36)
 
 ## 4. Theoretical Background
-
-### 4.1 SMS Dispatch Architectures in Android
-There are two primary methods to send SMS in Android:
-1. **Direct Background Dispatch (`SmsManager`):** Requires runtime `SEND_SMS` permission, which exposes privacy risks and requires complex permission flows.
-2. **Intent-based Prefilled Delegation (`ACTION_SENDTO`):** Dispatches an implicit Intent to the user's default messaging application. Requires **zero dangerous permissions**, respects user privacy, and allows the user to review the message before sending.
-
-### 4.2 Intent Configuration for SMS
-```java
-Intent intent = new Intent(Intent.ACTION_SENDTO);
-intent.setData(Uri.parse("smsto:" + phoneNumber));
-intent.putExtra("sms_body", message);
-startActivity(intent);
-```
-Using the `smsto:` scheme ensures that only genuine SMS/MMS messaging apps resolve the intent.
-
----
+`SharedPreferences` provides a lightweight mechanism to save and retrieve persistent key-value pairs of primitive data types stored as private XML files inside `/data/data/<package_name>/shared_prefs/`.
 
 ## 5. Algorithm & Procedure
-
-### Step 1: Layout Construction
-1. In `activity_main.xml`, add an `EditText` for recipient phone number (`android:inputType="phone"`).
-2. Add an `EditText` for message content (`android:inputType="textMultiLine"`).
-3. Add a `Button` to trigger SMS dispatch ("Open SMS App").
-
-### Step 2: Input Validation & Intent Dispatch
-1. In `MainActivity.java`, set a click listener on the button.
-2. Validate that neither the phone number nor the message text is empty.
-3. Construct `Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + phone))`.
-4. Attach message text via `putExtra("sms_body", message)`.
-5. Call `startActivity(intent)`.
-
----
+1. Create a light-theme layout with an `EditText` for name input, Save and Load buttons, and a result `TextView`.
+2. In `MainActivity.java`, get a `SharedPreferences` instance via `getSharedPreferences("UserPrefs", MODE_PRIVATE)`.
+3. In the Save button listener, call `preferences.edit().putString("user_name", name).apply()`.
+4. In the Load button listener, read `preferences.getString("user_name", default)` and display the result.
 
 ## 6. Source Code
 
 ### 6.1 `MainActivity.java`
 ```java
-package com.example.smsapp;
+package com.example.userpreferences;
 
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
-/**
- * Practical 07: Send SMS in Android Studio
- * Course: SCS391 Mobile Application Development Lab
- *
- * Demonstrates:
- * 1. Validating recipient phone number and message payload.
- * 2. Invoking the default system messaging application via Intent.ACTION_SENDTO
- *    using the "smsto:" scheme.
- * 3. Prefilling the conversation thread without requesting invasive permissions
- *    or silently sending messages without user consent.
- */
 public class MainActivity extends AppCompatActivity {
 
-    private EditText etPhoneNumber;
-    private EditText etMessageBody;
+    private static final String PREFS_NAME = "UserPrefs";
+    private static final String KEY_USER_NAME = "user_name";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        etPhoneNumber = findViewById(R.id.etPhoneNumber);
-        etMessageBody = findViewById(R.id.etMessageBody);
+        EditText editName = findViewById(R.id.editName);
+        Button btnSave = findViewById(R.id.btnSave);
+        Button btnLoad = findViewById(R.id.btnLoad);
+        TextView txtResult = findViewById(R.id.txtResult);
 
-        findViewById(R.id.btnOpenSmsApp).setOnClickListener(v -> openSmsComposer());
-    }
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-    private void openSmsComposer() {
-        String phone = etPhoneNumber.getText().toString().trim();
-        String message = etMessageBody.getText().toString().trim();
-
-        // Validation
-        if (phone.isEmpty()) {
-            etPhoneNumber.setError("Phone number is required");
-            etPhoneNumber.requestFocus();
-            Toast.makeText(this, "Please enter recipient phone number", Toast.LENGTH_SHORT).show();
-            return;
+        // Auto-load preference on launch if available
+        String initialName = preferences.getString(KEY_USER_NAME, null);
+        if (initialName != null && !initialName.isEmpty()) {
+            txtResult.setText("Stored Name: " + initialName);
+            editName.setText(initialName);
         }
 
-        if (message.isEmpty()) {
-            etMessageBody.setError("Message body cannot be empty");
-            etMessageBody.requestFocus();
-            Toast.makeText(this, "Please enter message text", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        btnSave.setOnClickListener(v -> {
+            String name = editName.getText().toString().trim();
+            if (name.isEmpty()) {
+                Toast.makeText(this, "Please enter a name to save", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            preferences.edit().putString(KEY_USER_NAME, name).apply();
+            txtResult.setText("Saved successfully: " + name);
+            Toast.makeText(this, "Preference saved to storage", Toast.LENGTH_SHORT).show();
+        });
 
-        // Construct standard SMS Intent
-        Uri smsUri = Uri.parse("smsto:" + Uri.encode(phone));
-        Intent smsIntent = new Intent(Intent.ACTION_SENDTO, smsUri);
-        smsIntent.putExtra("sms_body", message);
-
-        try {
-            startActivity(smsIntent);
-            Toast.makeText(this, "Opening default SMS application...", Toast.LENGTH_SHORT).show();
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(this, "No compatible SMS messaging app found on device", Toast.LENGTH_LONG).show();
-        }
+        btnLoad.setOnClickListener(v -> {
+            String savedName = preferences.getString(KEY_USER_NAME, "No data saved");
+            txtResult.setText("Loaded: " + savedName);
+        });
     }
 }
 ```
@@ -1853,63 +1627,56 @@ public class MainActivity extends AppCompatActivity {
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="20dp">
+    android:gravity="center"
+    android:padding="24dp"
+    android:background="#FFFFFF">
 
     <TextView
+        android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Send SMS Application"
-        android:textSize="22sp"
+        android:text="@string/pref_title"
+        android:textColor="#1F1F1F"
+        android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:layout_marginTop="20dp"
         android:layout_marginBottom="24dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Recipient Phone Number:"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:layout_marginBottom="6dp"/>
-
     <EditText
-        android:id="@+id/etPhoneNumber"
+        android:id="@+id/editName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter phone number"
-        android:text="+919876543210"
-        android:inputType="phone"
+        android:hint="@string/hint_user_name"
+        android:textColor="#1F1F1F"
+        android:textColorHint="#757575"
+        android:background="@android:drawable/editbox_background_normal"
         android:padding="12dp"
-        android:background="@android:drawable/edit_text"
-        android:layout_marginBottom="20dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Message Body:"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:layout_marginBottom="6dp"/>
-
-    <EditText
-        android:id="@+id/etMessageBody"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter message text"
-        android:text="Hello, this is a test SMS message."
-        android:inputType="textMultiLine"
-        android:minLines="3"
-        android:gravity="top|start"
-        android:padding="12dp"
-        android:background="@android:drawable/edit_text"
-        android:layout_marginBottom="24dp"/>
+        android:inputType="textPersonName"
+        android:layout_marginBottom="16dp"/>
 
     <Button
-        android:id="@+id/btnOpenSmsApp"
+        android:id="@+id/btnSave"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Open SMS App"/>
+        android:text="@string/btn_save_pref"
+        android:textSize="16sp"
+        android:layout_marginBottom="12dp"/>
+
+    <Button
+        android:id="@+id/btnLoad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_load_pref"
+        android:textSize="16sp"
+        android:layout_marginBottom="24dp"/>
+
+    <TextView
+        android:id="@+id/txtResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#1A73E8"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:gravity="center"/>
 
 </LinearLayout>
 ```
@@ -1923,9 +1690,8 @@ public class MainActivity extends AppCompatActivity {
         android:allowBackup="true"
         android:icon="@android:drawable/sym_def_app_icon"
         android:label="@string/app_name"
-        android:roundIcon="@android:drawable/sym_def_app_icon"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SmsApp">
+        android:theme="@style/Theme.UserPreferences">
 
         <activity
             android:name=".MainActivity"
@@ -1941,382 +1707,44 @@ public class MainActivity extends AppCompatActivity {
 </manifest>
 ```
 
----
-
 ## 7. Output & Hardware Execution Evidence
 
-The application was tested and validated on the physical OnePlus CPH2661 testing smartphone:
+The application was built via Gradle, verified, and executed:
 
-**Output Screen 1: SMS composition form with input fields:**
+**Output Screen: User Preferences saved and loaded successfully:**
 
-![SMS Form](Practical_Screenshots/Practical_07/P07_SMS_Form.png)
-
-**Output Screen 2: System messaging application opened with prefilled recipient and message:**
-
-![SMS Prefilled App](Practical_Screenshots/Practical_07/P07_SMS_Prefilled_App.png)
-
-- **Verification Summary:**
-  - Screen 1 shows the form with phone number (`+919876543210`) and message text entered.
-  - Screen 2 confirms that tapping the action button cleanly opened Google Messages with the recipient and body prefilled.
+- **Execution Verification:** After saving a user's name to `SharedPreferences`, reloading the application accurately restored and rendered the saved string.
 
 ## 8. Expected Output
-1. The app displays an input form with fields for recipient phone number and SMS message text.
-2. Clicking the action button validates inputs and triggers an implicit intent (`ACTION_SENDTO` with `smsto:`).
-3. The phone's default messaging app opens directly into a conversation thread addressed to the recipient with message text already populated in the draft box.
+After saving a name, pressing Load displays the stored name even after restarting the application.
 
 ## 9. Result & Conclusion
-Practical 07 was successfully implemented and verified on physical hardware. The application cleanly implements SMS composition through the secure, permissionless `Intent.ACTION_SENDTO` architecture, guaranteeing complete privacy and adherence to Android platform best practices.
+Local data storage using Android `SharedPreferences` was successfully implemented and verified.
 
 
-# PRACTICAL 08
+# PRACTICAL 11
 
 ## 1. Title
-Development of an Android Application in Java to Send Email using Prefilled Intent.
+Creating, Reading and Writing Data Using SQLite (CRUD Operations).
 
 ## 2. Aim
-To develop a native Android application that prepares email parameters (recipient, subject, body), validates email syntax, and delegates composition to an installed email client via `Intent.ACTION_SENDTO` with a system chooser.
+To develop a native Android application in light theme utilizing SQLite database storage via `SQLiteOpenHelper` to perform full Create, Read, Update, and Delete (CRUD) operations on student records and display them dynamically in a `ListView`.
 
 ## 3. Software and Hardware Requirements
 - **IDE:** Android Studio
 - **Language:** Java (JDK 21 LTS)
 - **Compile SDK:** API 36 | **Min SDK:** API 24
-- **UI Components:** `LinearLayout`, `EditText`, `Button`
+- **UI Architecture:** Light Theme (`#FFFFFF` background, dark text `#1F1F1F`)
+- **Components:** `SQLiteOpenHelper`, `SQLiteDatabase`, `EditText`, `Button`, `ListView`
 - **Testing Hardware:** OnePlus CPH2661 (Android 16, API Level 36)
 
 ## 4. Theoretical Background
-
-### 4.1 Email Dispatch Architecture
-Using `Intent.ACTION_SENDTO` with the `mailto:` URI scheme ensures that only dedicated email clients (such as Gmail, Outlook, or Thunderbird) handle the intent, filtering out messaging, social media, and Bluetooth handlers.
-
-### 4.2 System Chooser Dialog
-Wrapping the email intent with `Intent.createChooser(intent, title)` ensures that the system always presents an app chooser dialog, giving the user control over which client to use without permanently binding a default handler.
-
----
+SQLite is an embedded relational SQL database engine included in Android. `SQLiteOpenHelper` manages database creation (`onCreate`) and schema version upgrades (`onUpgrade`). Operations are executed via parameterized queries using `ContentValues` and `Cursor`.
 
 ## 5. Algorithm & Procedure
-
-### Step 1: Layout Construction
-1. In `activity_main.xml`, add `EditText` fields for:
-   - Recipient email address (`android:inputType="textEmailAddress"`).
-   - Subject line (`android:inputType="text"`).
-   - Message body (`android:inputType="textMultiLine"`).
-2. Add a `Button` to trigger email dispatch ("Open Email Client").
-
-### Step 2: Field Validation & Intent Construction
-1. In `MainActivity.java`, validate all fields. Check email format using `Patterns.EMAIL_ADDRESS.matcher(email).matches()`.
-2. Create an `Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"))`.
-3. Put extras:
-   - `Intent.EXTRA_EMAIL`: Array of recipient addresses (`new String[]{email}`).
-   - `Intent.EXTRA_SUBJECT`: Subject string.
-   - `Intent.EXTRA_TEXT`: Body string.
-4. Wrap in `Intent.createChooser()` and call `startActivity()`.
-
----
-
-## 6. Source Code
-
-### 6.1 `MainActivity.java`
-```java
-package com.example.emailapp;
-
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.util.Patterns;
-import android.widget.EditText;
-import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
-
-/**
- * Practical 08: Send Email in Android Studio
- * Course: SCS391 Mobile Application Development Lab
- *
- * Demonstrates:
- * 1. Validation of recipient email format, subject line, and message body.
- * 2. Privacy-first implicit Intent delegation using Intent.ACTION_SENDTO with "mailto:".
- * 3. Delegating prefilled parameters to external email clients (e.g., Gmail) via Intent.createChooser.
- * 4. Graceful handling of ActivityNotFoundException when no email app is available.
- */
-public class MainActivity extends AppCompatActivity {
-
-    private EditText etEmailTo;
-    private EditText etSubject;
-    private EditText etEmailBody;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        etEmailTo = findViewById(R.id.etEmailTo);
-        etSubject = findViewById(R.id.etSubject);
-        etEmailBody = findViewById(R.id.etEmailBody);
-
-        findViewById(R.id.btnSendEmail).setOnClickListener(v -> handleSendEmail());
-    }
-
-    private void handleSendEmail() {
-        String to = etEmailTo.getText().toString().trim();
-        String subject = etSubject.getText().toString().trim();
-        String body = etEmailBody.getText().toString().trim();
-
-        // 1. Recipient Validation
-        if (to.isEmpty()) {
-            etEmailTo.setError("Recipient email cannot be empty");
-            etEmailTo.requestFocus();
-            Toast.makeText(this, "Please enter recipient email", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (!Patterns.EMAIL_ADDRESS.matcher(to).matches()) {
-            etEmailTo.setError("Please enter a valid email address");
-            etEmailTo.requestFocus();
-            Toast.makeText(this, "Invalid email format", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // 2. Subject Validation
-        if (subject.isEmpty()) {
-            etSubject.setError("Subject line cannot be empty");
-            etSubject.requestFocus();
-            Toast.makeText(this, "Please enter email subject", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // 3. Body Validation
-        if (body.isEmpty()) {
-            etEmailBody.setError("Email body cannot be empty");
-            etEmailBody.requestFocus();
-            Toast.makeText(this, "Please enter message body", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // 4. Construct Email Intent
-        // ACTION_SENDTO with mailto: ensures ONLY dedicated email clients match
-        Uri mailtoUri = Uri.parse("mailto:" + Uri.encode(to));
-        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, mailtoUri);
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{to});
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
-        emailIntent.putExtra(Intent.EXTRA_TEXT, body);
-
-        // 5. Wrap in Chooser to provide seamless user choice
-        Intent chooserIntent = Intent.createChooser(emailIntent, "Send Email via:");
-
-        try {
-            startActivity(chooserIntent);
-            Toast.makeText(this, "Opening email client...", Toast.LENGTH_SHORT).show();
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(this, "No compatible email client found on device", Toast.LENGTH_LONG).show();
-        }
-    }
-}
-```
-
-### 6.2 `res/layout/activity_main.xml`
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="20dp">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Send Email Application"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="24dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Recipient Email:"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:layout_marginBottom="6dp"/>
-
-    <EditText
-        android:id="@+id/etEmailTo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter recipient email"
-        android:text="alex.johnson@university.edu"
-        android:inputType="textEmailAddress"
-        android:padding="12dp"
-        android:background="@android:drawable/edit_text"
-        android:layout_marginBottom="16dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Subject Line:"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:layout_marginBottom="6dp"/>
-
-    <EditText
-        android:id="@+id/etSubject"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter subject"
-        android:text="SCS391 Practical 08 Submission"
-        android:inputType="text"
-        android:padding="12dp"
-        android:background="@android:drawable/edit_text"
-        android:layout_marginBottom="16dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Message Body:"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:layout_marginBottom="6dp"/>
-
-    <EditText
-        android:id="@+id/etEmailBody"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter message text"
-        android:text="Hello, this is a test email message."
-        android:inputType="textMultiLine"
-        android:minLines="3"
-        android:gravity="top|start"
-        android:padding="12dp"
-        android:background="@android:drawable/edit_text"
-        android:layout_marginBottom="24dp"/>
-
-    <Button
-        android:id="@+id/btnSendEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Open Email Client"/>
-
-</LinearLayout>
-```
-
-### 6.3 `AndroidManifest.xml`
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <!-- Zero permissions required: Using ACTION_SENDTO with mailto: delegation -->
-    <queries>
-        <!-- Support Android 11+ package visibility for email clients -->
-        <intent>
-            <action android:name="android.intent.action.SENDTO" />
-            <data android:scheme="mailto" />
-        </intent>
-    </queries>
-
-    <application
-        android:allowBackup="true"
-        android:icon="@android:drawable/sym_def_app_icon"
-        android:label="@string/app_name"
-        android:roundIcon="@android:drawable/sym_def_app_icon"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.EmailApp">
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-    </application>
-
-</manifest>
-```
-
----
-
-## 7. Output & Hardware Execution Evidence
-
-The application was tested and validated on the physical OnePlus CPH2661 testing smartphone:
-
-**Output Screen 1: Email composition form with input fields:**
-
-![Email Form](Practical_Screenshots/Practical_08/P08_Email_Form.png)
-
-**Output Screen 2: System email app chooser opened for composition:**
-
-![Email Prefilled App](Practical_Screenshots/Practical_08/P08_Email_Prefilled_App.png)
-
-- **Verification Summary:**
-  - Screen 1 shows the form with recipient (`student@example.com`), subject, and body entered.
-  - Screen 2 shows the Android system chooser / client opening directly with recipient, subject, and body prefilled.
-
-## 8. Expected Output
-1. The user fills in recipient address, subject line, and message body.
-2. Clicking "Open Email Client" validates all fields.
-3. If valid, an implicit intent with `ACTION_SENDTO` and `mailto:` is dispatched inside a system chooser dialog.
-4. The system presents available email clients prefilled with recipient, subject, and body content.
-
-## 9. Result & Conclusion
-Practical 08 was successfully implemented and verified on the physical OnePlus device. The application implements the best-practice Android email dispatch architecture using `Intent.ACTION_SENDTO` with `mailto:` scheme delegation and system chooser integration.
-
-
-# PRACTICAL 09
-
-## 1. Title
-Development of an Android Application in Java to Perform Database Operations (CRUD) using SQLite.
-
-## 2. Aim
-To develop a native Android application utilizing SQLite database storage via `SQLiteOpenHelper` to perform full Create, Read, Update, and Delete (CRUD) operations on student records and display them dynamically in a `ListView`.
-
-## 3. Software and Hardware Requirements
-- **IDE:** Android Studio
-- **Language:** Java (JDK 21 LTS)
-- **Compile SDK:** API 36 | **Min SDK:** API 24
-- **UI Components:** `LinearLayout`, `EditText`, `Button`, `ListView`
-- **Testing Hardware:** OnePlus CPH2661 (Android 16, API Level 36)
-
-## 4. Theoretical Background
-
-### 4.1 SQLite in Android
-SQLite is an in-process, serverless, transactional SQL database engine embedded directly into the Android OS. Every application has its own private SQLite database file located in `/data/data/<package_name>/databases/`, accessible only by that application.
-
-### 4.2 `SQLiteOpenHelper` Lifecycle
-`SQLiteOpenHelper` manages database creation and version management:
-- `onCreate(SQLiteDatabase db)`: Invoked when the database file is first created. Executes `CREATE TABLE` DDL queries.
-- `onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)`: Invoked when the database version increments, handling table migrations.
-
-### 4.3 CRUD SQL Operations
-- **Create:** `db.insert(TABLE_NAME, null, values)` where `values` is a `ContentValues` key-value map.
-- **Read:** `db.query(TABLE_NAME, columns, selection, selectionArgs, ...)` returning a `Cursor`.
-- **Update:** `db.update(TABLE_NAME, values, "id = ?", new String[]{id})`.
-- **Delete:** `db.delete(TABLE_NAME, "id = ?", new String[]{id})`.
-
----
-
-## 5. Algorithm & Procedure
-
-### Step 1: Database Helper Construction
-1. Create `DatabaseHelper.java` extending `SQLiteOpenHelper`.
-2. Define table `students` with columns: `id` (INTEGER PRIMARY KEY AUTOINCREMENT), `name` (TEXT), `email` (TEXT).
-3. Implement `insertStudent()`, `getAllStudents()`, `updateStudent()`, and `deleteStudent()`.
-
-### Step 2: User Interface Design
-1. In `res/layout/activity_main.xml`, add `EditText` widgets for ID, Name, and Email.
-2. Add four action buttons: Insert, View All, Update, and Delete.
-3. Add a `ListView` (`@+id/lvStudents`) to display stored student records.
-
-### Step 3: Activity Implementation
-1. In `MainActivity.java`, instantiate `DatabaseHelper`.
-2. Set click listeners for the four buttons:
-   - **Insert:** Read name and email, call `dbHelper.insertStudent()`, clear fields, refresh list.
-   - **View All:** Call `dbHelper.getAllStudents()`, populate `ListView` via `ArrayAdapter`.
-   - **Update:** Read ID, new name, new email, call `dbHelper.updateStudent()`, refresh list.
-   - **Delete:** Read ID, call `dbHelper.deleteStudent()`, refresh list.
-
----
+1. Create `DatabaseHelper.java` extending `SQLiteOpenHelper` with student table schema (`id`, `name`, `email`).
+2. Implement CRUD methods: `insertStudent()`, `getAllStudents()`, `updateStudent()`, `deleteStudent()`.
+3. In `MainActivity.java`, attach click listeners for the 4 action buttons (Insert, View All, Update, Delete) and bind results to `ListView`.
 
 ## 6. Source Code
 
@@ -2584,13 +2012,15 @@ public class Student {
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="20dp"
+        android:background="#FFFFFF">
 
         <TextView
             android:layout_width="wrap_content"
@@ -2598,7 +2028,7 @@ public class Student {
             android:text="Student Records (SQLite CRUD)"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="@android:color/black"
+            android:textColor="#1F1F1F"
             android:layout_marginBottom="16dp"/>
 
         <EditText
@@ -2606,9 +2036,11 @@ public class Student {
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Student ID (Required for Update/Delete)"
+            android:textColor="#1F1F1F"
+            android:textColorHint="#757575"
             android:inputType="number"
-            android:padding="10dp"
-            android:background="@android:drawable/edit_text"
+            android:padding="12dp"
+            android:background="@android:drawable/editbox_background_normal"
             android:layout_marginBottom="10dp"/>
 
         <EditText
@@ -2616,9 +2048,11 @@ public class Student {
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Student Name"
+            android:textColor="#1F1F1F"
+            android:textColorHint="#757575"
             android:inputType="textPersonName"
-            android:padding="10dp"
-            android:background="@android:drawable/edit_text"
+            android:padding="12dp"
+            android:background="@android:drawable/editbox_background_normal"
             android:layout_marginBottom="10dp"/>
 
         <EditText
@@ -2626,9 +2060,11 @@ public class Student {
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Student Email"
+            android:textColor="#1F1F1F"
+            android:textColorHint="#757575"
             android:inputType="textEmailAddress"
-            android:padding="10dp"
-            android:background="@android:drawable/edit_text"
+            android:padding="12dp"
+            android:background="@android:drawable/editbox_background_normal"
             android:layout_marginBottom="16dp"/>
 
         <!-- Action Buttons -->
@@ -2684,14 +2120,16 @@ public class Student {
             android:layout_height="wrap_content"
             android:text="Stored Records:"
             android:textStyle="bold"
-            android:textColor="@android:color/black"
+            android:textColor="#1F1F1F"
             android:layout_marginBottom="8dp"/>
 
         <ListView
             android:id="@+id/lvStudents"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:background="#FAFAFA"
+            android:background="#FFFFFF"
+            android:divider="#E0E0E0"
+            android:dividerHeight="1dp"
             android:nestedScrollingEnabled="true"/>
 
     </LinearLayout>
@@ -2723,109 +2161,891 @@ public class Student {
 </manifest>
 ```
 
----
-
 ## 7. Output & Hardware Execution Evidence
 
-The application was tested and validated on the physical OnePlus CPH2661 testing smartphone across all four operations:
+The application was tested and validated on the OnePlus CPH2661 smartphone across all four operations:
 
 **Output Screen 1: CREATE — Inserting student record into SQLite database:**
 
-![CRUD Create](Practical_Screenshots/Practical_09/P09_CRUD_Create.png)
+![CRUD Create](Practical_Screenshots/Practical_11/P11_CRUD_Create.png)
 
 **Output Screen 2: READ — Querying and listing student records in ListView:**
 
-![CRUD Read](Practical_Screenshots/Practical_09/P09_CRUD_Read.png)
+![CRUD Read](Practical_Screenshots/Practical_11/P11_CRUD_Read.png)
 
 **Output Screen 3: UPDATE — Updating existing student record by ID:**
 
-![CRUD Update](Practical_Screenshots/Practical_09/P09_CRUD_Update.png)
+![CRUD Update](Practical_Screenshots/Practical_11/P11_CRUD_Update.png)
 
 **Output Screen 4: DELETE — Deleting student record by ID:**
 
-![CRUD Delete](Practical_Screenshots/Practical_09/P09_CRUD_Delete.png)
+![CRUD Delete](Practical_Screenshots/Practical_11/P11_CRUD_Delete.png)
 
 - **Verification Summary:** All four CRUD operations (Create, Read, Update, Delete) were executed on physical hardware and verified against the embedded SQLite database file.
 
 ## 8. Expected Output
 1. **CREATE:** Entering student details and tapping "Insert" writes to SQLite and updates the list view immediately.
 2. **READ ALL:** Tapping "View All" displays all stored student records in the `ListView`.
-3. **UPDATE:** Providing an existing ID allows updating name or email; tapping "Update" modifies the database row and refreshes the display.
-4. **DELETE:** Supplying an ID and tapping "Delete" permanently deletes the record and removes it from the list.
+3. **UPDATE:** Providing an existing ID allows updating name or email; tapping "Update" modifies the database row.
+4. **DELETE:** Supplying an ID and tapping "Delete" permanently removes the record from SQLite and the list.
 
 ## 9. Result & Conclusion
-Practical 09 was successfully built, verified on physical hardware, and documented. The application implements complete SQLite database management using Android's native `SQLiteOpenHelper`, showcasing secure query execution, dynamic list rendering, and robust data persistence.
+SQLite database management using Android's native `SQLiteOpenHelper` was successfully demonstrated and verified.
 
 
-# PRACTICAL 10
+# PRACTICAL 12
 
 ## 1. Title
-Packaging, Cryptographic Signing, and Deployment of a Native Android Application.
+Creating an Application to Send SMS using Prefilled Intent.
 
 ## 2. Aim
-To configure, compile, sign, verify, and deploy a production release Android APK using custom cryptographic keystores, APK Signature Scheme v2, `zipalign`, and physical device installation.
+To develop a native Android application in Java to send SMS using a prefilled implicit intent (`Intent.ACTION_SENDTO` with `smsto:`) delegating dispatch to the default messaging client without requiring dangerous runtime permissions.
+
+## 3. Software and Hardware Requirements
+- **IDE:** Android Studio
+- **Language:** Java (JDK 21 LTS)
+- **Compile SDK:** API 36 | **Min SDK:** API 24
+- **UI Components:** `LinearLayout`, `EditText`, `Button`
+- **Testing Hardware:** OnePlus CPH2661 (Android 16, API Level 36)
+
+## 4. Theoretical Background
+Dispatching an implicit intent with `Intent.ACTION_SENDTO` and `smsto:` scheme allows prefilling recipient phone numbers and message drafts without requiring dangerous `SEND_SMS` permissions, adhering to platform privacy best practices.
+
+## 5. Algorithm & Procedure
+1. Create a clean form layout with recipient phone number and message input fields and a send button.
+2. In `MainActivity.java`, validate inputs upon button click.
+3. Construct `Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + phone))` with `sms_body` extra.
+4. Dispatch the intent via `startActivity()`.
+
+## 6. Source Code
+
+### 6.1 `MainActivity.java`
+```java
+package com.example.smsapp;
+
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.widget.EditText;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+/**
+ * Practical 07: Send SMS in Android Studio
+ * Course: SCS391 Mobile Application Development Lab
+ *
+ * Demonstrates:
+ * 1. Validating recipient phone number and message payload.
+ * 2. Invoking the default system messaging application via Intent.ACTION_SENDTO
+ *    using the "smsto:" scheme.
+ * 3. Prefilling the conversation thread without requesting invasive permissions
+ *    or silently sending messages without user consent.
+ */
+public class MainActivity extends AppCompatActivity {
+
+    private EditText etPhoneNumber;
+    private EditText etMessageBody;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        etPhoneNumber = findViewById(R.id.etPhoneNumber);
+        etMessageBody = findViewById(R.id.etMessageBody);
+
+        findViewById(R.id.btnOpenSmsApp).setOnClickListener(v -> openSmsComposer());
+    }
+
+    private void openSmsComposer() {
+        String phone = etPhoneNumber.getText().toString().trim();
+        String message = etMessageBody.getText().toString().trim();
+
+        // Validation
+        if (phone.isEmpty()) {
+            etPhoneNumber.setError("Phone number is required");
+            etPhoneNumber.requestFocus();
+            Toast.makeText(this, "Please enter recipient phone number", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (message.isEmpty()) {
+            etMessageBody.setError("Message body cannot be empty");
+            etMessageBody.requestFocus();
+            Toast.makeText(this, "Please enter message text", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Construct standard SMS Intent
+        Uri smsUri = Uri.parse("smsto:" + Uri.encode(phone));
+        Intent smsIntent = new Intent(Intent.ACTION_SENDTO, smsUri);
+        smsIntent.putExtra("sms_body", message);
+
+        try {
+            startActivity(smsIntent);
+            Toast.makeText(this, "Opening default SMS application...", Toast.LENGTH_SHORT).show();
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "No compatible SMS messaging app found on device", Toast.LENGTH_LONG).show();
+        }
+    }
+}
+```
+
+### 6.2 `res/layout/activity_main.xml`
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="#FFFFFF">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send SMS Application"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="#1F1F1F"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="24dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recipient Phone Number:"
+        android:textStyle="bold"
+        android:textColor="#1F1F1F"
+        android:layout_marginBottom="6dp"/>
+
+    <EditText
+        android:id="@+id/etPhoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter phone number"
+        android:text="+919876543210"
+        android:textColor="#1F1F1F"
+        android:textColorHint="#757575"
+        android:inputType="phone"
+        android:padding="12dp"
+        android:background="@android:drawable/editbox_background_normal"
+        android:layout_marginBottom="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Message Body:"
+        android:textStyle="bold"
+        android:textColor="#1F1F1F"
+        android:layout_marginBottom="6dp"/>
+
+    <EditText
+        android:id="@+id/etMessageBody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter message text"
+        android:text="Hello, this is a test SMS message."
+        android:textColor="#1F1F1F"
+        android:textColorHint="#757575"
+        android:inputType="textMultiLine"
+        android:minLines="3"
+        android:gravity="top|start"
+        android:padding="12dp"
+        android:background="@android:drawable/editbox_background_normal"
+        android:layout_marginBottom="24dp"/>
+
+    <Button
+        android:id="@+id/btnOpenSmsApp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Open SMS App"/>
+
+</LinearLayout>
+```
+
+### 6.3 `AndroidManifest.xml`
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@android:drawable/sym_def_app_icon"
+        android:label="@string/app_name"
+        android:roundIcon="@android:drawable/sym_def_app_icon"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.SmsApp">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>
+```
+
+## 7. Output & Hardware Execution Evidence
+
+The application was tested and validated on the OnePlus CPH2661 smartphone:
+
+**Output Screen 1: SMS composition form with input fields:**
+
+![SMS Form](Practical_Screenshots/Practical_12/P12_SMS_Form.png)
+
+**Output Screen 2: System messaging application opened with prefilled recipient and message:**
+
+![SMS Prefilled App](Practical_Screenshots/Practical_12/P12_SMS_Prefilled_App.png)
+
+- **Verification Summary:** Screen 1 shows the form with recipient (`+919876543210`) and message text; Screen 2 confirms tapping the action button opened Google Messages with recipient and draft prefilled.
+
+## 8. Expected Output
+The app displays an input form. Tapping "Open SMS App" triggers an implicit intent opening the default messaging client prefilled with recipient and message.
+
+## 9. Result & Conclusion
+SMS composition was cleanly implemented through permissionless `Intent.ACTION_SENDTO` delegation and verified on physical hardware.
+
+
+# PRACTICAL 13
+
+## 1. Title
+Creating an Application to Send an E-mail using Prefilled Intent with System Chooser.
+
+## 2. Aim
+To develop a native Android application in light theme that prepares email parameters (recipient, subject, body), validates email syntax, and delegates composition to an installed email client via `Intent.ACTION_SENDTO` with a system chooser dialog.
+
+## 3. Software and Hardware Requirements
+- **IDE:** Android Studio
+- **Language:** Java (JDK 21 LTS)
+- **Compile SDK:** API 36 | **Min SDK:** API 24
+- **UI Architecture:** Light Theme (`#FFFFFF` background, dark text `#1F1F1F`)
+- **Components:** `LinearLayout`, `EditText`, `Button`, `Intent.ACTION_SENDTO`, `Intent.createChooser`
+- **Testing Hardware:** OnePlus CPH2661 (Android 16, API Level 36)
+
+## 4. Theoretical Background
+Using `Intent.ACTION_SENDTO` with the `mailto:` scheme filters handlers to dedicated email applications. Wrapping the intent inside `Intent.createChooser()` ensures that a system app chooser dialog is displayed, providing user autonomy.
+
+## 5. Algorithm & Procedure
+1. Create a clean form with fields for recipient email, subject, and message body.
+2. In `MainActivity.java`, validate email format using `Patterns.EMAIL_ADDRESS`.
+3. Construct `Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"))`, attach `EXTRA_EMAIL`, `EXTRA_SUBJECT`, `EXTRA_TEXT`.
+4. Wrap in `Intent.createChooser()` and call `startActivity()`.
+
+## 6. Source Code
+
+### 6.1 `MainActivity.java`
+```java
+package com.example.emailapp;
+
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.util.Patterns;
+import android.widget.EditText;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+/**
+ * Practical 08: Send Email in Android Studio
+ * Course: SCS391 Mobile Application Development Lab
+ *
+ * Demonstrates:
+ * 1. Validation of recipient email format, subject line, and message body.
+ * 2. Privacy-first implicit Intent delegation using Intent.ACTION_SENDTO with "mailto:".
+ * 3. Delegating prefilled parameters to external email clients (e.g., Gmail) via Intent.createChooser.
+ * 4. Graceful handling of ActivityNotFoundException when no email app is available.
+ */
+public class MainActivity extends AppCompatActivity {
+
+    private EditText etEmailTo;
+    private EditText etSubject;
+    private EditText etEmailBody;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        etEmailTo = findViewById(R.id.etEmailTo);
+        etSubject = findViewById(R.id.etSubject);
+        etEmailBody = findViewById(R.id.etEmailBody);
+
+        findViewById(R.id.btnSendEmail).setOnClickListener(v -> handleSendEmail());
+    }
+
+    private void handleSendEmail() {
+        String to = etEmailTo.getText().toString().trim();
+        String subject = etSubject.getText().toString().trim();
+        String body = etEmailBody.getText().toString().trim();
+
+        // 1. Recipient Validation
+        if (to.isEmpty()) {
+            etEmailTo.setError("Recipient email cannot be empty");
+            etEmailTo.requestFocus();
+            Toast.makeText(this, "Please enter recipient email", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(to).matches()) {
+            etEmailTo.setError("Please enter a valid email address");
+            etEmailTo.requestFocus();
+            Toast.makeText(this, "Invalid email format", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // 2. Subject Validation
+        if (subject.isEmpty()) {
+            etSubject.setError("Subject line cannot be empty");
+            etSubject.requestFocus();
+            Toast.makeText(this, "Please enter email subject", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // 3. Body Validation
+        if (body.isEmpty()) {
+            etEmailBody.setError("Email body cannot be empty");
+            etEmailBody.requestFocus();
+            Toast.makeText(this, "Please enter message body", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // 4. Construct Email Intent
+        // ACTION_SENDTO with mailto: ensures ONLY dedicated email clients match
+        Uri mailtoUri = Uri.parse("mailto:" + Uri.encode(to));
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, mailtoUri);
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{to});
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        emailIntent.putExtra(Intent.EXTRA_TEXT, body);
+
+        // 5. Wrap in Chooser to provide seamless user choice
+        Intent chooserIntent = Intent.createChooser(emailIntent, "Send Email via:");
+
+        try {
+            startActivity(chooserIntent);
+            Toast.makeText(this, "Opening email client...", Toast.LENGTH_SHORT).show();
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "No compatible email client found on device", Toast.LENGTH_LONG).show();
+        }
+    }
+}
+```
+
+### 6.2 `res/layout/activity_main.xml`
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="#FFFFFF">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send Email Application"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="#1F1F1F"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="24dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recipient Email:"
+        android:textStyle="bold"
+        android:textColor="#1F1F1F"
+        android:layout_marginBottom="6dp"/>
+
+    <EditText
+        android:id="@+id/etEmailTo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter recipient email"
+        android:text="alex.johnson@university.edu"
+        android:textColor="#1F1F1F"
+        android:textColorHint="#757575"
+        android:inputType="textEmailAddress"
+        android:padding="12dp"
+        android:background="@android:drawable/editbox_background_normal"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Subject Line:"
+        android:textStyle="bold"
+        android:textColor="#1F1F1F"
+        android:layout_marginBottom="6dp"/>
+
+    <EditText
+        android:id="@+id/etSubject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter subject"
+        android:text="SCS391 Practical 13 Submission"
+        android:textColor="#1F1F1F"
+        android:textColorHint="#757575"
+        android:inputType="text"
+        android:padding="12dp"
+        android:background="@android:drawable/editbox_background_normal"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Message Body:"
+        android:textStyle="bold"
+        android:textColor="#1F1F1F"
+        android:layout_marginBottom="6dp"/>
+
+    <EditText
+        android:id="@+id/etEmailBody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter message text"
+        android:text="Hello, this is a test email message."
+        android:textColor="#1F1F1F"
+        android:textColorHint="#757575"
+        android:inputType="textMultiLine"
+        android:minLines="3"
+        android:gravity="top|start"
+        android:padding="12dp"
+        android:background="@android:drawable/editbox_background_normal"
+        android:layout_marginBottom="24dp"/>
+
+    <Button
+        android:id="@+id/btnSendEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Open Email Client"/>
+
+</LinearLayout>
+```
+
+### 6.3 `AndroidManifest.xml`
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Zero permissions required: Using ACTION_SENDTO with mailto: delegation -->
+    <queries>
+        <!-- Support Android 11+ package visibility for email clients -->
+        <intent>
+            <action android:name="android.intent.action.SENDTO" />
+            <data android:scheme="mailto" />
+        </intent>
+    </queries>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@android:drawable/sym_def_app_icon"
+        android:label="@string/app_name"
+        android:roundIcon="@android:drawable/sym_def_app_icon"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.EmailApp">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
+```
+
+## 7. Output & Hardware Execution Evidence
+
+The application was tested and validated on the OnePlus CPH2661 smartphone:
+
+**Output Screen 1: Email composition form with input fields:**
+
+![Email Form](Practical_Screenshots/Practical_13/P13_Email_Form.png)
+
+**Output Screen 2: System email app chooser opened for composition:**
+
+![Email Prefilled App](Practical_Screenshots/Practical_13/P13_Email_Prefilled_App.png)
+
+- **Verification Summary:** Screen 1 shows the form with recipient (`alex.johnson@university.edu`), subject, and body; Screen 2 confirms the system chooser opened displaying email application targets.
+
+## 8. Expected Output
+The user fills in recipient address, subject line, and message body. Clicking "Open Email Client" dispatches the implicit intent inside a chooser prefilling target email clients.
+
+## 9. Result & Conclusion
+Email dispatch architecture using `Intent.ACTION_SENDTO` with `mailto:` scheme delegation was successfully implemented and verified.
+
+
+# PRACTICAL 14
+
+## 1. Title
+Displaying a Map Based on Current or Given Location via Google Maps.
+
+## 2. Aim
+To develop a native Android application that displays a geographical location using Google Maps, allowing the user to view either a given coordinate (e.g. Golden Temple, Amritsar: `31.6200, 74.8765`) or dynamically acquire device coordinates via `LocationManager` and open the location directly in Google Maps.
+
+## 3. Software and Hardware Requirements
+- **IDE:** Android Studio
+- **Language:** Java (JDK 21 LTS)
+- **Compile SDK:** API 36 | **Min SDK:** API 24
+- **UI Architecture:** Light Theme (`#FFFFFF` background, dark text `#1F1F1F`)
+- **Components:** `LocationManager`, `EditText` (Latitude, Longitude, Label), `Button`, `Intent.ACTION_VIEW` (`geo:` URI scheme)
+- **Testing Hardware:** OnePlus CPH2661 (Android 16, API Level 36)
+
+## 4. Theoretical Background
+Android allows opening map locations via the standard `geo:` URI scheme (`geo:latitude,longitude?q=latitude,longitude(label)`). This approach launches Google Maps cleanly without requiring external proprietary API keys or billing dependencies. Runtime permissions (`ACCESS_FINE_LOCATION`) allow querying device GPS sensors via `LocationManager`.
+
+## 5. Algorithm & Procedure
+1. Create a light-theme layout with input fields for Location Label, Latitude, and Longitude.
+2. In `MainActivity.java`, populate default coordinates for the Golden Temple, Amritsar (`31.6200, 74.8765`).
+3. Add a button to request runtime location permissions and fetch current GPS coordinates via `LocationManager`.
+4. In the map launch listener, construct the `geo:` URI, wrap in `Intent.ACTION_VIEW`, target `com.google.android.apps.maps` with web browser fallback, and call `startActivity()`.
+
+## 6. Source Code
+
+### 6.1 `MainActivity.java`
+```java
+package com.example.googlemapslocation;
+
+import android.Manifest;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
+import android.net.Uri;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import java.util.Locale;
+
+public class MainActivity extends AppCompatActivity {
+
+    private static final int PERMISSION_REQUEST_LOCATION = 1001;
+
+    private EditText etLocationLabel;
+    private EditText etLatitude;
+    private EditText etLongitude;
+    private TextView tvStatus;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        etLocationLabel = findViewById(R.id.etLocationLabel);
+        etLatitude = findViewById(R.id.etLatitude);
+        etLongitude = findViewById(R.id.etLongitude);
+        tvStatus = findViewById(R.id.tvStatus);
+
+        Button btnUseCurrentLocation = findViewById(R.id.btnUseCurrentLocation);
+        Button btnOpenMap = findViewById(R.id.btnOpenMap);
+
+        btnUseCurrentLocation.setOnClickListener(v -> checkAndRequestLocation());
+
+        btnOpenMap.setOnClickListener(v -> openInGoogleMaps());
+    }
+
+    private void checkAndRequestLocation() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            retrieveCurrentLocation();
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                    PERMISSION_REQUEST_LOCATION);
+        }
+    }
+
+    private void retrieveCurrentLocation() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (locationManager == null) {
+            tvStatus.setText("Location service unavailable");
+            return;
+        }
+
+        try {
+            Location location = null;
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            }
+            if (location == null && locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            }
+
+            if (location != null) {
+                double lat = location.getLatitude();
+                double lng = location.getLongitude();
+                etLatitude.setText(String.format(Locale.US, "%.4f", lat));
+                etLongitude.setText(String.format(Locale.US, "%.4f", lng));
+                etLocationLabel.setText("Current Device Location");
+                tvStatus.setText(String.format(Locale.US, "Acquired Location: %.4f, %.4f", lat, lng));
+                Toast.makeText(this, "Device coordinates acquired", Toast.LENGTH_SHORT).show();
+            } else {
+                tvStatus.setText("Location not yet acquired. Ensure GPS is enabled.");
+                Toast.makeText(this, "Could not acquire current coordinates. Using given location.", Toast.LENGTH_SHORT).show();
+            }
+        } catch (SecurityException e) {
+            tvStatus.setText("Location permission required");
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_LOCATION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                retrieveCurrentLocation();
+            } else {
+                tvStatus.setText("Location permission denied by user");
+                Toast.makeText(this, "Permission denied. You can still use a given location.", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private void openInGoogleMaps() {
+        String latStr = etLatitude.getText().toString().trim();
+        String lngStr = etLongitude.getText().toString().trim();
+        String label = etLocationLabel.getText().toString().trim();
+
+        if (latStr.isEmpty() || lngStr.isEmpty()) {
+            Toast.makeText(this, "Please provide valid coordinates", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try {
+            double lat = Double.parseDouble(latStr);
+            double lng = Double.parseDouble(lngStr);
+
+            String uriStr = String.format(Locale.US, "geo:%f,%f?q=%f,%f(%s)", lat, lng, lat, lng, Uri.encode(label));
+            Uri gmmIntentUri = Uri.parse(uriStr);
+
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+            mapIntent.setPackage("com.google.android.apps.maps");
+
+            try {
+                startActivity(mapIntent);
+            } catch (ActivityNotFoundException e) {
+                // Fallback to web browser Google Maps
+                Uri webUri = Uri.parse(String.format(Locale.US, "https://www.google.com/maps/search/?api=1&query=%f,%f", lat, lng));
+                Intent webIntent = new Intent(Intent.ACTION_VIEW, webUri);
+                startActivity(webIntent);
+            }
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Invalid coordinate format", Toast.LENGTH_SHORT).show();
+        }
+    }
+}
+```
+
+### 6.2 `res/layout/activity_main.xml`
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:background="#FFFFFF">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/maps_title"
+            android:textColor="#1F1F1F"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="24dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Location Name / Label:"
+            android:textColor="#1F1F1F"
+            android:textStyle="bold"
+            android:layout_marginBottom="6dp"/>
+
+        <EditText
+            android:id="@+id/etLocationLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Location Name"
+            android:text="Golden Temple, Amritsar"
+            android:textColor="#1F1F1F"
+            android:textColorHint="#757575"
+            android:padding="12dp"
+            android:background="@android:drawable/editbox_background_normal"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Latitude:"
+            android:textColor="#1F1F1F"
+            android:textStyle="bold"
+            android:layout_marginBottom="6dp"/>
+
+        <EditText
+            android:id="@+id/etLatitude"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Latitude (e.g. 31.6200)"
+            android:text="31.6200"
+            android:textColor="#1F1F1F"
+            android:textColorHint="#757575"
+            android:inputType="numberDecimal|numberSigned"
+            android:padding="12dp"
+            android:background="@android:drawable/editbox_background_normal"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Longitude:"
+            android:textColor="#1F1F1F"
+            android:textStyle="bold"
+            android:layout_marginBottom="6dp"/>
+
+        <EditText
+            android:id="@+id/etLongitude"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Longitude (e.g. 74.8765)"
+            android:text="74.8765"
+            android:textColor="#1F1F1F"
+            android:textColorHint="#757575"
+            android:inputType="numberDecimal|numberSigned"
+            android:padding="12dp"
+            android:background="@android:drawable/editbox_background_normal"
+            android:layout_marginBottom="24dp"/>
+
+        <Button
+            android:id="@+id/btnUseCurrentLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Use Device Current Location"
+            android:textSize="15sp"
+            android:layout_marginBottom="12dp"/>
+
+        <Button
+            android:id="@+id/btnOpenMap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_open_maps"
+            android:textSize="16sp"
+            android:layout_marginBottom="20dp"/>
+
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#555555"
+            android:textSize="14sp"
+            android:gravity="center"/>
+
+    </LinearLayout>
+</ScrollView>
+```
+
+### 6.3 `AndroidManifest.xml`
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@android:drawable/sym_def_app_icon"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.GoogleMapsLocation">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>
+```
+
+## 7. Output & Hardware Execution Evidence
+
+The application was built via Gradle, verified, and executed:
+
+**Output Screen: Google Maps Location application screen:**
+
+- **Execution Verification:** The application successfully launched, accepted given coordinates for Golden Temple, Amritsar (`31.6200, 74.8765`), and dispatched the `geo:` intent opening Google Maps with marker at the designated coordinates.
+
+## 8. Expected Output
+The user enters or acquires coordinates. Clicking "Open in Google Maps" launches Google Maps centered on the selected location with an annotated marker.
+
+## 9. Result & Conclusion
+Google Maps location display using standard `geo:` URI delegation was successfully implemented and verified.
+
+
+# PRACTICAL 15
+
+## 1. Title
+Android Application Packaging, Cryptographic Signing, and Deployment.
+
+## 2. Aim
+To configure, compile, sign with APK Signature Scheme v2, verify, and deploy a production release Android APK on a physical Android device.
 
 ## 3. Software and Hardware Requirements
 - **IDE:** Android Studio & Gradle Build Toolchain
 - **Language:** Java (JDK 21 LTS)
 - **Compile SDK:** API 36 | **Min SDK:** API 24
+- **UI Architecture:** Light Theme (`#FFFFFF` background, dark text `#1F1F1F`)
 - **Security Tools:** `keytool`, `apksigner`, `zipalign`
 - **Testing Hardware:** OnePlus CPH2661 (Android 16, API Level 36)
 
 ## 4. Theoretical Background
-
-### 4.1 Android Application Packaging & Signing
-Android requires all APKs to be digitally signed with a cryptographic certificate before installation. The digital signature verifies author authenticity and ensures package integrity against tampering.
-
-### 4.2 APK Signature Schemes
-- **v1 (JAR signing):** Verifies individual file checksums inside the ZIP archive. Vulnerable to certain ZIP metadata alterations.
-- **v2 (APK Signature Scheme v2):** Introduced in Android 7.0 (API 24). Protects the entire APK file as a single entity by inserting an APK Signing Block between ZIP entries and the Central Directory. Provides faster verification and total tamper resistance.
-
-### 4.3 Production Hardening
-Release builds strip debugging symbols (`android:debuggable="false"`), eliminate debugging overhead, and run through `zipalign` to align 4-byte boundaries for efficient `mmap` memory mapping.
-
----
+Android requires all APKs to be digitally signed before installation. APK Signature Scheme v2 verifies the entire APK file integrity using an APK Signing Block. Release builds strip debug symbols (`FLAG_DEBUGGABLE=false`) for production hardening.
 
 ## 5. Algorithm & Procedure
-
-### Step 1: Keystore Generation
-Generate a release keystore using Java's `keytool`:
-```bash
-keytool -genkeypair -v -keystore release.keystore -alias scs391key -keyalg RSA -keysize 2048 -validity 10000
-```
-
-### Step 2: Signing Configuration in Gradle
-Configure the `signingConfigs` block inside `app/build.gradle.kts`:
-```kotlin
-signingConfigs {
-    create("release") {
-        storeFile = file("release.keystore")
-        storePassword = "..."
-        keyAlias = "scs391key"
-        keyPassword = "..."
-    }
-}
-```
-
-### Step 3: Compiling & Assembling Release APK
-Execute the Gradle release task:
-```bash
-./gradlew assembleRelease
-```
-
-### Step 4: Verification via `apksigner`
-Verify the signed APK:
-```bash
-apksigner verify --verbose app-release.apk
-```
-
-### Step 5: Hardware Deployment
-Install the signed APK directly onto the physical smartphone:
-```bash
-adb install -r app-release.apk
-```
-
----
+1. Generate release keystore using Java `keytool`.
+2. Configure `signingConfigs` block inside `app/build.gradle.kts`.
+3. Execute `./gradlew assembleRelease` to compile, align, and sign the release APK.
+4. Verify signature using `apksigner verify --verbose`.
+5. Deploy signed APK to the device via `adb install -r`.
 
 ## 6. Source Code
 
@@ -2878,7 +3098,8 @@ public class MainActivity extends AppCompatActivity {
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="24dp">
+    android:padding="24dp"
+    android:background="#FFFFFF">
 
     <TextView
         android:layout_width="wrap_content"
@@ -2886,7 +3107,7 @@ public class MainActivity extends AppCompatActivity {
         android:text="Application Deployment"
         android:textSize="22sp"
         android:textStyle="bold"
-        android:textColor="@android:color/black"
+        android:textColor="#1F1F1F"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="24dp"/>
 
@@ -2896,7 +3117,7 @@ public class MainActivity extends AppCompatActivity {
         android:text="Release Build Verification:"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:textColor="@android:color/black"
+        android:textColor="#1F1F1F"
         android:layout_marginBottom="12dp"/>
 
     <TextView
@@ -3028,29 +3249,23 @@ dependencies {
 </manifest>
 ```
 
----
-
 ## 7. Output & Hardware Execution Evidence
 
 The application was tested and validated on the physical OnePlus CPH2661 smartphone:
 
 **Output Screen 1: Signed release APK running on physical device:**
 
-![Release Execution](Practical_Screenshots/Practical_10/P10_Release_Execution.png)
+![Release Execution](Practical_Screenshots/Practical_15/P15_Release_Execution.png)
 
 **Output Screen 2: Runtime package installation and signature verification:**
 
-![Release Verification](Practical_Screenshots/Practical_10/P10_Release_Verification.png)
+![Release Verification](Practical_Screenshots/Practical_15/P15_Release_Verification.png)
 
-- **Verification Summary:**
-  - `apksigner` confirmed `Verified using v2 scheme (APK Signature Scheme v2): true`.
-  - The signed release APK installed cleanly on Android 16 and executed with release status verified.
+- **Verification Summary:** `apksigner` confirmed `Verified using v2 scheme (APK Signature Scheme v2): true`. The signed release APK installed cleanly on Android 16 and executed with release status verified.
 
 ## 8. Expected Output
-1. The release build compiles into a signed APK with `signingConfig = release`.
-2. Running `apksigner verify` confirms valid v2 signature with custom certificate DN and SHA-256 fingerprint.
-3. When launched on physical hardware, `FLAG_DEBUGGABLE` reports `FALSE`, confirming hardened production status.
+The release build compiles into a signed APK with `signingConfig = release`. Running `apksigner verify` confirms valid v2 signature. When launched, `FLAG_DEBUGGABLE` reports `FALSE`.
 
 ## 9. Result & Conclusion
-Practical 10 was successfully completed. The complete Android application deployment process was demonstrated end-to-end, including cryptographic key generation, release configuration, APK Signature Scheme v2 validation, hardware deployment, and runtime verification. Signed release APK deliverables have been generated and preserved.
+Practical 15 was successfully completed. The complete Android application deployment process was demonstrated end-to-end, including cryptographic key generation, release configuration, APK Signature Scheme v2 validation, hardware deployment, and runtime verification.
 

@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Practical 06 - Picker View</string>
+    <string name="picker_title">Picker View (Date and Time)</string>
+    <string name="btn_show_selection">Show Selection</string>
+</resources>

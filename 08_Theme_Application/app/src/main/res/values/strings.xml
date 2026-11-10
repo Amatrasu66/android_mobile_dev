@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Practical 08 - Themes</string>
+    <string name="theme_title">Themed Android Application</string>
+    <string name="theme_subtitle">Demonstrating Custom Light Theme Styling</string>
+    <string name="btn_sample">Themed Primary Button</string>
+    <string name="theme_info">Applied Theme: Theme.CustomLight</string>
+</resources>
