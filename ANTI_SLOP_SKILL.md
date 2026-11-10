@@ -53,6 +53,21 @@ This is an academic practical portfolio for a university Mobile App Development 
 
 ---
 
+## Phase 3 Physical Execution & Hardware Verification Rules
+
+36. **Physical execution mandatory:** A practical is not complete until its Android application has been physically executed on bare-metal hardware.
+37. **Compilation is not verification:** Compilation success is not equivalent to functional verification; runtime states, lifecycle callbacks, and user interactions must be validated.
+38. **Bare-metal captures only:** Screenshots must come from the connected physical Android device. Zero emulator or simulated captures.
+39. **Demonstrate actual functionality:** Screenshots must demonstrate actual practical functionality (e.g. data entered, intent fired, records rendered, coordinates mapped), not just idle blank states.
+40. **Direct document embedding:** Screenshots must be embedded directly in the correct Google Docs practical section immediately adjacent to the corresponding code and explanation.
+41. **Mandatory screenshot replacement:** Old screenshots must be replaced when the underlying application code, theme, or visual design changes. Never retain obsolete dark-theme screenshots.
+42. **Academic simplicity preserved:** Simple academic practical interfaces should remain simple, functional, and student-focused.
+43. **Consistent light palette:** Light-themed practicals must use a consistent light palette throughout the application (white surfaces `#FFFFFF`, dark text `#1F1F1F`, subtle dividers, light status bars).
+44. **Honest reporting:** Never report untested functionality as tested. Clearly delineate hardware-verified operations from pending or blocked operations.
+45. **Zero fabrication:** Never fabricate screenshots, mockups, synthetic logs, or test results under any circumstances.
+
+---
+
 ## Strict Approval Test
 
 Before adding any UI element or code block, apply this test:

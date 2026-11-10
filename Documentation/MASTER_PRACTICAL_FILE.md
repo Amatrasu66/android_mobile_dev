@@ -1317,11 +1317,13 @@ public class MainActivity extends AppCompatActivity {
 
 ## 7. Output & Hardware Execution Evidence
 
-The application was built via Gradle, verified, and executed:
+The application was built via Gradle, installed onto the physical OnePlus Nord 4 (CPH2661, Android 16), and verified:
 
 **Output Screen: Custom Light Theme applied to application:**
 
-- **Execution Verification:** The application successfully launched applying `Theme.CustomLight`, rendering high-contrast blue primary accents on a clean light background `#F8F9FA`.
+![Custom Light Theme Output](Practical_Screenshots/Practical_08/P08_Theme_Application.png)
+
+- **Execution Verification:** The application successfully launched applying `Theme.CustomLight`, rendering high-contrast blue primary accents on a clean light background `#FFFFFF`.
 
 ## 8. Expected Output
 The application opens using the custom light theme, displaying configured colors and clean typography.
@@ -1709,11 +1711,13 @@ public class MainActivity extends AppCompatActivity {
 
 ## 7. Output & Hardware Execution Evidence
 
-The application was built via Gradle, verified, and executed:
+The application was built via Gradle, installed onto the physical OnePlus Nord 4 (CPH2661, Android 16), and verified:
 
 **Output Screen: User Preferences saved and loaded successfully:**
 
-- **Execution Verification:** After saving a user's name to `SharedPreferences`, reloading the application accurately restored and rendered the saved string.
+![User Preferences SharedPreferences Persistence](Practical_Screenshots/Practical_10/P10_User_Preferences.png)
+
+- **Execution Verification:** After saving a user's name to `SharedPreferences`, terminating and restarting the application accurately restored and rendered the saved string upon pressing Load.
 
 ## 8. Expected Output
 After saving a name, pressing Load displays the stored name even after restarting the application.
@@ -3008,11 +3012,21 @@ public class MainActivity extends AppCompatActivity {
 
 ## 7. Output & Hardware Execution Evidence
 
-The application was built via Gradle, verified, and executed:
+The application was built via Gradle, installed onto the physical OnePlus Nord 4 (CPH2661, Android 16), and executed:
 
-**Output Screen: Google Maps Location application screen:**
+**Output Screen 1: Google Maps Location application screen with designated coordinates:**
 
-- **Execution Verification:** The application successfully launched, accepted given coordinates for Golden Temple, Amritsar (`31.6200, 74.8765`), and dispatched the `geo:` intent opening Google Maps with marker at the designated coordinates.
+![Google Maps Application Screen](Practical_Screenshots/Practical_14/P14_01_Maps_Home.png)
+
+**Output Screen 2: Current location trigger and permission execution:**
+
+![Location Permission and Execution](Practical_Screenshots/Practical_14/P14_02_Maps_CurrentLocation_Permission.png)
+
+**Output Screen 3: Google Maps launched with marker at Amritsar Golden Temple:**
+
+![Google Maps Running on Phone](Practical_Screenshots/Practical_14/P14_03_Maps_GoogleMaps_View.png)
+
+- **Execution Verification:** The application successfully launched, accepted given coordinates for Golden Temple, Amritsar (`31.6200, 74.8765`), handled device current location checks, and dispatched the standard `geo:` intent opening Google Maps with marker at the designated coordinates.
 
 ## 8. Expected Output
 The user enters or acquires coordinates. Clicking "Open in Google Maps" launches Google Maps centered on the selected location with an annotated marker.

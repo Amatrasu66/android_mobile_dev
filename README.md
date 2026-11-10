@@ -38,16 +38,16 @@ Every application in this repository strictly adheres to minimalist academic pra
 | **05** | `05_Screen_Orientation` | Portrait and Landscape Orientation Detection & Layouts | Configuration & Layouts | **COMPLETE** | 2 Screenshots (`P05_Portrait`, `Landscape`) |
 | **06** | `06_Picker_View` | Developing an Application Using Picker View | UI Components & Pickers | **COMPLETE** | 1 Screenshot (`P06_Picker_View.png`) |
 | **07** | `07_List_View` | Developing an Application Using ListView with Feedback | UI Components & Adapters | **COMPLETE** | 1 Screenshot (`P07_List_View.png`) |
-| **08** | `08_Theme_Application` | Applying a Custom Light Theme in an Activity/Application | Styling & Themes | **COMPLETE** | Hardware Baseline Verified |
+| **08** | `08_Theme_Application` | Applying a Custom Light Theme in an Activity/Application | Styling & Themes | **COMPLETE** | 1 Screenshot (`P08_Theme_Application.png`) |
 | **09** | `09_Menu_Bar` | Options Menu Bar (Home, Settings, About, Help) | Menus & Navigation | **COMPLETE** | 3 Screenshots (`P09_Closed`, `Open`, `Selected`) |
-| **10** | `10_User_Preferences` | Local Data Storage Using SharedPreferences | Data Persistence | **COMPLETE** | Hardware Baseline Verified |
+| **10** | `10_User_Preferences` | Local Data Storage Using SharedPreferences | Data Persistence | **COMPLETE** | 1 Screenshot (`P10_User_Preferences.png`) |
 | **11** | `11_CRUD_SQLite` | Student Records Management using SQLite (Light Theme) | SQLite Database | **COMPLETE** | 4 Screenshots (`P11_Create`, `Read`, `Update`, `Delete`) |
 | **12** | `12_SMS_Application` | SMS Intent Application via `ACTION_SENDTO` (Zero Permissions) | Intents & Communication | **COMPLETE** | 2 Screenshots (`P12_Form`, `Prefilled`) |
 | **13** | `13_Email_Application` | Email Intent Application via Chooser (Light Theme) | Intents & Communication | **COMPLETE** | 2 Screenshots (`P13_Form`, `Prefilled`) |
-| **14** | `14_Google_Maps_Location` | Displaying Maps via `geo:` Intent (Given & Current Location) | Location & Maps | **COMPLETE** | Hardware Baseline Verified |
+| **14** | `14_Google_Maps_Location` | Displaying Maps via `geo:` Intent (Given & Current Location) | Location & Maps | **COMPLETE** | 3 Screenshots (`P14_Home`, `Permission`, `MapsView`) |
 | **15** | `15_Application_Deployment` | Signed Release APK Build, Deployment & Signature Verification | Deployment & Signing | **COMPLETE** | Signed Release APK & 2 Screenshots |
 
-**Total Verified Hardware Screenshots:** Exactly 22 genuine screenshots captured and synchronized to the Master Google Doc.
+**Total Verified Hardware Screenshots:** Exactly 27 genuine screenshots captured and synchronized to the Master Google Doc.
 
 ---
 

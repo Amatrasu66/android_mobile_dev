@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         tvRecordsHeader = findViewById(R.id.tvRecordsHeader);
         lvStudents = findViewById(R.id.lvStudents);
 
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, displayList);
+        adapter = new ArrayAdapter<>(this, R.layout.item_student, R.id.tvStudentRow, displayList);
         lvStudents.setAdapter(adapter);
 
         findViewById(R.id.btnInsert).setOnClickListener(v -> insertRecord());
